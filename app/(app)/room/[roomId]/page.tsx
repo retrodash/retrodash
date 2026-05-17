@@ -11,6 +11,7 @@ import { updateRoomStatus, getParticipant } from "@/lib/firestore";
 import { signOut } from "@/lib/auth";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
+import { ShareRoomModal } from "@/components/room/ShareRoomModal";
 
 export default function RoomPage({
   params,
@@ -23,6 +24,7 @@ export default function RoomPage({
   const { cards, loading: cardsLoading } = useCards(roomId);
   const router = useRouter();
   const [endingRetro, setEndingRetro] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [participantStatus, setParticipantStatus] = useState<
     "loading" | "joined" | "stranger"
   >("loading");
@@ -94,6 +96,14 @@ export default function RoomPage({
               {room.name}
             </h1>
             <StatusBadge status={room.status} />
+            <button
+              onClick={() => setShareOpen(true)}
+              title="Invite teammates"
+              className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+              aria-label="Invite teammates"
+            >
+              <LinkIcon />
+            </button>
           </div>
         </div>
 
@@ -151,6 +161,14 @@ export default function RoomPage({
           isFacilitator={isFacilitator}
         />
       </div>
+
+      {shareOpen && (
+        <ShareRoomModal
+          roomId={roomId}
+          roomName={room.name}
+          onClose={() => setShareOpen(false)}
+        />
+      )}
     </div>
   );
 }
@@ -229,6 +247,24 @@ function BoardSkeleton() {
         ))}
       </div>
     </div>
+  );
+}
+
+function LinkIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
   );
 }
 
