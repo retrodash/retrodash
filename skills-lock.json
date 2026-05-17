@@ -36,6 +36,18 @@
       "sourceType": "github",
       "skillPath": "skills/.experimental/tailwind-refactor/SKILL.md",
       "computedHash": "74cc16b48321d9a943016420fac621fa45011ca64e566ccdf65046439942a783"
+    },
+    "tailwind-responsive-ui": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.experimental/tailwind-responsive-ui/SKILL.md",
+      "computedHash": "0b4a3b0ecc73594314c99603eef2cce8c4691ba27b7e373f93838fdda5487266"
+    },
+    "tailwind-ui-refactor": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.experimental/tailwind-ui-refactor/SKILL.md",
+      "computedHash": "dbd03b1cd3ef596d0691ff4ba8d85e3cc79761203fdefb10a5eb5fb57bee0ae4"
     }
   }
 }
