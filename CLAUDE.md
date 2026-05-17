@@ -8,6 +8,12 @@ Think of it like [retro.io](https://retro.io) — but self-owned and built from 
 
 ---
 
+## Commits
+
+When you build or change something for me — like a login page — always include a commit message at the end using Conventional Commits format (e.g. `feat:`, `fix:`, `refactor:`, `style:`).
+
+---
+
 ## ⚙️ Tech Stack
 
 | Layer | Technology |
