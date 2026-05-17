@@ -21,6 +21,7 @@ export interface Card {
   columnId: string;
   text: string;
   authorId: string;
+  authorName: string;
   votes: number;
   votedBy: string[];
   createdAt: Timestamp;
