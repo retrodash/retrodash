@@ -3,15 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { signOut } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { useRooms } from "@/hooks/useRooms";
+import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import type { Room } from "@/types";
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const { rooms, loading } = useRooms();
   const router = useRouter();
+  const [joinOpen, setJoinOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -22,7 +25,13 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-bg-base flex flex-col">
       {/* ── Navbar ────────────────────────────────────────────── */}
       <header className="bg-bg-surface border-b border-border px-6 h-16 flex items-center justify-between shrink-0">
-        <Image src="/logo.svg" alt="RetroDash" width={130} height={56} priority />
+        <Image
+          src="/logo.svg"
+          alt="RetroDash"
+          width={130}
+          height={56}
+          priority
+        />
 
         <div className="flex items-center gap-3">
           {user?.photoURL && (
@@ -37,7 +46,9 @@ export default function DashboardPage() {
           <span className="text-text-secondary text-sm hidden sm:block">
             {user?.displayName}
           </span>
-          <span aria-hidden className="text-border hidden sm:block">|</span>
+          <span aria-hidden className="text-border hidden sm:block">
+            |
+          </span>
           <button
             onClick={handleSignOut}
             className="text-text-muted hover:text-text-primary text-sm transition-colors cursor-pointer"
@@ -61,13 +72,19 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="h-10 px-4 rounded-md border border-border text-text-secondary text-sm font-medium hover:border-accent-cyan hover:text-text-primary transition-colors cursor-pointer">
+            <button
+              onClick={() => setJoinOpen(true)}
+              className="h-10 px-4 rounded-md border border-border text-text-secondary text-sm font-medium hover:border-accent-cyan hover:text-text-primary transition-colors cursor-pointer"
+            >
               Join Room
             </button>
             <Link
               href="/room/new"
               className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 transition-opacity hover:opacity-90"
-              style={{ background: "var(--color-cta)", color: "var(--color-bg-base)" }}
+              style={{
+                background: "var(--color-cta)",
+                color: "var(--color-bg-base)",
+              }}
             >
               <PlusIcon />
               New Room
@@ -88,6 +105,8 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
+
+      {joinOpen && <JoinRoomModal onClose={() => setJoinOpen(false)} />}
     </div>
   );
 }
@@ -96,9 +115,28 @@ export default function DashboardPage() {
 
 function RoomCard({ room }: { room: Room }) {
   const statusMap = {
-    waiting: { label: "Waiting", style: { color: "var(--color-text-muted)",    background: "var(--color-bg-elevated)" } },
-    active:  { label: "Active",  style: { color: "var(--color-accent-cyan)",   background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)" } },
-    ended:   { label: "Ended",   style: { color: "var(--color-text-muted)",    background: "var(--color-bg-elevated)" } },
+    waiting: {
+      label: "Waiting",
+      style: {
+        color: "var(--color-text-muted)",
+        background: "var(--color-bg-elevated)",
+      },
+    },
+    active: {
+      label: "Active",
+      style: {
+        color: "var(--color-accent-cyan)",
+        background:
+          "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+      },
+    },
+    ended: {
+      label: "Ended",
+      style: {
+        color: "var(--color-text-muted)",
+        background: "var(--color-bg-elevated)",
+      },
+    },
   } as const;
 
   const { label, style } = statusMap[room.status];
@@ -146,13 +184,17 @@ function EmptyState() {
         No rooms yet
       </h2>
       <p className="text-text-secondary text-sm leading-relaxed mb-8 max-w-xs">
-        Create your first retrospective room and invite your team to reflect and improve together.
+        Create your first retrospective room and invite your team to reflect and
+        improve together.
       </p>
 
       <Link
         href="/room/new"
         className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 transition-opacity hover:opacity-90"
-        style={{ background: "var(--color-cta)", color: "var(--color-bg-base)" }}
+        style={{
+          background: "var(--color-cta)",
+          color: "var(--color-bg-base)",
+        }}
       >
         <PlusIcon />
         Create your first room
@@ -181,7 +223,12 @@ function RoomsSkeleton() {
 function PlusIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-      <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M7 1v12M1 7h12"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -189,9 +236,31 @@ function PlusIcon() {
 function BoardIcon() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
-      <rect x="2" y="5" width="24" height="18" rx="3" stroke="var(--color-text-muted)" strokeWidth="1.5" />
-      <line x1="2" y1="11" x2="26" y2="11" stroke="var(--color-text-muted)" strokeWidth="1.5" />
-      <line x1="10" y1="11" x2="10" y2="23" stroke="var(--color-text-muted)" strokeWidth="1.5" />
+      <rect
+        x="2"
+        y="5"
+        width="24"
+        height="18"
+        rx="3"
+        stroke="var(--color-text-muted)"
+        strokeWidth="1.5"
+      />
+      <line
+        x1="2"
+        y1="11"
+        x2="26"
+        y2="11"
+        stroke="var(--color-text-muted)"
+        strokeWidth="1.5"
+      />
+      <line
+        x1="10"
+        y1="11"
+        x2="10"
+        y2="23"
+        stroke="var(--color-text-muted)"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 }
