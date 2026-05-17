@@ -1,17 +1,17 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { updateRoomStatus, getParticipant } from "@/lib/firestore";
-import { signOut } from "@/lib/auth";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
+import { Navbar } from "@/components/ui/Navbar";
+import type { Room } from "@/types";
 
 export default function RoomPage({
   params,
@@ -47,11 +47,6 @@ export default function RoomPage({
   const isFacilitator = user?.uid === room?.ownerId;
   const loading = roomLoading || cardsLoading || participantStatus === "loading";
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
-  };
-
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 
   const handleEndRetro = async () => {
@@ -84,69 +79,45 @@ export default function RoomPage({
 
   return (
     <div className="h-screen bg-bg-base flex flex-col overflow-hidden">
-      {/* ── Navbar ──────────────────────────────────────────── */}
-      <header className="bg-bg-surface border-b border-border px-5 h-16 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-4 min-w-0">
-          <Link href="/dashboard" className="shrink-0">
-            <Image src="/logo.svg" alt="RetroDash" width={110} height={48} priority />
-          </Link>
-          <span aria-hidden className="text-border hidden sm:block shrink-0">|</span>
-          <div className="flex items-center gap-2.5 min-w-0">
-            <h1 className="text-text-primary font-semibold text-sm truncate">
-              {room.name}
-            </h1>
-            <StatusBadge status={room.status} />
-            <button
-              onClick={() => setShareOpen(true)}
-              title="Invite teammates"
-              className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
-              aria-label="Invite teammates"
-            >
-              <LinkIcon />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          {/* Facilitator controls */}
-          {isFacilitator && room.status === "waiting" && (
-            <button
-              onClick={handleStartRetro}
-              className="h-8 px-4 rounded-md text-xs font-semibold bg-accent-cyan text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
-            >
-              Start Retro
-            </button>
-          )}
-          {isFacilitator && room.status === "active" && (
-            <EndRetroButton loading={endingRetro} onClick={handleEndRetro} />
-          )}
-          {room.status === "ended" && (
-            <Link
-              href={`/room/${roomId}/summary`}
-              className="h-8 px-4 rounded-md text-xs font-semibold border border-border text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors flex items-center"
-            >
-              View Summary
-            </Link>
-          )}
-
-          {/* User */}
-          {user?.photoURL && (
-            <Image
-              src={user.photoURL}
-              alt={user.displayName ?? "User"}
-              width={28}
-              height={28}
-              className="rounded-full hidden sm:block"
-            />
-          )}
-          <button
-            onClick={handleSignOut}
-            className="text-text-muted hover:text-text-primary text-xs transition-colors cursor-pointer hidden sm:block"
-          >
-            Sign out
-          </button>
-        </div>
-      </header>
+      <Navbar
+        logoHref="/dashboard"
+        actions={
+          <>
+            {isFacilitator && room.status === "waiting" && (
+              <button
+                onClick={handleStartRetro}
+                className="h-8 px-4 rounded-md text-xs font-semibold bg-accent-cyan text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
+              >
+                Start Retro
+              </button>
+            )}
+            {isFacilitator && room.status === "active" && (
+              <EndRetroButton loading={endingRetro} onClick={handleEndRetro} />
+            )}
+            {room.status === "ended" && (
+              <Link
+                href={`/room/${roomId}/summary`}
+                className="h-8 px-4 rounded-md text-xs font-semibold border border-border text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors flex items-center"
+              >
+                View Summary
+              </Link>
+            )}
+          </>
+        }
+      >
+        <h1 className="text-text-primary font-semibold text-sm truncate">
+          {room.name}
+        </h1>
+        <StatusBadge status={room.status} />
+        <button
+          onClick={() => setShareOpen(true)}
+          title="Invite teammates"
+          className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+          aria-label="Invite teammates"
+        >
+          <LinkIcon />
+        </button>
+      </Navbar>
 
       {/* ── Board ───────────────────────────────────────────── */}
       <div className="flex-1 min-h-0">
@@ -267,5 +238,3 @@ function LinkIcon() {
   );
 }
 
-// local type alias for the status badge
-type Room = { status: "waiting" | "active" | "ended" };

@@ -1,62 +1,19 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { signOut } from "@/lib/auth";
-import { useAuth } from "@/hooks/useAuth";
 import { useRooms } from "@/hooks/useRooms";
+import { Navbar } from "@/components/ui/Navbar";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import type { Room } from "@/types";
 
 export default function DashboardPage() {
-  const { user } = useAuth();
   const { rooms, loading } = useRooms();
-  const router = useRouter();
   const [joinOpen, setJoinOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
-  };
 
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
-      {/* ── Navbar ────────────────────────────────────────────── */}
-      <header className="bg-bg-surface border-b border-border px-6 h-16 flex items-center justify-between shrink-0">
-        <Image
-          src="/logo.svg"
-          alt="RetroDash"
-          width={130}
-          height={56}
-          priority
-        />
-
-        <div className="flex items-center gap-3">
-          {user?.photoURL && (
-            <Image
-              src={user.photoURL}
-              alt={user.displayName ?? "User"}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-          )}
-          <span className="text-text-secondary text-sm hidden sm:block">
-            {user?.displayName}
-          </span>
-          <span aria-hidden className="text-border hidden sm:block">
-            |
-          </span>
-          <button
-            onClick={handleSignOut}
-            className="text-text-muted hover:text-text-primary text-sm transition-colors cursor-pointer"
-          >
-            Sign out
-          </button>
-        </div>
-      </header>
+      <Navbar />
 
       {/* ── Main ──────────────────────────────────────────────── */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10">

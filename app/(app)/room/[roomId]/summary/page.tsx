@@ -1,13 +1,10 @@
 "use client";
 
 import { use } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { signOut } from "@/lib/auth";
+import { Navbar } from "@/components/ui/Navbar";
 import type { Card, Column } from "@/types";
 
 export default function SummaryPage({
@@ -16,15 +13,8 @@ export default function SummaryPage({
   params: Promise<{ roomId: string }>;
 }) {
   const { roomId } = use(params);
-  const { user } = useAuth();
   const { room, columns, loading: roomLoading } = useRoom(roomId);
   const { cards, loading: cardsLoading } = useCards(roomId);
-  const router = useRouter();
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
-  };
 
   if (roomLoading || cardsLoading) return <SummarySkeleton />;
 
@@ -59,49 +49,14 @@ export default function SummaryPage({
 
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
-      {/* ── Navbar ──────────────────────────────────────────── */}
-      <header className="bg-bg-surface border-b border-border px-5 h-16 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-4 min-w-0">
-          <Link href="/dashboard" className="shrink-0">
-            <Image
-              src="/logo.svg"
-              alt="RetroDash"
-              width={110}
-              height={48}
-              priority
-            />
-          </Link>
-          <span aria-hidden className="text-border hidden sm:block shrink-0">
-            |
-          </span>
-          <div className="flex items-center gap-2.5 min-w-0">
-            <span className="text-text-primary font-semibold text-sm truncate">
-              {room.name}
-            </span>
-            <span className="inline-flex text-[11px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm shrink-0 text-text-muted bg-bg-elevated">
-              Ended
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {user?.photoURL && (
-            <Image
-              src={user.photoURL}
-              alt={user.displayName ?? "User"}
-              width={28}
-              height={28}
-              className="rounded-full hidden sm:block"
-            />
-          )}
-          <button
-            onClick={handleSignOut}
-            className="text-text-muted hover:text-text-primary text-xs transition-colors cursor-pointer hidden sm:block"
-          >
-            Sign out
-          </button>
-        </div>
-      </header>
+      <Navbar logoHref="/dashboard">
+        <span className="text-text-primary font-semibold text-sm truncate">
+          {room.name}
+        </span>
+        <span className="inline-flex text-[11px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm shrink-0 text-text-muted bg-bg-elevated">
+          Ended
+        </span>
+      </Navbar>
 
       {/* ── Content ─────────────────────────────────────────── */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-10 space-y-10">
