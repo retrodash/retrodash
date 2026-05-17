@@ -7,9 +7,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { updateRoomStatus } from "@/lib/firestore";
+import { updateRoomStatus, getParticipant } from "@/lib/firestore";
 import { signOut } from "@/lib/auth";
 import { Board } from "@/components/board/Board";
+import { JoinRoom } from "@/components/room/JoinRoom";
 
 export default function RoomPage({
   params,
@@ -22,16 +23,27 @@ export default function RoomPage({
   const { cards, loading: cardsLoading } = useCards(roomId);
   const router = useRouter();
   const [endingRetro, setEndingRetro] = useState(false);
+  const [participantStatus, setParticipantStatus] = useState<
+    "loading" | "joined" | "stranger"
+  >("loading");
+
+  // Check participant membership once room + user are ready
+  useEffect(() => {
+    if (!user || roomLoading || !room) return;
+    getParticipant(roomId, user.uid).then((p) =>
+      setParticipantStatus(p ? "joined" : "stranger")
+    );
+  }, [roomId, user, room, roomLoading]);
 
   // Redirect all clients when retro ends
   useEffect(() => {
-    if (room?.status === "ended") {
+    if (room?.status === "ended" && participantStatus === "joined") {
       router.push(`/room/${roomId}/summary`);
     }
-  }, [room?.status, roomId, router]);
+  }, [room?.status, roomId, router, participantStatus]);
 
   const isFacilitator = user?.uid === room?.ownerId;
-  const loading = roomLoading || cardsLoading;
+  const loading = roomLoading || cardsLoading || participantStatus === "loading";
 
   const handleSignOut = async () => {
     await signOut();
@@ -55,6 +67,16 @@ export default function RoomPage({
           Back to dashboard
         </Link>
       </div>
+    );
+  }
+
+  if (participantStatus === "stranger") {
+    return (
+      <JoinRoom
+        room={room}
+        userId={user?.uid ?? ""}
+        onJoined={() => setParticipantStatus("joined")}
+      />
     );
   }
 

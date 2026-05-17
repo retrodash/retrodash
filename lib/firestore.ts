@@ -1,6 +1,8 @@
 import {
   collection,
   doc,
+  getDoc,
+  setDoc,
   query,
   where,
   orderBy,
@@ -79,6 +81,18 @@ export async function createRoom({
 
   await batch.commit();
   return roomRef.id;
+}
+
+export async function getParticipant(roomId: string, userId: string) {
+  const snap = await getDoc(doc(db, "rooms", roomId, "participants", userId));
+  return snap.exists() ? snap.data() : null;
+}
+
+export async function joinRoom(roomId: string, userId: string): Promise<void> {
+  await setDoc(doc(db, "rooms", roomId, "participants", userId), {
+    joinedAt: serverTimestamp(),
+    role: "member",
+  });
 }
 
 export async function updateRoomStatus(

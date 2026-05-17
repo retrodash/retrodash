@@ -3,6 +3,7 @@ import type { Timestamp } from "firebase/firestore";
 export interface Room {
   id: string;
   name: string;
+  password: string;
   ownerId: string;
   isAnonymous: boolean;
   status: "waiting" | "active" | "ended";
