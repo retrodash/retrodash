@@ -112,8 +112,7 @@ export default function RoomPage({
           {isFacilitator && room.status === "waiting" && (
             <button
               onClick={handleStartRetro}
-              className="h-8 px-4 rounded-md text-xs font-semibold text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
-              style={{ background: "var(--color-accent-cyan)" }}
+              className="h-8 px-4 rounded-md text-xs font-semibold bg-accent-cyan text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
             >
               Start Retro
             </button>
@@ -190,7 +189,7 @@ function StatusBadge({ status }: { status: Room["status"] }) {
       style={{ color, background: bg }}
     >
       {status === "active" && (
-        <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+        <span className="size-1.5 rounded-full bg-current animate-pulse" />
       )}
       {label}
     </span>

@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { updateCard, deleteCard, toggleVote, toggleCardDone } from "@/lib/firestore";
+import {
+  updateCard,
+  deleteCard,
+  toggleVote,
+  toggleCardDone,
+} from "@/lib/firestore";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -22,19 +27,22 @@ export function CardItem({
   isActionItem = false,
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText]   = useState(card.text);
-  const [saving, setSaving]       = useState(false);
+  const [editText, setEditText] = useState(card.text);
+  const [saving, setSaving] = useState(false);
 
-  const isOwnCard  = card.authorId === userId;
-  const hasVoted   = card.votedBy.includes(userId);
-  const canVote    = !isOwnCard;
-  const canEdit    = isOwnCard;
-  const canDelete  = isOwnCard || isFacilitator;
-  const isDone     = card.done ?? false;
+  const isOwnCard = card.authorId === userId;
+  const hasVoted = card.votedBy.includes(userId);
+  const canVote = !isOwnCard;
+  const canEdit = isOwnCard;
+  const canDelete = isOwnCard || isFacilitator;
+  const isDone = card.done ?? false;
 
   const handleSaveEdit = async () => {
     const trimmed = editText.trim();
-    if (!trimmed || trimmed === card.text) { setIsEditing(false); return; }
+    if (!trimmed || trimmed === card.text) {
+      setIsEditing(false);
+      return;
+    }
     setSaving(true);
     await updateCard(roomId, card.id, trimmed);
     setSaving(false);
@@ -54,16 +62,23 @@ export function CardItem({
   const handleDelete = () => deleteCard(roomId, card.id);
 
   return (
-    <div className={`group relative bg-bg-elevated rounded-md p-3 border transition-colors ${
-      isActionItem && isDone ? "border-accent-cyan/20" : "border-transparent hover:border-border"
-    }`}>
+    <div
+      className={`group relative bg-bg-elevated rounded-md p-3 border transition-colors ${
+        isActionItem && isDone
+          ? "border-accent-cyan/20"
+          : "border-transparent hover:border-border"
+      }`}
+    >
       {/* Edit / delete actions */}
       {!isEditing && (
         <div className="absolute top-2 right-2 hidden group-hover:flex items-center gap-1">
           {canEdit && (
             <button
-              onClick={() => { setEditText(card.text); setIsEditing(true); }}
-              className="w-6 h-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors"
+              onClick={() => {
+                setEditText(card.text);
+                setIsEditing(true);
+              }}
+              className="size-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors"
               aria-label="Edit"
             >
               <PencilIcon />
@@ -72,7 +87,7 @@ export function CardItem({
           {canDelete && (
             <button
               onClick={handleDelete}
-              className="w-6 h-6 flex items-center justify-center rounded text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
+              className="size-6 flex items-center justify-center rounded text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
               aria-label="Delete"
             >
               <TrashIcon />
@@ -90,10 +105,11 @@ export function CardItem({
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Escape") handleCancelEdit();
-              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSaveEdit();
+              if (e.key === "Enter" && (e.ctrlKey || e.metaKey))
+                handleSaveEdit();
             }}
             rows={3}
-            className="w-full bg-bg-card border border-accent-cyan rounded-md p-2 text-sm text-text-primary resize-none outline-none"
+            className="w-full bg-bg-card border border-accent-cyan rounded-md p-2 text-sm text-text-primary resize-none outline-hidden"
           />
           <div className="flex gap-2">
             <button
@@ -117,22 +133,24 @@ export function CardItem({
           <button
             onClick={() => toggleCardDone(roomId, card.id, isDone)}
             aria-label={isDone ? "Mark as not done" : "Mark as done"}
-            className="mt-0.5 shrink-0 w-4 h-4 rounded border transition-colors cursor-pointer flex items-center justify-center"
-            style={isDone
-              ? { background: "var(--color-accent-cyan)", borderColor: "var(--color-accent-cyan)" }
-              : { background: "transparent", borderColor: "var(--color-text-muted)" }
-            }
+            className={`mt-0.5 shrink-0 size-4 rounded border transition-colors cursor-pointer flex items-center justify-center ${
+              isDone
+                ? "bg-accent-cyan border-accent-cyan"
+                : "bg-transparent border-text-muted"
+            }`}
           >
             {isDone && <SmallCheckIcon />}
           </button>
-          <p className={`text-sm leading-relaxed whitespace-pre-wrap break-words transition-colors ${
-            isDone ? "line-through text-text-muted" : "text-text-primary"
-          }`}>
+          <p
+            className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word transition-colors ${
+              isDone ? "line-through text-text-muted" : "text-text-primary"
+            }`}
+          >
             {card.text}
           </p>
         </div>
       ) : (
-        <p className="text-text-primary text-sm leading-relaxed pr-14 whitespace-pre-wrap break-words">
+        <p className="text-text-primary text-sm leading-relaxed pr-14 whitespace-pre-wrap wrap-break-word">
           {card.text}
         </p>
       )}
@@ -141,7 +159,7 @@ export function CardItem({
       {!isEditing && (
         <div className="flex items-center justify-between mt-3">
           {!isAnonymous && (
-            <span className="text-text-muted text-xs truncate max-w-[120px]">
+            <span className="text-text-muted text-xs truncate max-w-30">
               {isOwnCard ? "You" : card.authorName}
             </span>
           )}
@@ -152,11 +170,12 @@ export function CardItem({
                 disabled={!canVote}
                 aria-label={hasVoted ? "Remove vote" : "Vote"}
                 className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
-                  ${canVote
-                    ? hasVoted
-                      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
-                      : "text-text-muted hover:text-text-primary hover:bg-bg-card"
-                    : "text-text-muted cursor-default"
+                  ${
+                    canVote
+                      ? hasVoted
+                        ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
+                        : "text-text-muted hover:text-text-primary hover:bg-bg-card"
+                      : "text-text-muted cursor-default"
                   }`}
               >
                 <ThumbUpIcon filled={hasVoted} />
@@ -175,7 +194,13 @@ export function CardItem({
 function SmallCheckIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M1.5 5l2.5 2.5 4.5-4.5"
+        stroke="var(--color-bg-base)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -183,7 +208,12 @@ function SmallCheckIcon() {
 function PencilIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <path
+        d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -191,7 +221,13 @@ function PencilIcon() {
 function TrashIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

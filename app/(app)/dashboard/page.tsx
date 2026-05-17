@@ -80,11 +80,7 @@ export default function DashboardPage() {
             </button>
             <Link
               href="/room/new"
-              className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 transition-opacity hover:opacity-90"
-              style={{
-                background: "var(--color-cta)",
-                color: "var(--color-bg-base)",
-              }}
+              className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
             >
               <PlusIcon />
               New Room
@@ -173,10 +169,7 @@ function RoomCard({ room }: { room: Room }) {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-28 text-center">
-      <div
-        className="w-16 h-16 rounded-lg border border-border flex items-center justify-center mb-6"
-        style={{ background: "var(--color-bg-card)" }}
-      >
+      <div className="size-16 rounded-lg border border-border bg-bg-card flex items-center justify-center mb-6">
         <BoardIcon />
       </div>
 
@@ -190,11 +183,7 @@ function EmptyState() {
 
       <Link
         href="/room/new"
-        className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 transition-opacity hover:opacity-90"
-        style={{
-          background: "var(--color-cta)",
-          color: "var(--color-bg-base)",
-        }}
+        className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
       >
         <PlusIcon />
         Create your first room

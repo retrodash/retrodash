@@ -35,8 +35,8 @@ export default function LoginPage() {
       <div className="hidden lg:flex flex-1 flex-col justify-between px-16 py-14 relative overflow-hidden">
         {/* Atmospheric glows */}
         <div aria-hidden className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-40 -left-40 w-140 h-140 rounded-full bg-accent-cyan/4 blur-3xl" />
-          <div className="absolute -bottom-40 right-0 w-140 h-140 rounded-full bg-accent-violet/5 blur-3xl" />
+          <div className="absolute -top-40 -left-40 size-140 rounded-full bg-accent-cyan/4 blur-3xl" />
+          <div className="absolute -bottom-40 right-0 size-140 rounded-full bg-accent-violet/5 blur-3xl" />
         </div>
 
         {/* Logo */}

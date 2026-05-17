@@ -151,7 +151,7 @@ export default function NewRoomPage() {
                 placeholder="e.g. Sprint 42 Retrospective"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-none focus:border-accent-cyan transition-colors"
+                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
               />
             </Field>
 
@@ -166,7 +166,7 @@ export default function NewRoomPage() {
                 placeholder="Enter a room password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-none focus:border-accent-cyan transition-colors"
+                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
               />
             </Field>
 
@@ -202,13 +202,13 @@ export default function NewRoomPage() {
                       placeholder="Column name"
                       value={col.title}
                       onChange={(e) => updateColumn(col.id, e.target.value)}
-                      className="flex-1 h-10 px-3 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-none focus:border-accent-cyan transition-colors"
+                      className="flex-1 h-10 px-3 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
                     />
                     <button
                       type="button"
                       onClick={() => removeColumn(col.id)}
                       disabled={columns.length === 1}
-                      className="h-10 w-10 flex items-center justify-center rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      className="size-10 flex items-center justify-center rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                       aria-label="Remove column"
                     >
                       <XIcon />
@@ -249,11 +249,7 @@ export default function NewRoomPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-                style={{
-                  background: "var(--color-cta)",
-                  color: "var(--color-bg-base)",
-                }}
+                className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
                 {submitting ? "Creating…" : "Create Room"}
                 {!submitting && <ArrowRightIcon />}

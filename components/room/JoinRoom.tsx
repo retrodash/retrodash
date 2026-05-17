@@ -48,7 +48,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
       <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8">
         {/* Room identity */}
         <div className="flex items-start gap-3 mb-6">
-          <span className="mt-0.5 shrink-0" style={{ color: "var(--color-accent-violet)" }}>
+          <span className="mt-0.5 shrink-0 text-accent-violet">
             <LockIcon />
           </span>
           <div className="min-w-0">
@@ -76,7 +76,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
               placeholder="Enter room password"
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(null); }}
-              className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-none focus:border-accent-cyan transition-colors"
+              className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
             />
             {error && (
               <p className="text-red-400 text-xs">{error}</p>
@@ -86,8 +86,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
           <button
             type="submit"
             disabled={joining || !password.trim()}
-            className="w-full h-11 rounded-md font-semibold text-sm transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            style={{ background: "var(--color-cta)", color: "var(--color-bg-base)" }}
+            className="w-full h-11 rounded-md font-semibold text-sm bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {joining ? "Joining…" : "Join Room"}
           </button>

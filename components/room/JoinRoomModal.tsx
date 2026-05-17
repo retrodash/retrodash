@@ -50,18 +50,14 @@ export function JoinRoomModal({ onClose }: JoinRoomModalProps) {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Paste room code…"
-            className="w-full bg-bg-elevated border border-border rounded-md px-4 py-2.5 text-text-primary text-sm font-mono placeholder:text-text-muted focus:outline-none focus:border-accent-cyan transition-colors"
+            className="w-full bg-bg-elevated border border-border rounded-md px-4 py-2.5 text-text-primary text-sm font-mono placeholder:text-text-muted focus:outline-hidden focus:border-accent-cyan transition-colors"
             spellCheck={false}
           />
 
           <button
             type="submit"
             disabled={!code.trim()}
-            className="h-10 w-full rounded-md text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            style={{
-              background: "var(--color-cta)",
-              color: "var(--color-bg-base)",
-            }}
+            className="h-10 w-full rounded-md text-sm font-semibold bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             Join Room
           </button>

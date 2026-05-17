@@ -98,7 +98,7 @@ export function BoardColumn({
               onKeyDown={handleKeyDown}
               placeholder={column.isActionItems ? "Describe the action item…" : "What's on your mind?"}
               rows={3}
-              className="w-full bg-bg-elevated border border-border focus:border-accent-cyan rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-none transition-colors"
+              className="w-full bg-bg-elevated border border-border focus:border-accent-cyan rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-hidden transition-colors"
             />
             <div className="flex gap-2">
               <button

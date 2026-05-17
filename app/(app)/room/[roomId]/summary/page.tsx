@@ -32,7 +32,10 @@ export default function SummaryPage({
     return (
       <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4">
         <p className="text-text-secondary">Room not found.</p>
-        <Link href="/dashboard" className="text-accent-cyan text-sm hover:underline">
+        <Link
+          href="/dashboard"
+          className="text-accent-cyan text-sm hover:underline"
+        >
           Back to dashboard
         </Link>
       </div>
@@ -40,10 +43,10 @@ export default function SummaryPage({
   }
 
   const actionItemsCol = columns.find((c) => c.isActionItems);
-  const regularCols    = columns.filter((c) => !c.isActionItems);
+  const regularCols = columns.filter((c) => !c.isActionItems);
 
   const actionCards = sortByVotes(
-    actionItemsCol ? cards.filter((c) => c.columnId === actionItemsCol.id) : []
+    actionItemsCol ? cards.filter((c) => c.columnId === actionItemsCol.id) : [],
   );
 
   const endedDate = room.createdAt
@@ -60,9 +63,17 @@ export default function SummaryPage({
       <header className="bg-bg-surface border-b border-border px-5 h-16 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4 min-w-0">
           <Link href="/dashboard" className="shrink-0">
-            <Image src="/logo.svg" alt="RetroDash" width={110} height={48} priority />
+            <Image
+              src="/logo.svg"
+              alt="RetroDash"
+              width={110}
+              height={48}
+              priority
+            />
           </Link>
-          <span aria-hidden className="text-border hidden sm:block shrink-0">|</span>
+          <span aria-hidden className="text-border hidden sm:block shrink-0">
+            |
+          </span>
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="text-text-primary font-semibold text-sm truncate">
               {room.name}
@@ -165,7 +176,9 @@ export default function SummaryPage({
                 <ColumnSummary
                   key={col.id}
                   column={col}
-                  cards={sortByVotes(cards.filter((c) => c.columnId === col.id))}
+                  cards={sortByVotes(
+                    cards.filter((c) => c.columnId === col.id),
+                  )}
                   isAnonymous={room.isAnonymous}
                 />
               ))}
@@ -198,7 +211,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-      <span style={{ color: accent ? "var(--color-accent-cyan)" : "var(--color-text-muted)" }}>
+      <span className={accent ? "text-accent-cyan" : "text-text-muted"}>
         {icon}
       </span>
       <h2 className="text-text-primary font-semibold text-lg">{title}</h2>
@@ -218,11 +231,11 @@ function ActionItemRow({
 }) {
   return (
     <div className="flex items-start gap-3 px-5 py-4">
-      <span className="mt-0.5 shrink-0" style={{ color: "var(--color-accent-cyan)" }}>
+      <span className="mt-0.5 shrink-0 text-accent-cyan">
         <CheckIcon />
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap break-words">
+        <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
           {card.text}
         </p>
         {!isAnonymous && (
@@ -251,7 +264,9 @@ function ColumnSummary({
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-text-primary font-semibold text-sm">{column.title}</h3>
+        <h3 className="text-text-primary font-semibold text-sm">
+          {column.title}
+        </h3>
         <span className="text-xs text-text-muted bg-bg-elevated px-2 py-0.5 rounded-full">
           {cards.length}
         </span>
@@ -279,7 +294,7 @@ function SummaryCard({
 }) {
   return (
     <div className="bg-bg-card border border-border rounded-md px-4 py-3">
-      <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap break-words">
+      <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
         {card.text}
       </p>
       <div className="flex items-center justify-between mt-2">
@@ -328,7 +343,13 @@ function SummarySkeleton() {
 function ArrowLeftIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M8 2L3 6l5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M8 2L3 6l5 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -337,7 +358,13 @@ function CheckCircleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
       <circle cx="9" cy="9" r="7.5" stroke="currentColor" strokeWidth="1.3" />
-      <path d="M5.5 9l2.5 2.5L12.5 7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M5.5 9l2.5 2.5L12.5 7"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -345,7 +372,13 @@ function CheckCircleIcon() {
 function CheckIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden>
-      <path d="M2.5 8l4 4L12.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M2.5 8l4 4L12.5 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -353,7 +386,12 @@ function CheckIcon() {
 function ThumbUpIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M3.5 11V5.5L6 1l.75.375C7 1.5 7 2 6.75 2.5L6 5h4.5a.5.5 0 01.5.5v1a.5.5 0 01-.1.3l-1.5 3.7a.5.5 0 01-.46.5H3.5zM3.5 5.5H1.5V11h2" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
+      <path
+        d="M3.5 11V5.5L6 1l.75.375C7 1.5 7 2 6.75 2.5L6 5h4.5a.5.5 0 01.5.5v1a.5.5 0 01-.1.3l-1.5 3.7a.5.5 0 01-.46.5H3.5zM3.5 5.5H1.5V11h2"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -361,9 +399,31 @@ function ThumbUpIcon() {
 function BoardIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden>
-      <rect x="1.5" y="2.5" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.3" />
-      <line x1="1.5" y1="7" x2="15.5" y2="7" stroke="currentColor" strokeWidth="1.3" />
-      <line x1="7" y1="7" x2="7" y2="14.5" stroke="currentColor" strokeWidth="1.3" />
+      <rect
+        x="1.5"
+        y="2.5"
+        width="14"
+        height="12"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="1.5"
+        y1="7"
+        x2="15.5"
+        y2="7"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="7"
+        y1="7"
+        x2="7"
+        y2="14.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
     </svg>
   );
 }
@@ -371,7 +431,13 @@ function BoardIcon() {
 function ExportIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
-      <path d="M7 1v8M4 6l3 3 3-3M2 10v1.5A1.5 1.5 0 003.5 13h7a1.5 1.5 0 001.5-1.5V10" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M7 1v8M4 6l3 3 3-3M2 10v1.5A1.5 1.5 0 003.5 13h7a1.5 1.5 0 001.5-1.5V10"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

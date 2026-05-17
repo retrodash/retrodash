@@ -31,7 +31,7 @@ export function ShareRoomModal({
         onClick={onClose}
       />
 
-      <div className="relative bg-bg-card border border-border rounded-[22px] w-full max-w-md p-6 shadow-2xl">
+      <div className="relative bg-bg-card border border-border rounded-lg w-full max-w-md p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-text-primary font-semibold text-lg">
@@ -58,12 +58,12 @@ export function ShareRoomModal({
             Room Code
           </label>
           <div className="flex gap-2">
-            <div className="flex-1 bg-bg-elevated border border-border rounded-[14px] px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
               {roomId}
             </div>
             <button
               onClick={() => copy(roomId, setCopiedCode)}
-              className="h-10 px-4 rounded-[14px] text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
               style={
                 copiedCode
                   ? {
@@ -90,12 +90,12 @@ export function ShareRoomModal({
             Share Link
           </label>
           <div className="flex gap-2">
-            <div className="flex-1 bg-bg-elevated border border-border rounded-[14px] px-4 py-2.5 text-text-secondary text-sm truncate">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 text-text-secondary text-sm truncate">
               {url}
             </div>
             <button
               onClick={() => copy(url, setCopiedUrl)}
-              className="h-10 px-4 rounded-[14px] text-xs font-semibold transition-all cursor-pointer shrink-0"
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0"
               style={
                 copiedUrl
                   ? {
