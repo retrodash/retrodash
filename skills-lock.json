@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "tailwind-refactor": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.experimental/tailwind-refactor/SKILL.md",
+      "computedHash": "74cc16b48321d9a943016420fac621fa45011ca64e566ccdf65046439942a783"
+    }
+  }
+}
