@@ -22,6 +22,12 @@
   --color-text-primary:   #F0F2F5;
   --color-text-secondary: #8B90A7;
   --color-text-muted:     #4A4F68;
+
+  /* Border radius */
+  --radius:    14px;
+  --radius-sm:  8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
 }
 
 :root {
