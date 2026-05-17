@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updateCard, deleteCard, toggleVote } from "@/lib/firestore";
+import { updateCard, deleteCard, toggleVote, toggleCardDone } from "@/lib/firestore";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -10,6 +10,7 @@ interface CardProps {
   userId: string;
   isAnonymous: boolean;
   isFacilitator: boolean;
+  isActionItem?: boolean;
 }
 
 export function CardItem({
@@ -18,6 +19,7 @@ export function CardItem({
   userId,
   isAnonymous,
   isFacilitator,
+  isActionItem = false,
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText]   = useState(card.text);
@@ -28,6 +30,7 @@ export function CardItem({
   const canVote    = !isOwnCard;
   const canEdit    = isOwnCard;
   const canDelete  = isOwnCard || isFacilitator;
+  const isDone     = card.done ?? false;
 
   const handleSaveEdit = async () => {
     const trimmed = editText.trim();
@@ -51,7 +54,9 @@ export function CardItem({
   const handleDelete = () => deleteCard(roomId, card.id);
 
   return (
-    <div className="group relative bg-bg-elevated rounded-md p-3 border border-transparent hover:border-border transition-colors">
+    <div className={`group relative bg-bg-elevated rounded-md p-3 border transition-colors ${
+      isActionItem && isDone ? "border-accent-cyan/20" : "border-transparent hover:border-border"
+    }`}>
       {/* Edit / delete actions */}
       {!isEditing && (
         <div className="absolute top-2 right-2 hidden group-hover:flex items-center gap-1">
@@ -59,7 +64,7 @@ export function CardItem({
             <button
               onClick={() => { setEditText(card.text); setIsEditing(true); }}
               className="w-6 h-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors"
-              aria-label="Edit card"
+              aria-label="Edit"
             >
               <PencilIcon />
             </button>
@@ -68,7 +73,7 @@ export function CardItem({
             <button
               onClick={handleDelete}
               className="w-6 h-6 flex items-center justify-center rounded text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
-              aria-label="Delete card"
+              aria-label="Delete"
             >
               <TrashIcon />
             </button>
@@ -106,6 +111,26 @@ export function CardItem({
             </button>
           </div>
         </div>
+      ) : isActionItem ? (
+        /* ── Action item row ── */
+        <div className="flex items-start gap-2.5 pr-14">
+          <button
+            onClick={() => toggleCardDone(roomId, card.id, isDone)}
+            aria-label={isDone ? "Mark as not done" : "Mark as done"}
+            className="mt-0.5 shrink-0 w-4 h-4 rounded border transition-colors cursor-pointer flex items-center justify-center"
+            style={isDone
+              ? { background: "var(--color-accent-cyan)", borderColor: "var(--color-accent-cyan)" }
+              : { background: "transparent", borderColor: "var(--color-text-muted)" }
+            }
+          >
+            {isDone && <SmallCheckIcon />}
+          </button>
+          <p className={`text-sm leading-relaxed whitespace-pre-wrap break-words transition-colors ${
+            isDone ? "line-through text-text-muted" : "text-text-primary"
+          }`}>
+            {card.text}
+          </p>
+        </div>
       ) : (
         <p className="text-text-primary text-sm leading-relaxed pr-14 whitespace-pre-wrap break-words">
           {card.text}
@@ -120,23 +145,25 @@ export function CardItem({
               {isOwnCard ? "You" : card.authorName}
             </span>
           )}
-          <div className={isAnonymous ? "ml-auto" : ""}>
-            <button
-              onClick={handleVote}
-              disabled={!canVote}
-              aria-label={hasVoted ? "Remove vote" : "Vote"}
-              className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
-                ${canVote
-                  ? hasVoted
-                    ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
-                    : "text-text-muted hover:text-text-primary hover:bg-bg-card"
-                  : "text-text-muted cursor-default"
-                }`}
-            >
-              <ThumbUpIcon filled={hasVoted} />
-              {card.votes > 0 && <span>{card.votes}</span>}
-            </button>
-          </div>
+          {!isActionItem && (
+            <div className={isAnonymous ? "ml-auto" : ""}>
+              <button
+                onClick={handleVote}
+                disabled={!canVote}
+                aria-label={hasVoted ? "Remove vote" : "Vote"}
+                className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
+                  ${canVote
+                    ? hasVoted
+                      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
+                      : "text-text-muted hover:text-text-primary hover:bg-bg-card"
+                    : "text-text-muted cursor-default"
+                  }`}
+              >
+                <ThumbUpIcon filled={hasVoted} />
+                {card.votes > 0 && <span>{card.votes}</span>}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -144,6 +171,14 @@ export function CardItem({
 }
 
 // ── Icons ──────────────────────────────────────────────────────
+
+function SmallCheckIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
+      <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 function PencilIcon() {
   return (

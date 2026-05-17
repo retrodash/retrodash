@@ -33,7 +33,13 @@ export function BoardColumn({
     const text = newText.trim();
     if (!text) return;
     setAdding(true);
-    await addCard(roomId, { columnId: column.id, text, authorId: userId, authorName: userName });
+    await addCard(roomId, {
+      columnId: column.id,
+      text,
+      authorId: userId,
+      authorName: userName,
+      isActionItem: column.isActionItems,
+    });
     setNewText("");
     setAdding(false);
     setIsAdding(false);
@@ -75,6 +81,7 @@ export function BoardColumn({
             userId={userId}
             isAnonymous={isAnonymous}
             isFacilitator={isFacilitator}
+            isActionItem={column.isActionItems}
           />
         ))}
       </div>
@@ -89,7 +96,7 @@ export function BoardColumn({
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="What's on your mind?"
+              placeholder={column.isActionItems ? "Describe the action item…" : "What's on your mind?"}
               rows={3}
               className="w-full bg-bg-elevated border border-border focus:border-accent-cyan rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-none transition-colors"
             />
@@ -116,7 +123,7 @@ export function BoardColumn({
             className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated text-sm transition-colors cursor-pointer"
           >
             <SmallPlusIcon />
-            Add a card
+            {column.isActionItems ? "Add action item" : "Add a card"}
           </button>
         )}
       </div>

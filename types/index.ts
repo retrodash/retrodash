@@ -25,6 +25,7 @@ export interface Card {
   authorName: string;
   votes: number;
   votedBy: string[];
+  done?: boolean;
   createdAt: Timestamp;
 }
 

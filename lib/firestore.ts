@@ -111,7 +111,8 @@ export async function addCard(
     text,
     authorId,
     authorName,
-  }: { columnId: string; text: string; authorId: string; authorName: string }
+    isActionItem = false,
+  }: { columnId: string; text: string; authorId: string; authorName: string; isActionItem?: boolean }
 ): Promise<void> {
   await addDoc(collection(db, "rooms", roomId, "cards"), {
     columnId,
@@ -120,8 +121,17 @@ export async function addCard(
     authorName,
     votes: 0,
     votedBy: [],
+    ...(isActionItem && { done: false }),
     createdAt: serverTimestamp(),
   });
+}
+
+export async function toggleCardDone(
+  roomId: string,
+  cardId: string,
+  done: boolean
+): Promise<void> {
+  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { done: !done });
 }
 
 export async function updateCard(
