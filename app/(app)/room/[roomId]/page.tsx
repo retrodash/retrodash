@@ -11,6 +11,7 @@ import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
 import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
 import type { Room } from "@/types";
 
 export default function RoomPage({
@@ -84,12 +85,9 @@ export default function RoomPage({
         actions={
           <>
             {isFacilitator && room.status === "waiting" && (
-              <button
-                onClick={handleStartRetro}
-                className="h-8 px-4 rounded-md text-xs font-semibold bg-accent-cyan text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
-              >
+              <Button variant="cyan" size="sm" onClick={handleStartRetro}>
                 Start Retro
-              </button>
+              </Button>
             )}
             {isFacilitator && room.status === "active" && (
               <EndRetroButton loading={endingRetro} onClick={handleEndRetro} />
@@ -180,30 +178,25 @@ function EndRetroButton({
     return (
       <div className="flex items-center gap-2">
         <span className="text-text-muted text-xs">End retro?</span>
-        <button
-          onClick={onClick}
-          disabled={loading}
-          className="h-8 px-3 rounded-md text-xs font-semibold bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors cursor-pointer disabled:opacity-60"
-        >
+        <Button variant="destructive" size="sm" onClick={onClick} disabled={loading}>
           {loading ? "Ending…" : "Yes, end"}
-        </button>
-        <button
-          onClick={() => setConfirming(false)}
-          className="h-8 px-3 rounded-md text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer"
-        >
+        </Button>
+        <Button variant="ghost-text" size="sm" onClick={() => setConfirming(false)}>
           Cancel
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
-    <button
+    <Button
+      variant="destructive"
+      size="sm"
       onClick={() => setConfirming(true)}
-      className="h-8 px-4 rounded-md text-xs font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+      className="border border-red-500/30 bg-transparent hover:bg-red-500/10"
     >
       End Retro
-    </button>
+    </Button>
   );
 }
 

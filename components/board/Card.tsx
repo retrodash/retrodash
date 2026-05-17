@@ -7,6 +7,7 @@ import {
   toggleVote,
   toggleCardDone,
 } from "@/lib/firestore";
+import { Button } from "@/components/ui/Button";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -112,19 +113,17 @@ export function CardItem({
             className="w-full bg-bg-card border border-accent-cyan rounded-md p-2 text-sm text-text-primary resize-none outline-hidden"
           />
           <div className="flex gap-2">
-            <button
+            <Button
+              size="xs"
+              variant="cyan"
               onClick={handleSaveEdit}
               disabled={saving || !editText.trim()}
-              className="h-7 px-3 rounded bg-accent-cyan text-bg-base text-xs font-semibold disabled:opacity-50 cursor-pointer"
             >
               Save
-            </button>
-            <button
-              onClick={handleCancelEdit}
-              className="h-7 px-3 rounded text-text-muted hover:text-text-primary text-xs transition-colors cursor-pointer"
-            >
+            </Button>
+            <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       ) : isActionItem ? (

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { hashPassword } from "@/lib/auth";
 import { joinRoom } from "@/lib/firestore";
+import { Button } from "@/components/ui/Button";
 import type { Room } from "@/types";
 
 interface JoinRoomProps {
@@ -83,13 +84,14 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
             )}
           </div>
 
-          <button
+          <Button
             type="submit"
+            size="lg"
             disabled={joining || !password.trim()}
-            className="w-full h-11 rounded-md font-semibold text-sm bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full"
           >
             {joining ? "Joining…" : "Join Room"}
-          </button>
+          </Button>
         </form>
       </div>
 

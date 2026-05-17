@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { hashPassword } from "@/lib/auth";
 import { createRoom } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
 
 type ColumnEntry = { id: string; title: string };
 
@@ -207,14 +208,10 @@ export default function NewRoomPage() {
 
             {/* Submit */}
             <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={submitting}
-                className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              >
+              <Button type="submit" size="lg" disabled={submitting}>
                 {submitting ? "Creating…" : "Create Room"}
                 {!submitting && <ArrowRightIcon />}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

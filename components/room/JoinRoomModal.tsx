@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
 
 interface JoinRoomModalProps {
   onClose: () => void;
@@ -37,13 +38,9 @@ export function JoinRoomModal({ onClose }: JoinRoomModalProps) {
           spellCheck={false}
         />
 
-        <button
-          type="submit"
-          disabled={!code.trim()}
-          className="h-10 w-full rounded-md text-sm font-semibold bg-cta text-bg-base transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-        >
+        <Button type="submit" disabled={!code.trim()} className="w-full">
           Join Room
-        </button>
+        </Button>
       </form>
     </Modal>
   );

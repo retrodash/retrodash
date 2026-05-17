@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRooms } from "@/hooks/useRooms";
 import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import type { Room } from "@/types";
 
@@ -29,12 +30,9 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setJoinOpen(true)}
-              className="h-10 px-4 rounded-md border border-border text-text-secondary text-sm font-medium hover:border-accent-cyan hover:text-text-primary transition-colors cursor-pointer"
-            >
+            <Button variant="ghost" onClick={() => setJoinOpen(true)}>
               Join Room
-            </button>
+            </Button>
             <Link
               href="/room/new"
               className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"

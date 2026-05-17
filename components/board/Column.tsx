@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { addCard } from "@/lib/firestore";
+import { Button } from "@/components/ui/Button";
 import { CardItem } from "@/components/board/Card";
 import type { Column, Card } from "@/types";
 
@@ -101,20 +102,20 @@ export function BoardColumn({
               className="w-full bg-bg-elevated border border-border focus:border-accent-cyan rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-hidden transition-colors"
             />
             <div className="flex gap-2">
-              <button
+              <Button
+                size="xs"
                 onClick={handleAddCard}
                 disabled={adding || !newText.trim()}
-                className="h-7 px-3 rounded-md text-xs font-semibold transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
-                style={{ background: "var(--color-cta)", color: "var(--color-bg-base)" }}
               >
                 Add
-              </button>
-              <button
+              </Button>
+              <Button
+                size="xs"
+                variant="ghost-text"
                 onClick={() => { setIsAdding(false); setNewText(""); }}
-                className="h-7 px-3 rounded-md text-xs text-text-muted hover:text-text-primary transition-colors cursor-pointer"
               >
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
