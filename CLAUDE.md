@@ -14,6 +14,13 @@ When you build or change something for me — like a login page — always inclu
 
 ---
 
+## Security
+
+Don't forget about the security :D
+Use security skills.
+
+---
+
 ## ⚙️ Tech Stack
 
 | Layer | Technology |
