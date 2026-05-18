@@ -20,20 +20,38 @@ export function Board({
   isAnonymous,
   isFacilitator,
 }: BoardProps) {
+  const regularCols = columns
+    .filter((col) => !col.isActionItems)
+    .sort((a, b) => a.order - b.order);
+
+  const actionCol = columns.find((col) => col.isActionItems);
+
+  const colProps = { roomId, userId, userName, isAnonymous, isFacilitator };
+
   return (
-    <div className="flex gap-4 p-6 overflow-x-auto h-full items-start">
-      {columns.map((col) => (
-        <BoardColumn
-          key={col.id}
-          column={col}
-          cards={cards.filter((c) => c.columnId === col.id)}
-          roomId={roomId}
-          userId={userId}
-          userName={userName}
-          isAnonymous={isAnonymous}
-          isFacilitator={isFacilitator}
-        />
+    <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
+      {regularCols.map((col) => (
+        <div key={col.id} className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
+          <BoardColumn
+            column={col}
+            cards={cards.filter((c) => c.columnId === col.id)}
+            {...colProps}
+          />
+        </div>
       ))}
+
+      {actionCol && (
+        <>
+          <div className="hidden lg:block w-px shrink-0 bg-border" />
+          <div className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
+            <BoardColumn
+              column={actionCol}
+              cards={cards.filter((c) => c.columnId === actionCol.id)}
+              {...colProps}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

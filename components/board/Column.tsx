@@ -57,7 +57,7 @@ export function BoardColumn({
     : "var(--color-text-muted)";
 
   return (
-    <div className="w-72 shrink-0 flex flex-col bg-bg-surface rounded-lg border border-border max-h-full">
+    <div className="w-full h-full flex flex-col bg-bg-surface rounded-lg border border-border">
       {/* Column header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
