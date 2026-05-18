@@ -10,6 +10,7 @@ import { updateRoomStatus, getParticipant } from "@/lib/firestore";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
+import { ParticipantsModal } from "@/components/room/ParticipantsModal";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -27,6 +28,7 @@ export default function RoomPage({
   const router = useRouter();
   const [endingRetro, setEndingRetro] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [participantsOpen, setParticipantsOpen] = useState(false);
   const [participantStatus, setParticipantStatus] = useState<
     "loading" | "joined" | "stranger"
   >("loading");
@@ -78,6 +80,8 @@ export default function RoomPage({
       <JoinRoom
         room={room}
         userId={user?.uid ?? ""}
+        userDisplayName={user?.displayName ?? "Member"}
+        userPhotoURL={user?.photoURL ?? null}
         onJoined={() => setParticipantStatus("joined")}
       />
     );
@@ -112,6 +116,16 @@ export default function RoomPage({
           {room.name}
         </h1>
         <StatusBadge status={room.status} />
+        {!room.isAnonymous && (
+          <button
+            onClick={() => setParticipantsOpen(true)}
+            title="View participants"
+            className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+            aria-label="View participants"
+          >
+            <PeopleIcon />
+          </button>
+        )}
         <button
           onClick={() => setShareOpen(true)}
           title="Invite teammates"
@@ -134,6 +148,13 @@ export default function RoomPage({
           isFacilitator={isFacilitator}
         />
       </div>
+
+      {participantsOpen && (
+        <ParticipantsModal
+          roomId={roomId}
+          onClose={() => setParticipantsOpen(false)}
+        />
+      )}
 
       {shareOpen && (
         <ShareRoomModal
@@ -203,6 +224,17 @@ function BoardSkeleton() {
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
       </div>
     </div>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
   );
 }
 

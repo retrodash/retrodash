@@ -13,10 +13,12 @@ import type { Room } from "@/types";
 interface JoinRoomProps {
   room: Room;
   userId: string;
+  userDisplayName: string;
+  userPhotoURL: string | null;
   onJoined: () => void;
 }
 
-export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
+export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined }: JoinRoomProps) {
   const [password, setPassword] = useState("");
   const [error, setError]       = useState<string | null>(null);
   const [joining, setJoining]   = useState(false);
@@ -36,7 +38,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
       return;
     }
 
-    await joinRoom(room.id, userId);
+    await joinRoom(room.id, userId, userDisplayName, userPhotoURL);
     onJoined();
   };
 

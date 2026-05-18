@@ -39,16 +39,27 @@ export function cardsQuery(roomId: string) {
 
 // ── Room mutations ─────────────────────────────────────────────
 
+export function participantsQuery(roomId: string) {
+  return query(
+    collection(db, "rooms", roomId, "participants"),
+    orderBy("joinedAt", "asc"),
+  );
+}
+
 export async function createRoom({
   name,
   passwordHash,
   ownerId,
+  ownerName,
+  ownerPhotoURL,
   isAnonymous,
   columnTitles,
 }: {
   name: string;
   passwordHash: string;
   ownerId: string;
+  ownerName: string;
+  ownerPhotoURL: string | null;
   isAnonymous: boolean;
   columnTitles: string[];
 }): Promise<string> {
@@ -77,7 +88,12 @@ export async function createRoom({
   });
 
   const participantRef = doc(db, "rooms", roomRef.id, "participants", ownerId);
-  batch.set(participantRef, { joinedAt: serverTimestamp(), role: "facilitator" });
+  batch.set(participantRef, {
+    displayName: ownerName,
+    photoURL: ownerPhotoURL,
+    joinedAt: serverTimestamp(),
+    role: "facilitator",
+  });
 
   await batch.commit();
   return roomRef.id;
@@ -88,8 +104,15 @@ export async function getParticipant(roomId: string, userId: string) {
   return snap.exists() ? snap.data() : null;
 }
 
-export async function joinRoom(roomId: string, userId: string): Promise<void> {
+export async function joinRoom(
+  roomId: string,
+  userId: string,
+  displayName: string,
+  photoURL: string | null,
+): Promise<void> {
   await setDoc(doc(db, "rooms", roomId, "participants", userId), {
+    displayName,
+    photoURL,
     joinedAt: serverTimestamp(),
     role: "member",
   });

@@ -68,6 +68,8 @@ export default function NewRoomPage() {
         name: name.trim(),
         passwordHash,
         ownerId: user.uid,
+        ownerName: user.displayName ?? "Facilitator",
+        ownerPhotoURL: user.photoURL ?? null,
         isAnonymous,
         columnTitles: columns.map((c) => c.title.trim()),
       });

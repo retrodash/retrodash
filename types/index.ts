@@ -30,6 +30,9 @@ export interface Card {
 }
 
 export interface Participant {
+  id: string;
+  displayName: string;
+  photoURL: string | null;
   joinedAt: Timestamp;
   role: "facilitator" | "member";
 }
