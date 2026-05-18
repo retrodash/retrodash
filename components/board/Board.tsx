@@ -7,6 +7,7 @@ interface BoardProps {
   roomId: string;
   userId: string;
   userName: string;
+  userPhotoURL: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
 }
@@ -17,6 +18,7 @@ export function Board({
   roomId,
   userId,
   userName,
+  userPhotoURL,
   isAnonymous,
   isFacilitator,
 }: BoardProps) {
@@ -26,7 +28,7 @@ export function Board({
 
   const actionCol = columns.find((col) => col.isActionItems);
 
-  const colProps = { roomId, userId, userName, isAnonymous, isFacilitator };
+  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator };
 
   // Show published cards to everyone; show own unpublished (draft) cards only to their author
   const visibleCards = cards.filter(

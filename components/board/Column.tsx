@@ -13,6 +13,7 @@ interface ColumnProps {
   roomId: string;
   userId: string;
   userName: string;
+  userPhotoURL: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
 }
@@ -23,6 +24,7 @@ export function BoardColumn({
   roomId,
   userId,
   userName,
+  userPhotoURL,
   isAnonymous,
   isFacilitator,
 }: ColumnProps) {
@@ -40,6 +42,7 @@ export function BoardColumn({
       text,
       authorId: userId,
       authorName: userName,
+      authorPhotoURL: userPhotoURL,
       isActionItem: column.isActionItems,
     });
     setNewText("");
@@ -81,6 +84,7 @@ export function BoardColumn({
             card={card}
             roomId={roomId}
             userId={userId}
+            currentUserPhotoURL={userPhotoURL}
             isAnonymous={isAnonymous}
             isFacilitator={isFacilitator}
             isActionItem={column.isActionItems}

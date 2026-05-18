@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Avatar } from "@/components/ui/Avatar";
 import {
   updateCard,
   deleteCard,
@@ -16,6 +17,7 @@ interface CardProps {
   card: Card;
   roomId: string;
   userId: string;
+  currentUserPhotoURL?: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
   isActionItem?: boolean;
@@ -25,6 +27,7 @@ export function CardItem({
   card,
   roomId,
   userId,
+  currentUserPhotoURL,
   isAnonymous,
   isFacilitator,
   isActionItem = false,
@@ -78,8 +81,8 @@ export function CardItem({
         isDraft
           ? "border-dashed border-border/60 opacity-80"
           : isActionItem && isDone
-          ? "border-accent-cyan/20"
-          : "border-transparent hover:border-border"
+            ? "border-accent-cyan/20"
+            : "border-transparent hover:border-border"
       }`}
     >
       {/* Edit / delete actions */}
@@ -170,9 +173,10 @@ export function CardItem({
       {!isEditing && (
         <div className="flex items-center justify-between mt-3">
           {!isAnonymous && (
-            <span className="text-text-muted text-xs truncate max-w-30">
-              {isOwnCard ? "You" : card.authorName}
-            </span>
+            <AuthorChip
+              name={isOwnCard ? "You" : card.authorName}
+              photoURL={isOwnCard ? currentUserPhotoURL : card.authorPhotoURL}
+            />
           )}
 
           {isDraft && isOwnCard ? (
@@ -210,6 +214,23 @@ export function CardItem({
           ) : null}
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Author chip ────────────────────────────────────────────────
+
+function AuthorChip({
+  name,
+  photoURL,
+}: {
+  name: string;
+  photoURL?: string | null;
+}) {
+  return (
+    <div className="flex items-center gap-1.5 min-w-0">
+      <Avatar photoURL={photoURL} name={name} size={24} />
+      <span className="text-text-muted text-xs truncate max-w-28">{name}</span>
     </div>
   );
 }

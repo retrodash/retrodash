@@ -24,6 +24,7 @@ export interface Card {
   text: string;
   authorId: string;
   authorName: string;
+  authorPhotoURL?: string | null;
   votes: number;
   votedBy: string[];
   done?: boolean;

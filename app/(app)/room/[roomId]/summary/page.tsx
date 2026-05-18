@@ -3,6 +3,7 @@
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Avatar } from "@/components/ui/Avatar";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { useParticipants } from "@/hooks/useParticipants";
@@ -249,7 +250,10 @@ function ActionItemRow({
           {card.text}
         </p>
         {!isAnonymous && (
-          <p className="text-text-muted text-xs mt-1">{card.authorName}</p>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
+            <span className="text-text-muted text-xs">{card.authorName}</span>
+          </div>
         )}
       </div>
       {card.votes > 0 && (
@@ -309,7 +313,10 @@ function SummaryCard({
       </p>
       <div className="flex items-center justify-between mt-2">
         {!isAnonymous ? (
-          <span className="text-text-muted text-xs">{card.authorName}</span>
+          <div className="flex items-center gap-1.5">
+            <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
+            <span className="text-text-muted text-xs">{card.authorName}</span>
+          </div>
         ) : (
           <span />
         )}

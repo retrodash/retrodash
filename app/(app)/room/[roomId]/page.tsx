@@ -146,6 +146,7 @@ export default function RoomPage({
           roomId={roomId}
           userId={user?.uid ?? ""}
           userName={user?.displayName ?? "Anonymous"}
+          userPhotoURL={user?.photoURL ?? null}
           isAnonymous={room.isAnonymous}
           isFacilitator={isFacilitator}
         />

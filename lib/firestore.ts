@@ -191,14 +191,16 @@ export async function addCard(
     text,
     authorId,
     authorName,
+    authorPhotoURL = null,
     isActionItem = false,
-  }: { columnId: string; text: string; authorId: string; authorName: string; isActionItem?: boolean }
+  }: { columnId: string; text: string; authorId: string; authorName: string; authorPhotoURL?: string | null; isActionItem?: boolean }
 ): Promise<void> {
   await addDoc(collection(db, "rooms", roomId, "cards"), {
     columnId,
     text,
     authorId,
     authorName,
+    authorPhotoURL,
     votes: 0,
     votedBy: [],
     published: false,
