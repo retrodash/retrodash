@@ -1,0 +1,405 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "@/i18n/navigation";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useAuth } from "@/hooks/useAuth";
+import { useRooms } from "@/hooks/useRooms";
+import { useCarryOver } from "@/hooks/useCarryOver";
+import { hashPassword } from "@/lib/auth";
+import { createRoom } from "@/lib/firestore";
+import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Field } from "@/components/ui/Field";
+import { Toggle } from "@/components/ui/Toggle";
+import { CarryOverSection } from "@/components/room/CarryOverSection";
+
+type ColumnEntry = { id: string; title: string };
+
+export default function NewRoomPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const t = useTranslations("newRoom");
+  const { rooms, loading: roomsLoading } = useRooms();
+  const endedRooms = rooms.filter((r) => r.status === "ended");
+  const carryOver = useCarryOver(endedRooms);
+
+  const DEFAULT_COLUMNS: ColumnEntry[] = [
+    { id: "1", title: t("defaultCol1") },
+    { id: "2", title: t("defaultCol2") },
+  ];
+
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAnonymous, setAnonymous] = useState(false);
+  const [columns, setColumns] = useState<ColumnEntry[]>(DEFAULT_COLUMNS);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [created, setCreated] = useState<{ roomId: string; password: string } | null>(null);
+
+  const addColumn = () => {
+    setColumns((prev) => [...prev, { id: crypto.randomUUID(), title: "" }]);
+  };
+
+  const removeColumn = (id: string) => {
+    setColumns((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const updateColumn = (id: string, title: string) => {
+    setColumns((prev) => prev.map((c) => (c.id === id ? { ...c, title } : c)));
+  };
+
+  const validate = () => {
+    const next: Record<string, string> = {};
+    if (!name.trim()) next.name = t("nameRequired");
+    if (!password.trim()) next.password = t("passwordRequired");
+    if (password.trim().length < 4) next.password = t("passwordMinLength");
+    if (columns.some((c) => !c.title.trim())) next.columns = t("columnsRequired");
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate() || !user) return;
+
+    setSubmitting(true);
+    setServerError(null);
+
+    try {
+      const passwordHash = await hashPassword(password.trim());
+      const roomId = await createRoom({
+        name: name.trim(),
+        passwordHash,
+        ownerId: user.uid,
+        ownerName: user.displayName ?? "Facilitator",
+        ownerPhotoURL: user.photoURL ?? null,
+        isAnonymous,
+        columnTitles: columns.map((c) => c.title.trim()),
+        initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
+      });
+      setCreated({ roomId, password: password.trim() });
+    } catch {
+      setServerError(t("serverError"));
+      setSubmitting(false);
+    }
+  };
+
+  if (created) {
+    return (
+      <RoomCreatedScreen
+        roomId={created.roomId}
+        roomName={name.trim()}
+        password={created.password}
+        onOpen={() => router.push(`/room/${created.roomId}`)}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-2xl w-full mx-auto px-6 py-10">
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-2 text-text-muted hover:text-text-secondary text-sm mb-8 transition-colors"
+        >
+          <ArrowLeftIcon />
+          {t("backToRooms")}
+        </Link>
+
+        <div className="bg-bg-card border border-border rounded-lg p-8">
+          <h1 className="text-2xl font-bold text-text-primary mb-1">{t("title")}</h1>
+          <p className="text-text-secondary text-sm mb-8">{t("subtitle")}</p>
+
+          {serverError && (
+            <div className="mb-6 px-4 py-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {serverError}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            <Field label={t("roomName")} error={errors.name}>
+              <Input
+                type="text"
+                placeholder={t("roomNamePlaceholder")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Field>
+
+            <Field label={t("password")} error={errors.password} hint={t("passwordHint")}>
+              <Input
+                type="password"
+                placeholder={t("passwordPlaceholder")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Field>
+
+            <div className="flex items-center justify-between gap-4 py-1">
+              <div>
+                <p className="text-text-primary text-sm font-medium">{t("anonymousMode")}</p>
+                <p className="text-text-muted text-xs mt-0.5">{t("anonymousModeHint")}</p>
+              </div>
+              <Toggle checked={isAnonymous} onChange={setAnonymous} />
+            </div>
+
+            <Divider />
+
+            <div>
+              <p className="text-text-primary text-sm font-medium mb-1">{t("columnsTitle")}</p>
+              <p className="text-text-muted text-xs mb-4">{t("columnsHint")}</p>
+
+              <div className="space-y-2">
+                {columns.map((col) => (
+                  <div key={col.id} className="flex items-center gap-2">
+                    <Input
+                      type="text"
+                      size="sm"
+                      placeholder={t("columnPlaceholder")}
+                      value={col.title}
+                      onChange={(e) => updateColumn(col.id, e.target.value)}
+                      className="flex-1"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeColumn(col.id)}
+                      disabled={columns.length === 1}
+                      className="size-10 flex items-center justify-center rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Remove column"
+                    >
+                      <XIcon />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {errors.columns && (
+                <p className="mt-2 text-xs text-red-400">{errors.columns}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={addColumn}
+                className="mt-3 flex items-center gap-1.5 text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <SmallPlusIcon />
+                {t("addColumn")}
+              </button>
+
+              <div className="mt-4 flex items-center gap-3 h-10 px-3 rounded-md border border-dashed border-border bg-bg-elevated/50">
+                <LockIcon />
+                <span className="text-text-muted text-sm flex-1">{t("actionItems")}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-text-muted">
+                  {t("autoAdded")}
+                </span>
+              </div>
+            </div>
+
+            <Divider />
+
+            <CarryOverSection
+              carryOver={carryOver}
+              endedRooms={endedRooms}
+              roomsLoading={roomsLoading}
+            />
+
+            <Divider />
+
+            <div className="flex justify-end">
+              <Button type="submit" size="lg" disabled={submitting}>
+                {submitting ? t("creating") : t("createRoom")}
+                {!submitting && <ArrowRightIcon />}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// ── Room Created Screen ────────────────────────────────────────
+
+function RoomCreatedScreen({
+  roomId,
+  roomName,
+  password,
+  onOpen,
+}: {
+  roomId: string;
+  roomName: string;
+  password: string;
+  onOpen: () => void;
+}) {
+  const t = useTranslations("newRoom");
+  const [copiedPassword, setCopiedPassword] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const copy = async (text: string, setter: (v: boolean) => void) => {
+    await navigator.clipboard.writeText(text);
+    setter(true);
+    setTimeout(() => setter(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6">
+      <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8 space-y-6">
+        <div>
+          <p className="text-accent-cyan text-[11px] font-semibold uppercase tracking-widest mb-1">
+            {t("createdHeader")}
+          </p>
+          <h1 className="text-text-primary font-bold text-xl leading-snug">{roomName}</h1>
+          <p className="text-text-secondary text-sm mt-1">{t("createdShare")}</p>
+        </div>
+
+        <div>
+          <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
+            {t("passwordLabel")}
+          </label>
+          <div className="flex gap-2">
+            <div className="flex-1 flex items-center bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-text-primary text-sm tracking-widest min-w-0">
+              <span className="truncate">
+                {showPassword ? password : "•".repeat(password.length)}
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="ml-2 shrink-0 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </button>
+            </div>
+            <button
+              onClick={() => copy(password, setCopiedPassword)}
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+              style={
+                copiedPassword
+                  ? {
+                      background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                      color: "var(--color-accent-cyan)",
+                      borderColor: "var(--color-accent-cyan)",
+                    }
+                  : {
+                      background: "transparent",
+                      color: "var(--color-text-secondary)",
+                      borderColor: "var(--color-border)",
+                    }
+              }
+            >
+              {copiedPassword ? t("copied") : t("copy")}
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
+            {t("codeLabel")}
+          </label>
+          <div className="flex gap-2">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+              {roomId}
+            </div>
+            <button
+              onClick={() => copy(roomId, setCopiedCode)}
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+              style={
+                copiedCode
+                  ? {
+                      background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                      color: "var(--color-accent-cyan)",
+                      borderColor: "var(--color-accent-cyan)",
+                    }
+                  : {
+                      background: "transparent",
+                      color: "var(--color-text-secondary)",
+                      borderColor: "var(--color-border)",
+                    }
+              }
+            >
+              {copiedCode ? t("copied") : t("copy")}
+            </button>
+          </div>
+        </div>
+
+        <Button size="lg" className="w-full" onClick={onOpen}>
+          {t("openRoom")}
+          <ArrowRightIcon />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ── Helpers ────────────────────────────────────────────────────
+
+function Divider() {
+  return <div className="h-px bg-border" />;
+}
+
+function ArrowLeftIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function EyeOffIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  );
+}
+
+function SmallPlusIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function LockIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
+      <rect x="1.5" y="5.5" width="10" height="7" rx="1.5" stroke="var(--color-text-muted)" strokeWidth="1.2" />
+      <path d="M4 5.5V4a2.5 2.5 0 015 0v1.5" stroke="var(--color-text-muted)" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}

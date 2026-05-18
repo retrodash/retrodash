@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Avatar } from "@/components/ui/Avatar";
 import {
   updateCard,
@@ -35,6 +36,8 @@ export function CardItem({
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(card.text);
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const t = useTranslations("board");
 
   const isOwnCard = card.authorId === userId;
   const isDraft = card.published === false;
@@ -43,7 +46,6 @@ export function CardItem({
   const canEdit = isOwnCard;
   const canDelete = isOwnCard || isFacilitator;
   const isDone = card.done ?? false;
-  const [publishing, setPublishing] = useState(false);
 
   const handlePublish = async () => {
     setPublishing(true);
@@ -85,17 +87,13 @@ export function CardItem({
             : "border-transparent hover:border-border"
       }`}
     >
-      {/* Edit / delete actions */}
       {!isEditing && (
         <div className="absolute top-2 right-2 hidden group-hover:flex items-center gap-1">
           {canEdit && (
             <button
-              onClick={() => {
-                setEditText(card.text);
-                setIsEditing(true);
-              }}
+              onClick={() => { setEditText(card.text); setIsEditing(true); }}
               className="size-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors"
-              aria-label="Edit"
+              aria-label={t("editLabel")}
             >
               <PencilIcon />
             </button>
@@ -104,7 +102,7 @@ export function CardItem({
             <button
               onClick={handleDelete}
               className="size-6 flex items-center justify-center rounded text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
-              aria-label="Delete"
+              aria-label={t("deleteLabel")}
             >
               <TrashIcon />
             </button>
@@ -112,7 +110,6 @@ export function CardItem({
         </div>
       )}
 
-      {/* Content */}
       {isEditing ? (
         <div className="space-y-2">
           <Textarea
@@ -121,32 +118,25 @@ export function CardItem({
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Escape") handleCancelEdit();
-              if (e.key === "Enter" && (e.ctrlKey || e.metaKey))
-                handleSaveEdit();
+              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSaveEdit();
             }}
             rows={3}
             className="bg-bg-card border-accent-cyan"
           />
           <div className="flex gap-2">
-            <Button
-              size="xs"
-              variant="cyan"
-              onClick={handleSaveEdit}
-              disabled={saving || !editText.trim()}
-            >
-              Save
+            <Button size="xs" variant="cyan" onClick={handleSaveEdit} disabled={saving || !editText.trim()}>
+              {t("save")}
             </Button>
             <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
-              Cancel
+              {t("cancel")}
             </Button>
           </div>
         </div>
       ) : isActionItem ? (
-        /* ── Action item row ── */
         <div className="flex items-start gap-2.5 pr-14">
           <button
             onClick={() => toggleCardDone(roomId, card.id, isDone)}
-            aria-label={isDone ? "Mark as not done" : "Mark as done"}
+            aria-label={isDone ? t("markAsNotDone") : t("markAsDone")}
             className={`mt-0.5 shrink-0 size-4 rounded border transition-colors cursor-pointer flex items-center justify-center ${
               isDone
                 ? "bg-accent-cyan border-accent-cyan"
@@ -169,12 +159,11 @@ export function CardItem({
         </p>
       )}
 
-      {/* Footer */}
       {!isEditing && (
         <div className="flex items-center justify-between mt-3">
           {!isAnonymous && (
             <AuthorChip
-              name={isOwnCard ? "You" : card.authorName}
+              name={isOwnCard ? t("you") : card.authorName}
               photoURL={isOwnCard ? currentUserPhotoURL : card.authorPhotoURL}
             />
           )}
@@ -182,14 +171,14 @@ export function CardItem({
           {isDraft && isOwnCard ? (
             <div className="flex items-center gap-2 ml-auto">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">
-                Draft
+                {t("draft")}
               </span>
               <button
                 onClick={handlePublish}
                 disabled={publishing}
                 className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
               >
-                {publishing ? "Publishing…" : "Publish"}
+                {publishing ? t("publishing") : t("publish")}
               </button>
             </div>
           ) : !isActionItem ? (
@@ -197,7 +186,7 @@ export function CardItem({
               <button
                 onClick={handleVote}
                 disabled={!canVote}
-                aria-label={hasVoted ? "Remove vote" : "Vote"}
+                aria-label={hasVoted ? t("removeVote") : t("vote")}
                 className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
                   ${
                     canVote
@@ -218,15 +207,7 @@ export function CardItem({
   );
 }
 
-// ── Author chip ────────────────────────────────────────────────
-
-function AuthorChip({
-  name,
-  photoURL,
-}: {
-  name: string;
-  photoURL?: string | null;
-}) {
+function AuthorChip({ name, photoURL }: { name: string; photoURL?: string | null }) {
   return (
     <div className="flex items-center gap-1.5 min-w-0">
       <Avatar photoURL={photoURL} name={name} size={24} />
@@ -235,18 +216,10 @@ function AuthorChip({
   );
 }
 
-// ── Icons ──────────────────────────────────────────────────────
-
 function SmallCheckIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path
-        d="M1.5 5l2.5 2.5 4.5-4.5"
-        stroke="var(--color-bg-base)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -254,12 +227,7 @@ function SmallCheckIcon() {
 function PencilIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path
-        d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
-      />
+      <path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -267,13 +235,7 @@ function PencilIcon() {
 function TrashIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path
-        d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

@@ -1,31 +1,30 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { Room } from "@/types";
 
 type Status = Room["status"];
 
-const config: Record<
-  Status,
-  { label: string; color: string; bg: string; pulse?: boolean }
-> = {
+const styles: Record<Status, { color: string; bg: string; pulse?: boolean }> = {
   waiting: {
-    label: "Waiting",
     color: "var(--color-text-muted)",
     bg: "var(--color-bg-elevated)",
   },
   active: {
-    label: "Live",
     color: "var(--color-accent-cyan)",
     bg: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
     pulse: true,
   },
   ended: {
-    label: "Ended",
     color: "var(--color-text-muted)",
     bg: "var(--color-bg-elevated)",
   },
 };
 
 export function StatusBadge({ status }: { status: Status }) {
-  const { label, color, bg, pulse } = config[status];
+  const t = useTranslations("statusBadge");
+  const { color, bg, pulse } = styles[status];
+  const label = status === "active" ? t("live") : t(status);
 
   return (
     <span

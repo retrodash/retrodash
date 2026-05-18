@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { signOut } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 interface NavbarProps {
   logoHref?: string;
@@ -15,6 +17,7 @@ interface NavbarProps {
 export function Navbar({ logoHref, children, actions }: NavbarProps) {
   const { user } = useAuth();
   const router = useRouter();
+  const t = useTranslations("navbar");
 
   const handleSignOut = async () => {
     await signOut();
@@ -47,6 +50,8 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
 
       <div className="flex items-center gap-3 shrink-0">
         {actions}
+        <LanguageSwitcher />
+        <span aria-hidden className="text-border hidden sm:block">|</span>
         {user?.photoURL && (
           <Image
             src={user.photoURL}
@@ -59,14 +64,12 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
         <span className="text-text-secondary text-sm hidden sm:block">
           {user?.displayName}
         </span>
-        <span aria-hidden className="text-border hidden sm:block">
-          |
-        </span>
+        <span aria-hidden className="text-border hidden sm:block">|</span>
         <button
           onClick={handleSignOut}
           className="text-text-muted hover:text-text-primary text-sm transition-colors cursor-pointer"
         >
-          Sign out
+          {t("signOut")}
         </button>
       </div>
     </header>

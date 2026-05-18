@@ -1,0 +1,218 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "getStarted": "Get Started",
+      "accessDashboard": "Access Dashboard"
+    },
+    "hero": {
+      "badge": "Retrospective Platform",
+      "title": "Better retros,",
+      "titleGradient": "every sprint.",
+      "subtitle": "A private, real-time retrospective board for Scrum and Kanban teams. Reflect honestly, vote together, and ship action items that stick.",
+      "seeHowItWorks": "See how it works",
+      "freeNotice": "Free to use · No credit card required · Works with any team"
+    },
+    "features": {
+      "sectionLabel": "What is RetroDash",
+      "title": "Everything your team needs for a great retrospective.",
+      "subtitle": "Built for teams who care about continuous improvement — not just ticking a ceremony box.",
+      "privateRoomsLabel": "Private Rooms",
+      "privateRoomsDesc": "Password-protected spaces where your team can speak freely. No uninvited observers, ever.",
+      "realtimeLabel": "Real-time Collaboration",
+      "realtimeDesc": "Cards, votes, and status updates appear instantly for every participant — no refreshing required.",
+      "anonymousLabel": "Anonymous Mode",
+      "anonymousDesc": "Let your team share honest feedback without their names attached. Psychological safety, built in.",
+      "actionItemsLabel": "Action Items",
+      "actionItemsDesc": "Capture outcomes directly on the board and track them to completion — no external tool needed."
+    },
+    "steps": {
+      "sectionLabel": "How it works",
+      "title": "Up and running in minutes.",
+      "subtitle": "No onboarding calls. No complex setup. Just open a room and start reflecting.",
+      "step1Title": "Create a Room",
+      "step1Desc": "Name your retro, choose your columns, and protect it with a password. Ready in under a minute.",
+      "step2Title": "Invite Your Team",
+      "step2Desc": "Share the room link and password with your teammates. Anyone with the link can join.",
+      "step3Title": "Run the Retro",
+      "step3Desc": "Add cards, vote on what matters most, discuss as a team, and close with clear action items."
+    },
+    "cta": {
+      "sectionLabel": "Get started today",
+      "title": "Your team deserves",
+      "titleGradient": "better retros.",
+      "subtitle": "Free forever. No credit card required. Your first retrospective takes less than a minute to set up.",
+      "notice": "Works with any Scrum or Kanban team · Sign in with Google"
+    },
+    "footer": {
+      "tagline": "Reflect Together. Improve Always."
+    }
+  },
+  "login": {
+    "headline": "Reflect Together.",
+    "headlineGradient": "Improve Always.",
+    "subtitle": "Structured retrospectives for high-performing teams. Real-time, collaborative, and genuinely useful.",
+    "footer": "Built for Scrum & Kanban teams",
+    "welcomeBack": "Welcome back",
+    "signInTo": "Sign in to continue to RetroDash",
+    "continueWithGoogle": "Continue with Google",
+    "signingIn": "Signing in…",
+    "noAccount": "No account yet? It’s created automatically on your first sign-in.",
+    "signInFailed": "Sign-in failed. Please try again.",
+    "byContinuing": "By continuing, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "dashboard": {
+    "myRooms": "My Rooms",
+    "myRoomsSubtitle": "Retrospective sessions you created",
+    "joinRoom": "Join Room",
+    "newRoom": "New Room",
+    "joinedRooms": "Joined Rooms",
+    "joinedRoomsSubtitle": "Sessions you participated in",
+    "active": "Active",
+    "pastSessions": "Past Sessions",
+    "noJoinedRooms": "No joined rooms yet. Use",
+    "noJoinedRoomsLink": "Join Room",
+    "noJoinedRoomsEnd": "to enter a session with a room code.",
+    "emptyTitle": "No rooms yet",
+    "emptySubtitle": "Create your first retrospective room and invite your team to reflect and improve together.",
+    "createFirstRoom": "Create your first room",
+    "created": "Created {date}"
+  },
+  "newRoom": {
+    "title": "Create a Room",
+    "subtitle": "Set up a space for your team’s retrospective.",
+    "backToRooms": "My Rooms",
+    "roomName": "Room Name",
+    "roomNamePlaceholder": "e.g. Sprint 42 Retrospective",
+    "password": "Password",
+    "passwordPlaceholder": "Enter a room password",
+    "passwordHint": "Participants will need this to join.",
+    "anonymousMode": "Anonymous mode",
+    "anonymousModeHint": "Hide card authors from participants",
+    "columnsTitle": "Columns",
+    "columnsHint": "Define the topics your team will discuss.",
+    "columnPlaceholder": "Column name",
+    "addColumn": "Add column",
+    "actionItems": "Action Items",
+    "autoAdded": "Auto-added",
+    "creating": "Creating…",
+    "createRoom": "Create Room",
+    "serverError": "Something went wrong. Please try again.",
+    "nameRequired": "Room name is required.",
+    "passwordRequired": "Password is required.",
+    "passwordMinLength": "Password must be at least 4 characters.",
+    "columnsRequired": "All column names must be filled in.",
+    "defaultCol1": "Went Well",
+    "defaultCol2": "To Improve",
+    "createdHeader": "Room created",
+    "createdShare": "Share the password and room code with your team.",
+    "passwordLabel": "Password",
+    "codeLabel": "Room Code",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "openRoom": "Open Room"
+  },
+  "room": {
+    "startRetro": "Start Retro",
+    "endRetro": "End Retro",
+    "ending": "Ending…",
+    "viewSummary": "View Summary",
+    "notFound": "Room not found.",
+    "backToDashboard": "Back to dashboard",
+    "endRetroTitle": "End Retro",
+    "endRetroSubtitle": "Add a closing phrase for this sprint — a goal, quote, or reflection. Optional.",
+    "endRetroPlaceholder": "e.g. “Ship it or skip it”…",
+    "cancel": "Cancel",
+    "confirmEnd": "End Retro",
+    "inviteTeammates": "Invite teammates",
+    "viewParticipants": "View participants"
+  },
+  "summary": {
+    "myRooms": "My Rooms",
+    "retroLabel": "Retrospective",
+    "export": "Export",
+    "comingSoon": "Coming soon",
+    "ended": "Ended",
+    "participants": "Participants",
+    "actionItems": "Action Items",
+    "noActionItems": "No action items were added.",
+    "retroRecap": "Retro Recap",
+    "noCards": "No cards added.",
+    "notFound": "Room not found.",
+    "backToDashboard": "Back to dashboard",
+    "host": "Host"
+  },
+  "navbar": {
+    "signOut": "Sign out"
+  },
+  "statusBadge": {
+    "waiting": "Waiting",
+    "live": "Live",
+    "ended": "Ended"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "This page doesn’t exist or was moved. Let’s get you back to your retrospectives.",
+    "goToDashboard": "Go to Dashboard",
+    "backToHome": "Back to Home"
+  },
+  "joinRoom": {
+    "title": "Join Room",
+    "passwordProtected": "This room is password-protected. Enter the password to join.",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter room password",
+    "joining": "Joining…",
+    "join": "Join Room",
+    "backToDashboard": "← Back to dashboard",
+    "incorrectPassword": "Incorrect password. Please try again."
+  },
+  "joinRoomModal": {
+    "title": "Join a Room",
+    "subtitle": "Paste the room code shared by your facilitator.",
+    "placeholder": "Paste room code…",
+    "join": "Join Room"
+  },
+  "shareRoomModal": {
+    "title": "Invite teammates",
+    "subtitle": "Share the link or room code below to invite people to",
+    "subtitleEnd": "They will need the room password to join.",
+    "roomCode": "Room Code",
+    "shareLink": "Share Link",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "copyLink": "Copy link"
+  },
+  "carryOver": {
+    "title": "Carry over action items",
+    "hint": "Import uncompleted items from a past retro",
+    "noEndedRooms": "No ended rooms yet. Rooms appear here after a retro ends.",
+    "pickRoom": "Pick a past room…",
+    "noItems": "No uncompleted action items in this room.",
+    "deselectAll": "Deselect all",
+    "selectAll": "Select all",
+    "selectedCount": "{selected} of {total} selected"
+  },
+  "board": {
+    "addActionItem": "Add action item",
+    "addCard": "Add a card",
+    "add": "Add",
+    "cancel": "Cancel",
+    "actionItemPlaceholder": "Describe the action item…",
+    "cardPlaceholder": "What’s on your mind?",
+    "you": "You",
+    "draft": "Draft",
+    "publishing": "Publishing…",
+    "publish": "Publish",
+    "save": "Save",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete",
+    "markAsDone": "Mark as done",
+    "markAsNotDone": "Mark as not done",
+    "removeVote": "Remove vote",
+    "vote": "Vote"
+  }
+}

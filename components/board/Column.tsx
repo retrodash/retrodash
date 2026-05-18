@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { addCard } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
@@ -29,9 +30,10 @@ export function BoardColumn({
   isFacilitator,
 }: ColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
-  const [newText, setNewText]   = useState("");
-  const [adding, setAdding]     = useState(false);
-  const textareaRef             = useRef<HTMLTextAreaElement>(null);
+  const [newText, setNewText] = useState("");
+  const [adding, setAdding] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const t = useTranslations("board");
 
   const handleAddCard = async () => {
     const text = newText.trim();
@@ -61,7 +63,6 @@ export function BoardColumn({
 
   return (
     <div className="w-full h-full flex flex-col bg-bg-surface rounded-lg border border-border">
-      {/* Column header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
           {column.isActionItems && (
@@ -76,7 +77,6 @@ export function BoardColumn({
         </span>
       </div>
 
-      {/* Cards */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
         {cards.map((card) => (
           <CardItem
@@ -92,7 +92,6 @@ export function BoardColumn({
         ))}
       </div>
 
-      {/* Add card */}
       <div className="p-3 border-t border-border shrink-0">
         {isAdding ? (
           <div className="space-y-2">
@@ -102,23 +101,19 @@ export function BoardColumn({
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={column.isActionItems ? "Describe the action item…" : "What's on your mind?"}
+              placeholder={column.isActionItems ? t("actionItemPlaceholder") : t("cardPlaceholder")}
               rows={3}
             />
             <div className="flex gap-2">
-              <Button
-                size="xs"
-                onClick={handleAddCard}
-                disabled={adding || !newText.trim()}
-              >
-                Add
+              <Button size="xs" onClick={handleAddCard} disabled={adding || !newText.trim()}>
+                {t("add")}
               </Button>
               <Button
                 size="xs"
                 variant="ghost-text"
                 onClick={() => { setIsAdding(false); setNewText(""); }}
               >
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
           </div>
@@ -128,15 +123,13 @@ export function BoardColumn({
             className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated text-sm transition-colors cursor-pointer"
           >
             <SmallPlusIcon />
-            {column.isActionItems ? "Add action item" : "Add a card"}
+            {column.isActionItems ? t("addActionItem") : t("addCard")}
           </button>
         )}
       </div>
     </div>
   );
 }
-
-// ── Icons ──────────────────────────────────────────────────────
 
 function CheckIcon() {
   return (

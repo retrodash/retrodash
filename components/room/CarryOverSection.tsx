@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Toggle } from "@/components/ui/Toggle";
 import { Skeleton } from "@/components/ui/Skeleton";
 import type { CarryOverState } from "@/hooks/useCarryOver";
@@ -11,11 +12,7 @@ interface CarryOverSectionProps {
   roomsLoading: boolean;
 }
 
-export function CarryOverSection({
-  carryOver,
-  endedRooms,
-  roomsLoading,
-}: CarryOverSectionProps) {
+export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryOverSectionProps) {
   const {
     enabled, setEnabled,
     selectedRoomId, setSelectedRoomId,
@@ -23,58 +20,39 @@ export function CarryOverSection({
     checkedIds, toggleItem, toggleAll,
     selectedTexts,
   } = carryOver;
+  const t = useTranslations("carryOver");
 
   const allChecked = candidateItems.length > 0 && checkedIds.size === candidateItems.length;
 
   return (
     <div className="space-y-4">
-      {/* Toggle row — matches "Anonymous mode" row style */}
       <div className="flex items-center justify-between gap-4 py-1">
         <div>
-          <p className="text-text-primary text-sm font-medium">
-            Carry over action items
-          </p>
-          <p className="text-text-muted text-xs mt-0.5">
-            Import uncompleted items from a past retro
-          </p>
+          <p className="text-text-primary text-sm font-medium">{t("title")}</p>
+          <p className="text-text-muted text-xs mt-0.5">{t("hint")}</p>
         </div>
-        <Toggle
-          checked={enabled}
-          onChange={setEnabled}
-          aria-label="Carry over action items"
-        />
+        <Toggle checked={enabled} onChange={setEnabled} aria-label={t("title")} />
       </div>
 
-      {/* Expanded content */}
       {enabled && (
         <div className="space-y-3 pl-0">
-          {/* Room selector */}
           {roomsLoading ? (
             <Skeleton className="h-11 w-full" />
           ) : endedRooms.length === 0 ? (
-            <p className="text-text-muted text-sm">
-              No ended rooms yet. Rooms appear here after a retro ends.
-            </p>
+            <p className="text-text-muted text-sm">{t("noEndedRooms")}</p>
           ) : (
             <select
               value={selectedRoomId ?? ""}
-              onChange={(e) =>
-                setSelectedRoomId(e.target.value || null)
-              }
+              onChange={(e) => setSelectedRoomId(e.target.value || null)}
               className="w-full h-11 px-3 rounded-md bg-bg-elevated border border-border text-sm text-text-primary outline-none focus:border-accent-cyan transition-colors cursor-pointer"
             >
-              <option value="" disabled>
-                Pick a past room…
-              </option>
+              <option value="" disabled>{t("pickRoom")}</option>
               {endedRooms.map((room) => (
-                <option key={room.id} value={room.id}>
-                  {room.name}
-                </option>
+                <option key={room.id} value={room.id}>{room.name}</option>
               ))}
             </select>
           )}
 
-          {/* Items list */}
           {selectedRoomId && (
             loadingItems ? (
               <div className="space-y-2">
@@ -82,26 +60,22 @@ export function CarryOverSection({
                 <Skeleton className="h-9 w-full rounded-md" />
               </div>
             ) : candidateItems.length === 0 ? (
-              <p className="text-text-muted text-sm">
-                No uncompleted action items in this room.
-              </p>
+              <p className="text-text-muted text-sm">{t("noItems")}</p>
             ) : (
               <div className="space-y-2">
-                {/* Controls */}
                 <div className="flex items-center justify-between">
                   <button
                     type="button"
                     onClick={toggleAll}
                     className="text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
                   >
-                    {allChecked ? "Deselect all" : "Select all"}
+                    {allChecked ? t("deselectAll") : t("selectAll")}
                   </button>
                   <span className="text-xs text-text-muted">
-                    {selectedTexts.length} of {candidateItems.length} selected
+                    {t("selectedCount", { selected: selectedTexts.length, total: candidateItems.length })}
                   </span>
                 </div>
 
-                {/* Checklist */}
                 <div className="space-y-1">
                   {candidateItems.map((item) => {
                     const checked = checkedIds.has(item.id);
@@ -122,9 +96,7 @@ export function CarryOverSection({
                         >
                           {checked && <CheckIcon />}
                         </span>
-                        <span className="text-sm text-text-primary leading-snug">
-                          {item.text}
-                        </span>
+                        <span className="text-sm text-text-primary leading-snug">{item.text}</span>
                       </button>
                     );
                   })}
@@ -141,13 +113,7 @@ export function CarryOverSection({
 function CheckIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path
-        d="M1.5 5l2.5 2.5L8.5 2"
-        stroke="var(--color-bg-base)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="M1.5 5l2.5 2.5L8.5 2" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

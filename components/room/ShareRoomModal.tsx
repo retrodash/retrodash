@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Modal } from "@/components/ui/Modal";
 
 interface ShareRoomModalProps {
@@ -9,13 +10,10 @@ interface ShareRoomModalProps {
   onClose: () => void;
 }
 
-export function ShareRoomModal({
-  roomId,
-  roomName,
-  onClose,
-}: ShareRoomModalProps) {
+export function ShareRoomModal({ roomId, roomName, onClose }: ShareRoomModalProps) {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const t = useTranslations("shareRoomModal");
 
   const url = `${window.location.origin}/room/${roomId}`;
 
@@ -26,17 +24,16 @@ export function ShareRoomModal({
   };
 
   return (
-    <Modal onClose={onClose} title="Invite teammates" size="md">
+    <Modal onClose={onClose} title={t("title")} size="md">
       <p className="text-text-secondary text-sm mb-5 leading-relaxed">
-        Share the link or room code below to invite people to{" "}
-        <span className="text-text-primary font-medium">{roomName}</span>.
-        They will need the room password to join.
+        {t("subtitle")}{" "}
+        <span className="text-text-primary font-medium">{roomName}</span>.{" "}
+        {t("subtitleEnd")}
       </p>
 
-      {/* Room code */}
       <div className="mb-4">
         <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
-          Room Code
+          {t("roomCode")}
         </label>
         <div className="flex gap-2">
           <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
@@ -48,8 +45,7 @@ export function ShareRoomModal({
             style={
               copiedCode
                 ? {
-                    background:
-                      "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
                     color: "var(--color-accent-cyan)",
                     borderColor: "var(--color-accent-cyan)",
                   }
@@ -60,15 +56,14 @@ export function ShareRoomModal({
                   }
             }
           >
-            {copiedCode ? "Copied!" : "Copy"}
+            {copiedCode ? t("copied") : t("copy")}
           </button>
         </div>
       </div>
 
-      {/* Share link */}
       <div>
         <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
-          Share Link
+          {t("shareLink")}
         </label>
         <div className="flex gap-2">
           <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 text-text-secondary text-sm truncate">
@@ -80,8 +75,7 @@ export function ShareRoomModal({
             style={
               copiedUrl
                 ? {
-                    background:
-                      "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
                     color: "var(--color-accent-cyan)",
                   }
                 : {
@@ -90,7 +84,7 @@ export function ShareRoomModal({
                   }
             }
           >
-            {copiedUrl ? "Copied!" : "Copy link"}
+            {copiedUrl ? t("copied") : t("copyLink")}
           </button>
         </div>
       </div>

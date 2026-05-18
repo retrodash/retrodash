@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { hashPassword } from "@/lib/auth";
 import { joinRoom } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
@@ -20,8 +21,9 @@ interface JoinRoomProps {
 
 export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined }: JoinRoomProps) {
   const [password, setPassword] = useState("");
-  const [error, setError]       = useState<string | null>(null);
-  const [joining, setJoining]   = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [joining, setJoining] = useState(false);
+  const t = useTranslations("joinRoom");
 
   const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,7 +35,7 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
     const hash = await hashPassword(password.trim());
 
     if (hash !== room.password) {
-      setError("Incorrect password. Please try again.");
+      setError(t("incorrectPassword"));
       setJoining(false);
       return;
     }
@@ -44,21 +46,18 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
 
   return (
     <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6">
-      {/* Logo */}
       <div className="mb-10">
         <Image src="/logo.svg" alt="RetroDash" width={180} height={78} priority />
       </div>
 
-      {/* Card */}
       <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8">
-        {/* Room identity */}
         <div className="flex items-start gap-3 mb-6">
           <span className="mt-0.5 shrink-0 text-accent-violet">
             <LockIcon />
           </span>
           <div className="min-w-0">
             <p className="text-text-muted text-xs uppercase tracking-widest font-semibold mb-1">
-              Join Room
+              {t("title")}
             </p>
             <h1 className="text-text-primary font-bold text-lg leading-snug truncate">
               {room.name}
@@ -66,16 +65,14 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
           </div>
         </div>
 
-        <p className="text-text-secondary text-sm mb-6">
-          This room is password-protected. Enter the password to join.
-        </p>
+        <p className="text-text-secondary text-sm mb-6">{t("passwordProtected")}</p>
 
         <form onSubmit={handleJoin} noValidate className="space-y-4">
-          <Field label="Password" error={error ?? undefined}>
+          <Field label={t("passwordLabel")} error={error ?? undefined}>
             <Input
               type="password"
               autoFocus
-              placeholder="Enter room password"
+              placeholder={t("passwordPlaceholder")}
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(null); }}
             />
@@ -87,7 +84,7 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
             disabled={joining || !password.trim()}
             className="w-full"
           >
-            {joining ? "Joining…" : "Join Room"}
+            {joining ? t("joining") : t("join")}
           </Button>
         </form>
       </div>
@@ -96,7 +93,7 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
         href="/dashboard"
         className="mt-6 text-text-muted hover:text-text-secondary text-sm transition-colors"
       >
-        ← Back to dashboard
+        {t("backToDashboard")}
       </Link>
     </div>
   );
