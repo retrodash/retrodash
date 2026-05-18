@@ -8,6 +8,7 @@ import { hashPassword } from "@/lib/auth";
 import { createRoom } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 type ColumnEntry = { id: string; title: string };
 
@@ -108,12 +109,11 @@ export default function NewRoomPage() {
           <form onSubmit={handleSubmit} noValidate className="space-y-6">
             {/* Room Name */}
             <Field label="Room Name" error={errors.name}>
-              <input
+              <Input
                 type="text"
                 placeholder="e.g. Sprint 42 Retrospective"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
               />
             </Field>
 
@@ -123,12 +123,11 @@ export default function NewRoomPage() {
               error={errors.password}
               hint="Participants will need this to join."
             >
-              <input
+              <Input
                 type="password"
                 placeholder="Enter a room password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
               />
             </Field>
 
@@ -159,12 +158,13 @@ export default function NewRoomPage() {
               <div className="space-y-2">
                 {columns.map((col) => (
                   <div key={col.id} className="flex items-center gap-2">
-                    <input
+                    <Input
                       type="text"
+                      size="sm"
                       placeholder="Column name"
                       value={col.title}
                       onChange={(e) => updateColumn(col.id, e.target.value)}
-                      className="flex-1 h-10 px-3 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
+                      className="flex-1"
                     />
                     <button
                       type="button"

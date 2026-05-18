@@ -8,6 +8,7 @@ import {
   toggleCardDone,
 } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Input";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -100,7 +101,7 @@ export function CardItem({
       {/* Content */}
       {isEditing ? (
         <div className="space-y-2">
-          <textarea
+          <Textarea
             autoFocus
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
@@ -110,7 +111,7 @@ export function CardItem({
                 handleSaveEdit();
             }}
             rows={3}
-            className="w-full bg-bg-card border border-accent-cyan rounded-md p-2 text-sm text-text-primary resize-none outline-hidden"
+            className="bg-bg-card border-accent-cyan"
           />
           <div className="flex gap-2">
             <Button

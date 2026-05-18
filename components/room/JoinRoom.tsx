@@ -6,6 +6,7 @@ import Link from "next/link";
 import { hashPassword } from "@/lib/auth";
 import { joinRoom } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import type { Room } from "@/types";
 
 interface JoinRoomProps {
@@ -71,13 +72,12 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
             <label className="block text-text-primary text-sm font-medium">
               Password
             </label>
-            <input
+            <Input
               type="password"
               autoFocus
               placeholder="Enter room password"
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(null); }}
-              className="w-full h-11 px-4 bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors"
             />
             {error && (
               <p className="text-red-400 text-xs">{error}</p>

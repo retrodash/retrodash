@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { addCard } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Input";
 import { CardItem } from "@/components/board/Card";
 import type { Column, Card } from "@/types";
 
@@ -91,7 +92,7 @@ export function BoardColumn({
       <div className="p-3 border-t border-border shrink-0">
         {isAdding ? (
           <div className="space-y-2">
-            <textarea
+            <Textarea
               ref={textareaRef}
               autoFocus
               value={newText}
@@ -99,7 +100,6 @@ export function BoardColumn({
               onKeyDown={handleKeyDown}
               placeholder={column.isActionItems ? "Describe the action item…" : "What's on your mind?"}
               rows={3}
-              className="w-full bg-bg-elevated border border-border focus:border-accent-cyan rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-hidden transition-colors"
             />
             <div className="flex gap-2">
               <Button

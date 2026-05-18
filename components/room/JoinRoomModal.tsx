@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 interface JoinRoomModalProps {
   onClose: () => void;
@@ -28,13 +29,13 @@ export function JoinRoomModal({ onClose }: JoinRoomModalProps) {
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
+        <Input
           autoFocus
           type="text"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="Paste room code…"
-          className="w-full bg-bg-elevated border border-border rounded-md px-4 py-2.5 text-text-primary text-sm font-mono placeholder:text-text-muted focus:outline-hidden focus:border-accent-cyan transition-colors"
+          className="font-mono"
           spellCheck={false}
         />
 
