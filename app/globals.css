@@ -45,6 +45,10 @@
   --radius-lg: 22px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
