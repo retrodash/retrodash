@@ -25,7 +25,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
   };
 
   const logo = (
-    <Image src="/logo.svg" alt="RetroDash" width={110} height={48} priority />
+    <Image src="/logo.svg" alt="RetroDash" width={110} height={48} style={{ height: 'auto' }} priority />
   );
 
   return (

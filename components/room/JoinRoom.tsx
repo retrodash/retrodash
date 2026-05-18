@@ -47,7 +47,7 @@ export function JoinRoom({ room, userId, userDisplayName, userPhotoURL, onJoined
   return (
     <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6">
       <div className="mb-10">
-        <Image src="/logo.svg" alt="RetroDash" width={180} height={78} priority />
+        <Image src="/logo.svg" alt="RetroDash" width={180} height={78} style={{ height: 'auto' }} priority />
       </div>
 
       <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8">
