@@ -27,6 +27,7 @@ export interface Card {
   votes: number;
   votedBy: string[];
   done?: boolean;
+  published?: boolean;
   createdAt: Timestamp;
 }
 

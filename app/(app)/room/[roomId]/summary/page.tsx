@@ -39,8 +39,10 @@ export default function SummaryPage({
   const actionItemsCol = columns.find((c) => c.isActionItems);
   const regularCols = columns.filter((c) => !c.isActionItems);
 
+  const publishedCards = cards.filter((c) => c.published !== false);
+
   const actionCards = sortByVotes(
-    actionItemsCol ? cards.filter((c) => c.columnId === actionItemsCol.id) : [],
+    actionItemsCol ? publishedCards.filter((c) => c.columnId === actionItemsCol.id) : [],
   );
 
   const endedDate = room.createdAt
@@ -168,7 +170,7 @@ export default function SummaryPage({
             <SectionHeader
               icon={<BoardIcon />}
               title="Retro Recap"
-              count={cards.filter((c) => !actionCards.includes(c)).length}
+              count={publishedCards.filter((c) => !actionCards.includes(c)).length}
             />
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -177,7 +179,7 @@ export default function SummaryPage({
                   key={col.id}
                   column={col}
                   cards={sortByVotes(
-                    cards.filter((c) => c.columnId === col.id),
+                    publishedCards.filter((c) => c.columnId === col.id),
                   )}
                   isAnonymous={room.isAnonymous}
                 />

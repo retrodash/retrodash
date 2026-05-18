@@ -201,9 +201,14 @@ export async function addCard(
     authorName,
     votes: 0,
     votedBy: [],
+    published: false,
     ...(isActionItem && { done: false }),
     createdAt: serverTimestamp(),
   });
+}
+
+export async function publishCard(roomId: string, cardId: string): Promise<void> {
+  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { published: true });
 }
 
 export async function toggleCardDone(

@@ -28,13 +28,18 @@ export function Board({
 
   const colProps = { roomId, userId, userName, isAnonymous, isFacilitator };
 
+  // Show published cards to everyone; show own unpublished (draft) cards only to their author
+  const visibleCards = cards.filter(
+    (c) => c.published !== false || c.authorId === userId,
+  );
+
   return (
     <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
       {regularCols.map((col) => (
         <div key={col.id} className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
           <BoardColumn
             column={col}
-            cards={cards.filter((c) => c.columnId === col.id)}
+            cards={visibleCards.filter((c) => c.columnId === col.id)}
             {...colProps}
           />
         </div>
@@ -46,7 +51,7 @@ export function Board({
           <div className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
             <BoardColumn
               column={actionCol}
-              cards={cards.filter((c) => c.columnId === actionCol.id)}
+              cards={visibleCards.filter((c) => c.columnId === actionCol.id)}
               {...colProps}
             />
           </div>

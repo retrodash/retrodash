@@ -6,6 +6,7 @@ import {
   deleteCard,
   toggleVote,
   toggleCardDone,
+  publishCard,
 } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
@@ -33,11 +34,19 @@ export function CardItem({
   const [saving, setSaving] = useState(false);
 
   const isOwnCard = card.authorId === userId;
+  const isDraft = card.published === false;
   const hasVoted = card.votedBy.includes(userId);
-  const canVote = !isOwnCard;
+  const canVote = !isOwnCard && !isDraft;
   const canEdit = isOwnCard;
   const canDelete = isOwnCard || isFacilitator;
   const isDone = card.done ?? false;
+  const [publishing, setPublishing] = useState(false);
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    await publishCard(roomId, card.id);
+    setPublishing(false);
+  };
 
   const handleSaveEdit = async () => {
     const trimmed = editText.trim();
@@ -66,7 +75,9 @@ export function CardItem({
   return (
     <div
       className={`group relative bg-bg-elevated rounded-md p-3 border transition-colors ${
-        isActionItem && isDone
+        isDraft
+          ? "border-dashed border-border/60 opacity-80"
+          : isActionItem && isDone
           ? "border-accent-cyan/20"
           : "border-transparent hover:border-border"
       }`}
@@ -163,7 +174,21 @@ export function CardItem({
               {isOwnCard ? "You" : card.authorName}
             </span>
           )}
-          {!isActionItem && (
+
+          {isDraft && isOwnCard ? (
+            <div className="flex items-center gap-2 ml-auto">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-text-muted">
+                Draft
+              </span>
+              <button
+                onClick={handlePublish}
+                disabled={publishing}
+                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
+              >
+                {publishing ? "Publishing…" : "Publish"}
+              </button>
+            </div>
+          ) : !isActionItem ? (
             <div className={isAnonymous ? "ml-auto" : ""}>
               <button
                 onClick={handleVote}
@@ -182,7 +207,7 @@ export function CardItem({
                 {card.votes > 0 && <span>{card.votes}</span>}
               </button>
             </div>
-          )}
+          ) : null}
         </div>
       )}
     </div>
