@@ -36,6 +36,7 @@ export default function NewRoomPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [created, setCreated] = useState<{ roomId: string; password: string } | null>(null);
 
   const addColumn = () => {
     setColumns((prev) => [...prev, { id: crypto.randomUUID(), title: "" }]);
@@ -80,12 +81,23 @@ export default function NewRoomPage() {
         columnTitles: columns.map((c) => c.title.trim()),
         initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
       });
-      router.push(`/room/${roomId}`);
+      setCreated({ roomId, password: password.trim() });
     } catch {
       setServerError("Something went wrong. Please try again.");
       setSubmitting(false);
     }
   };
+
+  if (created) {
+    return (
+      <RoomCreatedScreen
+        roomId={created.roomId}
+        roomName={name.trim()}
+        password={created.password}
+        onOpen={() => router.push(`/room/${created.roomId}`)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
@@ -235,6 +247,115 @@ export default function NewRoomPage() {
           </form>
         </div>
       </main>
+    </div>
+  );
+}
+
+// ── Room Created Screen ────────────────────────────────────────
+
+function RoomCreatedScreen({
+  roomId,
+  roomName,
+  password,
+  onOpen,
+}: {
+  roomId: string;
+  roomName: string;
+  password: string;
+  onOpen: () => void;
+}) {
+  const [copiedPassword, setCopiedPassword] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+
+  const copy = async (text: string, setter: (v: boolean) => void) => {
+    await navigator.clipboard.writeText(text);
+    setter(true);
+    setTimeout(() => setter(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6">
+      <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8 space-y-6">
+        {/* Header */}
+        <div>
+          <p className="text-accent-cyan text-[11px] font-semibold uppercase tracking-widest mb-1">
+            Room created
+          </p>
+          <h1 className="text-text-primary font-bold text-xl leading-snug">
+            {roomName}
+          </h1>
+          <p className="text-text-secondary text-sm mt-1">
+            Share the password and room code with your team.
+          </p>
+        </div>
+
+        {/* Password */}
+        <div>
+          <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
+            Password
+          </label>
+          <div className="flex gap-2">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-text-primary text-sm tracking-widest truncate">
+              {password}
+            </div>
+            <button
+              onClick={() => copy(password, setCopiedPassword)}
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+              style={
+                copiedPassword
+                  ? {
+                      background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                      color: "var(--color-accent-cyan)",
+                      borderColor: "var(--color-accent-cyan)",
+                    }
+                  : {
+                      background: "transparent",
+                      color: "var(--color-text-secondary)",
+                      borderColor: "var(--color-border)",
+                    }
+              }
+            >
+              {copiedPassword ? "Copied!" : "Copy"}
+            </button>
+          </div>
+        </div>
+
+        {/* Room code */}
+        <div>
+          <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
+            Room Code
+          </label>
+          <div className="flex gap-2">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+              {roomId}
+            </div>
+            <button
+              onClick={() => copy(roomId, setCopiedCode)}
+              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+              style={
+                copiedCode
+                  ? {
+                      background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+                      color: "var(--color-accent-cyan)",
+                      borderColor: "var(--color-accent-cyan)",
+                    }
+                  : {
+                      background: "transparent",
+                      color: "var(--color-text-secondary)",
+                      borderColor: "var(--color-border)",
+                    }
+              }
+            >
+              {copiedCode ? "Copied!" : "Copy"}
+            </button>
+          </div>
+        </div>
+
+        <Button size="lg" className="w-full" onClick={onOpen}>
+          Open Room
+          <ArrowRightIcon />
+        </Button>
+      </div>
     </div>
   );
 }
