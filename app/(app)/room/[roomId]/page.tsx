@@ -12,6 +12,7 @@ import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { Room } from "@/types";
 
 export default function RoomPage({
@@ -142,28 +143,6 @@ export default function RoomPage({
 }
 
 // ── Sub-components ─────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: Room["status"] }) {
-  const config = {
-    waiting: { label: "Waiting",  color: "var(--color-text-muted)",  bg: "var(--color-bg-elevated)" },
-    active:  { label: "Live",     color: "var(--color-accent-cyan)", bg: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)" },
-    ended:   { label: "Ended",    color: "var(--color-text-muted)",  bg: "var(--color-bg-elevated)" },
-  } as const;
-
-  const { label, color, bg } = config[status];
-
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm shrink-0"
-      style={{ color, background: bg }}
-    >
-      {status === "active" && (
-        <span className="size-1.5 rounded-full bg-current animate-pulse" />
-      )}
-      {label}
-    </span>
-  );
-}
 
 function EndRetroButton({
   loading,

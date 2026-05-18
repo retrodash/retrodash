@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRooms } from "@/hooks/useRooms";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import type { Room } from "@/types";
 
@@ -65,33 +66,6 @@ export default function DashboardPage() {
 // ── Sub-components ─────────────────────────────────────────────
 
 function RoomCard({ room }: { room: Room }) {
-  const statusMap = {
-    waiting: {
-      label: "Waiting",
-      style: {
-        color: "var(--color-text-muted)",
-        background: "var(--color-bg-elevated)",
-      },
-    },
-    active: {
-      label: "Active",
-      style: {
-        color: "var(--color-accent-cyan)",
-        background:
-          "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
-      },
-    },
-    ended: {
-      label: "Ended",
-      style: {
-        color: "var(--color-text-muted)",
-        background: "var(--color-bg-elevated)",
-      },
-    },
-  } as const;
-
-  const { label, style } = statusMap[room.status];
-
   const createdDate = room.createdAt
     ? room.createdAt.toDate().toLocaleDateString("en-US", {
         month: "short",
@@ -103,13 +77,9 @@ function RoomCard({ room }: { room: Room }) {
   return (
     <Link href={`/room/${room.id}`} className="group block">
       <div className="bg-bg-card border border-border rounded-lg p-6 h-full hover:border-accent-cyan/40 transition-colors">
-        {/* Status badge */}
-        <span
-          className="inline-block text-[11px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded-sm mb-4"
-          style={style}
-        >
-          {label}
-        </span>
+        <div className="mb-4">
+          <StatusBadge status={room.status} />
+        </div>
 
         <h3 className="text-text-primary font-semibold text-lg leading-snug mb-2 group-hover:text-accent-cyan transition-colors">
           {room.name}
