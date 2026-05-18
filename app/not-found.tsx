@@ -4,7 +4,7 @@ import "./globals.css";
 
 export default function NotFound() {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col font-sans antialiased">
         <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6 relative overflow-hidden">
           <div aria-hidden className="absolute inset-0 pointer-events-none">
