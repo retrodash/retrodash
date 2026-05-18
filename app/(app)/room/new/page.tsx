@@ -9,6 +9,7 @@ import { createRoom } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Field } from "@/components/ui/Field";
 
 type ColumnEntry = { id: string; title: string };
 
@@ -221,29 +222,6 @@ export default function NewRoomPage() {
 }
 
 // ── Helpers ────────────────────────────────────────────────────
-
-function Field({
-  label,
-  hint,
-  error,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <label className="block text-text-primary text-sm font-medium">
-        {label}
-      </label>
-      {children}
-      {hint && !error && <p className="text-text-muted text-xs">{hint}</p>}
-      {error && <p className="text-red-400 text-xs">{error}</p>}
-    </div>
-  );
-}
 
 function Toggle({
   checked,

@@ -7,6 +7,7 @@ import { hashPassword } from "@/lib/auth";
 import { joinRoom } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Field } from "@/components/ui/Field";
 import type { Room } from "@/types";
 
 interface JoinRoomProps {
@@ -68,10 +69,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
         </p>
 
         <form onSubmit={handleJoin} noValidate className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="block text-text-primary text-sm font-medium">
-              Password
-            </label>
+          <Field label="Password" error={error ?? undefined}>
             <Input
               type="password"
               autoFocus
@@ -79,10 +77,7 @@ export function JoinRoom({ room, userId, onJoined }: JoinRoomProps) {
               value={password}
               onChange={(e) => { setPassword(e.target.value); setError(null); }}
             />
-            {error && (
-              <p className="text-red-400 text-xs">{error}</p>
-            )}
-          </div>
+          </Field>
 
           <Button
             type="submit"
