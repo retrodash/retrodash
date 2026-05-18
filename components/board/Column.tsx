@@ -87,7 +87,9 @@ export function BoardColumn({
               <CheckIcon />
             </span>
           )}
-          <h2 className="font-semibold text-sm text-text-primary">{column.title}</h2>
+          <h2 className="font-semibold text-sm text-text-primary">
+            {column.isActionItems ? t("actionItems") : column.title}
+          </h2>
         </div>
         <span className="text-xs text-text-muted bg-bg-elevated px-2 py-0.5 rounded-full">
           {cards.length}

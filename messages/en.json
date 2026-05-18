@@ -197,6 +197,7 @@
     "selectedCount": "{selected} of {total} selected"
   },
   "board": {
+    "actionItems": "Action Items",
     "addActionItem": "Add action item",
     "addCard": "Add a card",
     "add": "Add",
