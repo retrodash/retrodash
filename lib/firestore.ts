@@ -3,6 +3,7 @@ import {
   collectionGroup,
   doc,
   getDoc,
+  getDocs,
   setDoc,
   query,
   where,
@@ -16,6 +17,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import type { Card } from "@/types";
 import { db } from "@/lib/firebase";
 
 // ── Room queries ───────────────────────────────────────────────
@@ -58,6 +60,27 @@ export function roomDoc(roomId: string) {
   return doc(db, "rooms", roomId);
 }
 
+export async function getUncompletedActionItems(roomId: string): Promise<Card[]> {
+  const colSnap = await getDocs(
+    query(
+      collection(db, "rooms", roomId, "columns"),
+      where("isActionItems", "==", true),
+    ),
+  );
+  if (colSnap.empty) return [];
+  const actionColId = colSnap.docs[0].id;
+
+  const cardSnap = await getDocs(
+    query(
+      collection(db, "rooms", roomId, "cards"),
+      where("columnId", "==", actionColId),
+      where("done", "==", false),
+      orderBy("createdAt", "asc"),
+    ),
+  );
+  return cardSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as Card);
+}
+
 export async function createRoom({
   name,
   passwordHash,
@@ -66,6 +89,7 @@ export async function createRoom({
   ownerPhotoURL,
   isAnonymous,
   columnTitles,
+  initialActionItemTexts = [],
 }: {
   name: string;
   passwordHash: string;
@@ -74,6 +98,7 @@ export async function createRoom({
   ownerPhotoURL: string | null;
   isAnonymous: boolean;
   columnTitles: string[];
+  initialActionItemTexts?: string[];
 }): Promise<string> {
   const batch = writeBatch(db);
   const roomRef = doc(collection(db, "rooms"));
@@ -106,6 +131,20 @@ export async function createRoom({
     photoURL: ownerPhotoURL,
     joinedAt: serverTimestamp(),
     role: "facilitator",
+  });
+
+  initialActionItemTexts.forEach((text) => {
+    const cardRef = doc(collection(db, "rooms", roomRef.id, "cards"));
+    batch.set(cardRef, {
+      columnId: actionItemsRef.id,
+      text,
+      authorId: ownerId,
+      authorName: ownerName,
+      votes: 0,
+      votedBy: [],
+      done: false,
+      createdAt: serverTimestamp(),
+    });
   });
 
   await batch.commit();

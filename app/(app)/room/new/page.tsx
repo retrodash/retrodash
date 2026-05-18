@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useRooms } from "@/hooks/useRooms";
+import { useCarryOver } from "@/hooks/useCarryOver";
 import { hashPassword } from "@/lib/auth";
 import { createRoom } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
@@ -11,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Field } from "@/components/ui/Field";
 import { Toggle } from "@/components/ui/Toggle";
+import { CarryOverSection } from "@/components/room/CarryOverSection";
 
 type ColumnEntry = { id: string; title: string };
 
@@ -22,6 +25,9 @@ const DEFAULT_COLUMNS: ColumnEntry[] = [
 export default function NewRoomPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const { rooms, loading: roomsLoading } = useRooms();
+  const endedRooms = rooms.filter((r) => r.status === "ended");
+  const carryOver = useCarryOver(endedRooms);
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -72,6 +78,7 @@ export default function NewRoomPage() {
         ownerPhotoURL: user.photoURL ?? null,
         isAnonymous,
         columnTitles: columns.map((c) => c.title.trim()),
+        initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
       });
       router.push(`/room/${roomId}`);
     } catch {
@@ -207,6 +214,14 @@ export default function NewRoomPage() {
                 </span>
               </div>
             </div>
+
+            <Divider />
+
+            <CarryOverSection
+              carryOver={carryOver}
+              endedRooms={endedRooms}
+              roomsLoading={roomsLoading}
+            />
 
             <Divider />
 
