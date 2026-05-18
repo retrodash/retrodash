@@ -185,13 +185,21 @@ function ActionItemRow({
   card: Card;
   isAnonymous: boolean;
 }) {
+  const done = card.done ?? false;
+
   return (
     <div className="flex items-start gap-3 px-5 py-4">
-      <span className="mt-0.5 shrink-0 text-accent-cyan">
-        <CheckIcon />
+      <span
+        className={`mt-0.5 shrink-0 ${done ? "text-accent-cyan" : "text-text-muted"}`}
+      >
+        {done ? <CheckIcon /> : <CircleIcon />}
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
+        <p
+          className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word ${
+            done ? "line-through text-text-muted" : "text-text-primary"
+          }`}
+        >
           {card.text}
         </p>
         {!isAnonymous && (
@@ -335,6 +343,14 @@ function CheckIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function CircleIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden>
+      <circle cx="7.5" cy="7.5" r="6" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
 }
