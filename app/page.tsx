@@ -3,8 +3,55 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect, useRef, useState, ReactNode } from "react";
 
-// ── Page ────────────────────────────────────────────────────────
+// ── Scroll reveal ────────────────────────────────────────────────
+// prefers-reduced-motion is handled globally via CSS in globals.css
+
+function Reveal({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const ob = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          ob.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    ob.observe(el);
+    return () => ob.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "none" : "translateY(24px)",
+        transition: `opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────────
 
 export default function LandingPage() {
   const { user, loading } = useAuth();
@@ -18,13 +65,14 @@ export default function LandingPage() {
         <HeroSection ctaHref={ctaHref} ctaLabel={ctaLabel} loading={loading} />
         <FeaturesSection />
         <HowItWorksSection />
+        <FinalCTASection ctaHref={ctaHref} ctaLabel={ctaLabel} loading={loading} />
       </main>
       <SiteFooter />
     </div>
   );
 }
 
-// ── Navbar ──────────────────────────────────────────────────────
+// ── Navbar ───────────────────────────────────────────────────────
 
 function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
   return (
@@ -51,26 +99,35 @@ function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
   );
 }
 
-// ── Hero ────────────────────────────────────────────────────────
+// ── Hero ─────────────────────────────────────────────────────────
 
 function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
   return (
     <section className="relative min-h-[88vh] flex items-center overflow-hidden">
       {/* Atmospheric background glows */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-1/4 left-1/4 w-130 h-105 rounded-full bg-accent-cyan/6 blur-[130px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-110 h-90 rounded-full bg-accent-violet/6 blur-[110px]" />
+        <div
+          className="absolute top-1/4 left-1/4 w-130 h-105 rounded-full bg-accent-cyan/6 blur-[130px]"
+          style={{ animation: "glow-pulse 9s ease-in-out infinite" }}
+        />
+        <div
+          className="absolute bottom-1/4 right-1/4 w-110 h-90 rounded-full bg-accent-violet/6 blur-[110px]"
+          style={{ animation: "glow-pulse 12s ease-in-out infinite 3s" }}
+        />
       </div>
 
       <div className="relative max-w-6xl mx-auto px-6 py-24 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Copy */}
         <div className="space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-bg-card border border-border text-[11px] font-semibold uppercase tracking-widest text-text-muted">
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-bg-card border border-border text-[11px] font-semibold uppercase tracking-widest text-text-muted"
+            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0ms both" }}
+          >
             <span className="size-1.5 rounded-full bg-accent-cyan animate-pulse" />
             Retrospective Platform
           </div>
 
-          <div>
+          <div style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 100ms both" }}>
             <h1 className="text-5xl lg:text-[3.75rem] font-bold leading-[1.1] tracking-tight">
               Better retros,{" "}
               <span
@@ -87,7 +144,10 @@ function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
             </p>
           </div>
 
-          <div className="flex items-center gap-5 flex-wrap">
+          <div
+            className="flex items-center gap-5 flex-wrap"
+            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 220ms both" }}
+          >
             <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="lg" />
             <a
               href="#how-it-works"
@@ -98,13 +158,19 @@ function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
             </a>
           </div>
 
-          <p className="text-text-muted text-xs">
+          <p
+            className="text-text-muted text-xs"
+            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 320ms both" }}
+          >
             Free to use &middot; No credit card required &middot; Works with any team
           </p>
         </div>
 
         {/* Board preview widget */}
-        <div className="hidden lg:block">
+        <div
+          className="hidden lg:block"
+          style={{ animation: "fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 150ms both" }}
+        >
           <BoardPreview />
         </div>
       </div>
@@ -112,11 +178,11 @@ function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
   );
 }
 
-// ── Board preview ───────────────────────────────────────────────
+// ── Board preview ────────────────────────────────────────────────
 
 function BoardPreview() {
   return (
-    <div className="relative">
+    <div className="relative" style={{ animation: "float 7s ease-in-out infinite" }}>
       <div className="absolute -inset-4 rounded-3xl bg-accent-cyan/4 blur-2xl" aria-hidden />
       <div className="relative rounded-2xl border border-border bg-bg-surface shadow-2xl overflow-hidden">
         {/* Fake browser bar */}
@@ -279,7 +345,7 @@ function FeaturesSection() {
   return (
     <section id="features" className="py-28 border-t border-border">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="max-w-xl mb-14">
+        <Reveal className="max-w-xl mb-14">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-3">
             What is RetroDash
           </p>
@@ -290,28 +356,27 @@ function FeaturesSection() {
             Built for teams who care about continuous improvement — not just
             ticking a ceremony box.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {FEATURES.map((f) => (
-            <div
-              key={f.label}
-              className="group rounded-xl bg-bg-card border border-border p-6 hover:border-accent-cyan/30 transition-colors duration-300"
-            >
-              <div className="flex items-start gap-4">
-                <div className="size-10 rounded-lg bg-bg-elevated border border-border flex items-center justify-center text-accent-cyan shrink-0 group-hover:border-accent-cyan/40 transition-colors">
-                  {f.icon}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-text-primary text-base mb-1.5">
-                    {f.label}
-                  </h3>
-                  <p className="text-text-secondary text-sm leading-relaxed">
-                    {f.description}
-                  </p>
+          {FEATURES.map((f, i) => (
+            <Reveal key={f.label} delay={i * 80}>
+              <div className="group rounded-xl bg-bg-card border border-border p-6 hover:border-accent-cyan/30 transition-colors duration-300 h-full">
+                <div className="flex items-start gap-4">
+                  <div className="size-10 rounded-lg bg-bg-elevated border border-border flex items-center justify-center text-accent-cyan shrink-0 group-hover:border-accent-cyan/40 transition-colors">
+                    {f.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-text-primary text-base mb-1.5">
+                      {f.label}
+                    </h3>
+                    <p className="text-text-secondary text-sm leading-relaxed">
+                      {f.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -346,7 +411,7 @@ function HowItWorksSection() {
   return (
     <section id="how-it-works" className="py-28 border-t border-border bg-bg-surface">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="max-w-xl mb-14">
+        <Reveal className="max-w-xl mb-14">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-3">
             How it works
           </p>
@@ -357,33 +422,90 @@ function HowItWorksSection() {
             No onboarding calls. No complex setup. Just open a room and start
             reflecting.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {STEPS.map((step) => (
-            <div key={step.number} className="flex flex-col">
-              {/* Gradient-border circle */}
-              <div
-                className="size-12 rounded-full flex items-center justify-center mb-5 shrink-0"
-                style={{
-                  background:
-                    "linear-gradient(var(--color-bg-surface), var(--color-bg-surface)) padding-box, var(--gradient-brand) border-box",
-                  border: "1.5px solid transparent",
-                }}
-              >
-                <span className="text-sm font-bold text-text-primary">
-                  {step.number}
-                </span>
+          {STEPS.map((step, i) => (
+            <Reveal key={step.number} delay={i * 100}>
+              <div className="flex flex-col">
+                {/* Gradient-border circle */}
+                <div
+                  className="size-12 rounded-full flex items-center justify-center mb-5 shrink-0"
+                  style={{
+                    background:
+                      "linear-gradient(var(--color-bg-surface), var(--color-bg-surface)) padding-box, var(--gradient-brand) border-box",
+                    border: "1.5px solid transparent",
+                  }}
+                >
+                  <span className="text-sm font-bold text-text-primary">
+                    {step.number}
+                  </span>
+                </div>
+                <h3 className="font-semibold text-text-primary text-base mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  {step.description}
+                </p>
               </div>
-              <h3 className="font-semibold text-text-primary text-base mb-2">
-                {step.title}
-              </h3>
-              <p className="text-text-secondary text-sm leading-relaxed">
-                {step.description}
-              </p>
-            </div>
+            </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Final CTA ────────────────────────────────────────────────────
+
+function FinalCTASection({ ctaHref, ctaLabel, loading }: CTAProps) {
+  return (
+    <section className="py-32 border-t border-border relative overflow-hidden bg-bg-surface">
+      {/* Atmospheric glow */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-75 rounded-full bg-accent-cyan/5 blur-[110px]"
+          style={{ animation: "glow-pulse 8s ease-in-out infinite" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-100 h-50 rounded-full bg-accent-violet/6 blur-[80px]"
+          style={{ animation: "glow-pulse 10s ease-in-out infinite 2s" }}
+        />
+      </div>
+
+      <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <Reveal>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-6">
+              Get started today
+            </p>
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
+              Your team deserves{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: "var(--gradient-brand)" }}
+              >
+                better retros.
+              </span>
+            </h2>
+            <p className="text-text-secondary text-lg mb-10 max-w-md mx-auto leading-relaxed">
+              Free forever. No credit card required. Your first retrospective
+              takes less than a minute to set up.
+            </p>
+            <div className="flex justify-center">
+              <CTALink
+                href={ctaHref}
+                label={ctaLabel}
+                loading={loading}
+                size="lg"
+                variant="gradient"
+              />
+            </div>
+            <p className="mt-6 text-text-muted text-xs">
+              Works with any Scrum or Kanban team &middot; Sign in with Google
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -427,11 +549,13 @@ function CTALink({
   label,
   loading,
   size = "md",
+  variant = "solid",
 }: {
   href: string;
   label: string;
   loading: boolean;
   size?: "sm" | "md" | "lg";
+  variant?: "solid" | "gradient";
 }) {
   const sizes = {
     sm: "h-8 px-4 text-xs",
@@ -442,7 +566,8 @@ function CTALink({
   return (
     <Link
       href={loading ? "#" : href}
-      className={`inline-flex items-center justify-center rounded-lg font-semibold bg-cta text-bg-base hover:opacity-90 transition-opacity ${sizes[size]} ${loading ? "opacity-50 pointer-events-none" : ""}`}
+      className={`inline-flex items-center justify-center rounded-lg font-semibold text-bg-base hover:opacity-90 transition-opacity ${sizes[size]} ${variant === "solid" ? "bg-cta" : ""} ${loading ? "opacity-50 pointer-events-none" : ""}`}
+      style={variant === "gradient" ? { backgroundImage: "var(--gradient-brand)" } : undefined}
     >
       {loading ? "   " : label}
     </Link>
