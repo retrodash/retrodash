@@ -213,6 +213,8 @@
     "markAsDone": "Marcar como concluído",
     "markAsNotDone": "Marcar como não concluído",
     "removeVote": "Remover voto",
-    "vote": "Votar"
+    "vote": "Votar",
+    "improveWithAI": "Melhorar com IA",
+    "improving": "Melhorando…"
   }
 }

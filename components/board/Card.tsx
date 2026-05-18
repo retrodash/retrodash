@@ -37,6 +37,7 @@ export function CardItem({
   const [editText, setEditText] = useState(card.text);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [improving, setImproving] = useState(false);
   const t = useTranslations("board");
 
   const isOwnCard = card.authorId === userId;
@@ -76,6 +77,22 @@ export function CardItem({
   };
 
   const handleDelete = () => deleteCard(roomId, card.id);
+
+  const handleImprove = async () => {
+    if (!editText.trim() || improving) return;
+    setImproving(true);
+    try {
+      const res = await fetch("/api/improve-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: editText, type: isActionItem ? "action" : "card" }),
+      });
+      const data = await res.json();
+      if (data.improved) setEditText(data.improved);
+    } finally {
+      setImproving(false);
+    }
+  };
 
   return (
     <div
@@ -123,13 +140,25 @@ export function CardItem({
             rows={3}
             className="bg-bg-card border-accent-cyan"
           />
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <Button size="xs" variant="cyan" onClick={handleSaveEdit} disabled={saving || !editText.trim()}>
               {t("save")}
             </Button>
             <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
               {t("cancel")}
             </Button>
+            {editText.trim() && (
+              <button
+                type="button"
+                onClick={handleImprove}
+                disabled={improving}
+                className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
+                title={t("improveWithAI")}
+              >
+                {improving ? <MiniSpinner /> : <SparkleIcon />}
+                {improving ? t("improving") : t("improveWithAI")}
+              </button>
+            )}
           </div>
         </div>
       ) : isActionItem ? (
@@ -236,6 +265,23 @@ function TrashIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
       <path d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SparkleIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" />
+    </svg>
+  );
+}
+
+function MiniSpinner() {
+  return (
+    <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
     </svg>
   );
 }
