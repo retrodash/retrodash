@@ -86,11 +86,7 @@ export default function DashboardPage() {
               to enter a session with a room code.
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {joinedRooms.map((room) => (
-                <RoomCard key={room.id} room={room} />
-              ))}
-            </div>
+            <JoinedRoomsSections rooms={joinedRooms} />
           )}
         </section>
       </main>
@@ -102,7 +98,46 @@ export default function DashboardPage() {
 
 // ── Sub-components ─────────────────────────────────────────────
 
-function RoomCard({ room }: { room: Room }) {
+function JoinedRoomsSections({ rooms }: { rooms: Room[] }) {
+  const active = rooms.filter((r) => r.status !== "ended");
+  const ended  = rooms.filter((r) => r.status === "ended");
+
+  return (
+    <div className="space-y-8">
+      {active.length > 0 && (
+        <div>
+          <p className="text-text-muted text-xs uppercase tracking-widest font-semibold mb-4">
+            Active
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {active.map((room) => (
+              <RoomCard key={room.id} room={room} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {ended.length > 0 && (
+        <div>
+          <p className="text-text-muted text-xs uppercase tracking-widest font-semibold mb-4">
+            Past Sessions
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {ended.map((room) => (
+              <RoomCard
+                key={room.id}
+                room={room}
+                href={`/room/${room.id}/summary`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RoomCard({ room, href }: { room: Room; href?: string }) {
   const createdDate = room.createdAt
     ? room.createdAt.toDate().toLocaleDateString("en-US", {
         month: "short",
@@ -112,7 +147,7 @@ function RoomCard({ room }: { room: Room }) {
     : "—";
 
   return (
-    <Link href={`/room/${room.id}`} className="group block">
+    <Link href={href ?? `/room/${room.id}`} className="group block">
       <div className="bg-bg-card border border-border rounded-lg p-6 h-full hover:border-accent-cyan/40 transition-colors">
         <div className="mb-4">
           <StatusBadge status={room.status} />
