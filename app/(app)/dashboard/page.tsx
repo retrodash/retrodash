@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRooms } from "@/hooks/useRooms";
+import { useJoinedRooms } from "@/hooks/useJoinedRooms";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -12,6 +13,7 @@ import type { Room } from "@/types";
 
 export default function DashboardPage() {
   const { rooms, loading } = useRooms();
+  const { joinedRooms, loading: joinedLoading } = useJoinedRooms();
   const [joinOpen, setJoinOpen] = useState(false);
 
   return (
@@ -19,44 +21,78 @@ export default function DashboardPage() {
       <Navbar />
 
       {/* ── Main ──────────────────────────────────────────────── */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10">
-        {/* Page header */}
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-text-primary tracking-tight">
-              My Rooms
-            </h1>
+      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10 space-y-12">
+        {/* ── My Rooms ──────────────────────────────────────── */}
+        <section>
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-text-primary tracking-tight">
+                My Rooms
+              </h1>
+              <p className="text-text-secondary text-sm mt-1">
+                Retrospective sessions you created
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" onClick={() => setJoinOpen(true)}>
+                Join Room
+              </Button>
+              <Link
+                href="/room/new"
+                className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+              >
+                <PlusIcon />
+                New Room
+              </Link>
+            </div>
+          </div>
+
+          {loading ? (
+            <RoomsSkeleton />
+          ) : rooms.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rooms.map((room) => (
+                <RoomCard key={room.id} room={room} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ── Joined Rooms ──────────────────────────────────── */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-text-primary tracking-tight">
+              Joined Rooms
+            </h2>
             <p className="text-text-secondary text-sm mt-1">
-              Retrospective sessions you own
+              Sessions you participated in
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={() => setJoinOpen(true)}>
-              Join Room
-            </Button>
-            <Link
-              href="/room/new"
-              className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
-            >
-              <PlusIcon />
-              New Room
-            </Link>
-          </div>
-        </div>
-
-        {/* Content */}
-        {loading ? (
-          <RoomsSkeleton />
-        ) : rooms.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {rooms.map((room) => (
-              <RoomCard key={room.id} room={room} />
-            ))}
-          </div>
-        )}
+          {joinedLoading ? (
+            <RoomsSkeleton />
+          ) : joinedRooms.length === 0 ? (
+            <p className="text-text-muted text-sm">
+              No joined rooms yet. Use{" "}
+              <button
+                onClick={() => setJoinOpen(true)}
+                className="text-accent-cyan hover:underline cursor-pointer"
+              >
+                Join Room
+              </button>{" "}
+              to enter a session with a room code.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {joinedRooms.map((room) => (
+                <RoomCard key={room.id} room={room} />
+              ))}
+            </div>
+          )}
+        </section>
       </main>
 
       {joinOpen && <JoinRoomModal onClose={() => setJoinOpen(false)} />}

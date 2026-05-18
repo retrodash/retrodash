@@ -1,5 +1,6 @@
 import {
   collection,
+  collectionGroup,
   doc,
   getDoc,
   setDoc,
@@ -46,6 +47,17 @@ export function participantsQuery(roomId: string) {
   );
 }
 
+export function joinedRoomsParticipantQuery(userId: string) {
+  return query(
+    collectionGroup(db, "participants"),
+    where("userId", "==", userId),
+  );
+}
+
+export function roomDoc(roomId: string) {
+  return doc(db, "rooms", roomId);
+}
+
 export async function createRoom({
   name,
   passwordHash,
@@ -89,6 +101,7 @@ export async function createRoom({
 
   const participantRef = doc(db, "rooms", roomRef.id, "participants", ownerId);
   batch.set(participantRef, {
+    userId: ownerId,
     displayName: ownerName,
     photoURL: ownerPhotoURL,
     joinedAt: serverTimestamp(),
@@ -111,6 +124,7 @@ export async function joinRoom(
   photoURL: string | null,
 ): Promise<void> {
   await setDoc(doc(db, "rooms", roomId, "participants", userId), {
+    userId,
     displayName,
     photoURL,
     joinedAt: serverTimestamp(),
