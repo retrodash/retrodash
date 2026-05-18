@@ -1,9 +1,11 @@
 "use client";
 
 import { use } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
+import { useParticipants } from "@/hooks/useParticipants";
 import { Navbar } from "@/components/ui/Navbar";
 import { Skeleton } from "@/components/ui/Skeleton";
 import type { Card, Column } from "@/types";
@@ -16,6 +18,7 @@ export default function SummaryPage({
   const { roomId } = use(params);
   const { room, columns, loading: roomLoading } = useRoom(roomId);
   const { cards, loading: cardsLoading } = useCards(roomId);
+  const { participants } = useParticipants(roomId);
 
   if (roomLoading || cardsLoading) return <SummarySkeleton />;
 
@@ -96,6 +99,42 @@ export default function SummaryPage({
             Export
           </button>
         </div>
+
+        {/* ── Participants ─────────────────────────────────── */}
+        {participants.length > 0 && (
+          <section>
+            <SectionHeader
+              icon={<PeopleIcon />}
+              title="Participants"
+              count={participants.length}
+            />
+            <div className="mt-4 flex flex-wrap gap-3">
+              {participants.map((p) => (
+                <div key={p.id} className="flex items-center gap-2 bg-bg-card border border-border rounded-full pl-1 pr-3 py-1">
+                  {p.photoURL ? (
+                    <Image
+                      src={p.photoURL}
+                      alt={p.displayName}
+                      width={24}
+                      height={24}
+                      className="size-6 rounded-full object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className="size-6 rounded-full bg-bg-elevated border border-border flex items-center justify-center text-[10px] font-semibold text-text-muted shrink-0">
+                      {(p.displayName ?? "?")[0].toUpperCase()}
+                    </div>
+                  )}
+                  <span className="text-sm text-text-primary">{p.displayName}</span>
+                  {p.role === "facilitator" && (
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan">
+                      Host
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── Action Items ─────────────────────────────────── */}
         <section>
@@ -401,6 +440,17 @@ function BoardIcon() {
         stroke="currentColor"
         strokeWidth="1.3"
       />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
 }
