@@ -1,0 +1,169 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useRooms } from "@/hooks/useRooms";
+import { useJoinedRooms } from "@/hooks/useJoinedRooms";
+import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { JoinRoomModal } from "@/components/room/JoinRoomModal";
+import { PlusIcon, BoardIcon } from "@/components/ui/Icons";
+import { RoomCard } from "./RoomCard";
+import type { Room } from "@/types";
+
+export function DashboardClient() {
+  const { rooms, loading } = useRooms();
+  const { joinedRooms, loading: joinedLoading } = useJoinedRooms();
+  const [joinOpen, setJoinOpen] = useState(false);
+  const t = useTranslations("dashboard");
+
+  return (
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10 space-y-12">
+        {/* ── My Rooms ──────────────────────────────────────── */}
+        <section>
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-text-primary tracking-tight">
+                {t("myRooms")}
+              </h1>
+              <p className="text-text-secondary text-sm mt-1">{t("myRoomsSubtitle")}</p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" onClick={() => setJoinOpen(true)}>
+                {t("joinRoom")}
+              </Button>
+              <Link
+                href="/room/new"
+                className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+              >
+                <PlusIcon />
+                {t("newRoom")}
+              </Link>
+            </div>
+          </div>
+
+          {loading ? (
+            <RoomsSkeleton />
+          ) : rooms.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rooms.map((room) => (
+                <RoomCard key={room.id} room={room} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ── Joined Rooms ──────────────────────────────────── */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-text-primary tracking-tight">
+              {t("joinedRooms")}
+            </h2>
+            <p className="text-text-secondary text-sm mt-1">{t("joinedRoomsSubtitle")}</p>
+          </div>
+
+          {joinedLoading ? (
+            <RoomsSkeleton />
+          ) : joinedRooms.length === 0 ? (
+            <p className="text-text-muted text-sm">
+              {t("noJoinedRooms")}{" "}
+              <button
+                onClick={() => setJoinOpen(true)}
+                className="text-accent-cyan hover:underline cursor-pointer"
+              >
+                {t("noJoinedRoomsLink")}
+              </button>{" "}
+              {t("noJoinedRoomsEnd")}
+            </p>
+          ) : (
+            <JoinedRoomsSection rooms={joinedRooms} />
+          )}
+        </section>
+      </main>
+
+      {joinOpen && <JoinRoomModal onClose={() => setJoinOpen(false)} />}
+    </div>
+  );
+}
+
+function JoinedRoomsSection({ rooms }: { rooms: Room[] }) {
+  const t = useTranslations("dashboard");
+  const active = rooms.filter((r) => r.status !== "ended");
+  const ended = rooms.filter((r) => r.status === "ended");
+
+  return (
+    <div className="space-y-8">
+      {active.length > 0 && (
+        <div>
+          <p className="text-text-muted text-xs uppercase tracking-widest font-semibold mb-4">
+            {t("active")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {active.map((room) => (
+              <RoomCard key={room.id} room={room} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {ended.length > 0 && (
+        <div>
+          <p className="text-text-muted text-xs uppercase tracking-widest font-semibold mb-4">
+            {t("pastSessions")}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {ended.map((room) => (
+              <RoomCard key={room.id} room={room} href={`/room/${room.id}/summary`} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EmptyState() {
+  const t = useTranslations("dashboard");
+  return (
+    <div className="flex flex-col items-center justify-center py-28 text-center">
+      <div className="size-16 rounded-lg border border-border bg-bg-card flex items-center justify-center mb-6">
+        <BoardIcon />
+      </div>
+
+      <h2 className="text-text-primary font-semibold text-lg mb-2">{t("emptyTitle")}</h2>
+      <p className="text-text-secondary text-sm leading-relaxed mb-8 max-w-xs">
+        {t("emptySubtitle")}
+      </p>
+
+      <Link
+        href="/room/new"
+        className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+      >
+        <PlusIcon />
+        {t("createFirstRoom")}
+      </Link>
+    </div>
+  );
+}
+
+function RoomsSkeleton() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="bg-bg-card border border-border rounded-lg p-6">
+          <Skeleton className="h-5 w-16 rounded-sm mb-4" />
+          <Skeleton className="h-6 w-3/4 mb-2" />
+          <Skeleton className="h-3 w-1/3" />
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -1,3 +1,21 @@
+export function PlusIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path d="M7 1v12M1 7h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function BoardIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      <rect x="2" y="5" width="24" height="18" rx="3" stroke="var(--color-text-muted)" strokeWidth="1.5" />
+      <line x1="2" y1="11" x2="26" y2="11" stroke="var(--color-text-muted)" strokeWidth="1.5" />
+      <line x1="10" y1="11" x2="10" y2="23" stroke="var(--color-text-muted)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function GoogleIcon() {
   return (
     <svg
