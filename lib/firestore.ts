@@ -89,6 +89,7 @@ export async function createRoom({
   ownerPhotoURL,
   isAnonymous,
   columnTitles,
+  actionItemsTitle,
   initialActionItemTexts = [],
 }: {
   name: string;
@@ -98,6 +99,7 @@ export async function createRoom({
   ownerPhotoURL: string | null;
   isAnonymous: boolean;
   columnTitles: string[];
+  actionItemsTitle: string;
   initialActionItemTexts?: string[];
 }): Promise<string> {
   const batch = writeBatch(db);
@@ -119,7 +121,7 @@ export async function createRoom({
 
   const actionItemsRef = doc(collection(db, "rooms", roomRef.id, "columns"));
   batch.set(actionItemsRef, {
-    title: "Action Items",
+    title: actionItemsTitle,
     order: columnTitles.length,
     isActionItems: true,
   });

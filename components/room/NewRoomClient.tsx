@@ -86,6 +86,7 @@ export function NewRoomClient() {
         ownerPhotoURL: user.photoURL ?? null,
         isAnonymous,
         columnTitles: columns.map((c) => c.title.trim()),
+        actionItemsTitle: t("actionItems"),
         initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
       });
       setCreated({ roomId, password: password.trim() });
