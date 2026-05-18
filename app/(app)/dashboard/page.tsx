@@ -157,6 +157,12 @@ function RoomCard({ room, href }: { room: Room; href?: string }) {
           {room.name}
         </h3>
 
+        {room.description && (
+          <p className="text-text-secondary text-sm italic mb-2 line-clamp-2">
+            &ldquo;{room.description}&rdquo;
+          </p>
+        )}
+
         <p className="text-text-muted text-xs">Created {createdDate}</p>
       </div>
     </Link>

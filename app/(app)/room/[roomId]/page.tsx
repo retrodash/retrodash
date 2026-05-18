@@ -13,6 +13,8 @@ import { ShareRoomModal } from "@/components/room/ShareRoomModal";
 import { ParticipantsModal } from "@/components/room/ParticipantsModal";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
+import { Textarea } from "@/components/ui/Input";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Skeleton } from "@/components/ui/Skeleton";
 
@@ -54,9 +56,9 @@ export default function RoomPage({
 
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 
-  const handleEndRetro = async () => {
+  const handleEndRetro = async (description: string) => {
     setEndingRetro(true);
-    await updateRoomStatus(roomId, "ended");
+    await updateRoomStatus(roomId, "ended", description || undefined);
   };
 
   if (loading) return <BoardSkeleton />;
@@ -174,42 +176,55 @@ function EndRetroButton({
   onClick,
 }: {
   loading: boolean;
-  onClick: () => void;
+  onClick: (description: string) => void;
 }) {
-  const [confirming, setConfirming] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [phrase, setPhrase] = useState("");
 
-  if (confirming) {
-    return (
-      <div className="flex items-center gap-2">
-        <span className="text-text-muted text-xs">End retro?</span>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={onClick}
-          disabled={loading}
-        >
-          {loading ? "Ending…" : "Yes, end"}
-        </Button>
-        <Button
-          variant="ghost-text"
-          size="sm"
-          onClick={() => setConfirming(false)}
-        >
-          Cancel
-        </Button>
-      </div>
-    );
-  }
+  const handleConfirm = () => {
+    onClick(phrase.trim());
+    setOpen(false);
+  };
 
   return (
-    <Button
-      variant="destructive"
-      size="sm"
-      onClick={() => setConfirming(true)}
-      className="border border-red-500/30 bg-transparent hover:bg-red-500/10"
-    >
-      End Retro
-    </Button>
+    <>
+      <Button
+        variant="destructive"
+        size="sm"
+        onClick={() => setOpen(true)}
+        className="border border-red-500/30 bg-transparent hover:bg-red-500/10"
+      >
+        End Retro
+      </Button>
+
+      {open && (
+        <Modal title="End Retro" onClose={() => setOpen(false)} size="sm">
+          <p className="text-text-secondary text-sm mb-4 leading-relaxed">
+            Add a closing phrase for this sprint — a goal, quote, or reflection. Optional.
+          </p>
+          <Textarea
+            autoFocus
+            placeholder='e.g. "Ship it or skip it"…'
+            value={phrase}
+            onChange={(e) => setPhrase(e.target.value)}
+            rows={3}
+          />
+          <div className="flex gap-2 mt-4 justify-end">
+            <Button variant="ghost-text" size="sm" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleConfirm}
+              disabled={loading}
+            >
+              {loading ? "Ending…" : "End Retro"}
+            </Button>
+          </div>
+        </Modal>
+      )}
+    </>
   );
 }
 

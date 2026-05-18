@@ -74,6 +74,11 @@ export default function SummaryPage({
             <h1 className="text-3xl font-bold text-text-primary tracking-tight">
               {room.name}
             </h1>
+            {room.description && (
+              <p className="text-text-primary text-base italic mt-2">
+                &ldquo;{room.description}&rdquo;
+              </p>
+            )}
             {endedDate && (
               <p className="text-text-muted text-sm mt-1">
                 Retrospective · {endedDate}

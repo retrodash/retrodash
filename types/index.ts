@@ -7,6 +7,7 @@ export interface Room {
   ownerId: string;
   isAnonymous: boolean;
   status: "waiting" | "active" | "ended";
+  description?: string;
   createdAt: Timestamp;
 }
 

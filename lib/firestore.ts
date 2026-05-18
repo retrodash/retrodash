@@ -173,9 +173,13 @@ export async function joinRoom(
 
 export async function updateRoomStatus(
   roomId: string,
-  status: "waiting" | "active" | "ended"
+  status: "waiting" | "active" | "ended",
+  description?: string,
 ): Promise<void> {
-  await updateDoc(doc(db, "rooms", roomId), { status });
+  await updateDoc(doc(db, "rooms", roomId), {
+    status,
+    ...(description ? { description } : {}),
+  });
 }
 
 // ── Card mutations ─────────────────────────────────────────────
