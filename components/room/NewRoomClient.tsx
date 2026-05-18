@@ -1,0 +1,236 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { useRooms } from "@/hooks/useRooms";
+import { useCarryOver } from "@/hooks/useCarryOver";
+import { hashPassword } from "@/lib/auth";
+import { createRoom } from "@/lib/firestore";
+import { Navbar } from "@/components/ui/Navbar";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Field } from "@/components/ui/Field";
+import { Toggle } from "@/components/ui/Toggle";
+import { CarryOverSection } from "@/components/room/CarryOverSection";
+import { RoomCreatedScreen } from "@/components/room/RoomCreatedScreen";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  XIcon,
+  PlusIcon,
+  LockIcon,
+} from "@/components/ui/Icons";
+
+type ColumnEntry = { id: string; title: string };
+
+export function NewRoomClient() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const t = useTranslations("newRoom");
+  const { rooms, loading: roomsLoading } = useRooms();
+  const endedRooms = rooms.filter((r) => r.status === "ended");
+  const carryOver = useCarryOver(endedRooms);
+
+  const DEFAULT_COLUMNS: ColumnEntry[] = [
+    { id: "1", title: t("defaultCol1") },
+    { id: "2", title: t("defaultCol2") },
+  ];
+
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAnonymous, setAnonymous] = useState(false);
+  const [columns, setColumns] = useState<ColumnEntry[]>(DEFAULT_COLUMNS);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [created, setCreated] = useState<{ roomId: string; password: string } | null>(null);
+
+  const addColumn = () => {
+    setColumns((prev) => [...prev, { id: crypto.randomUUID(), title: "" }]);
+  };
+
+  const removeColumn = (id: string) => {
+    setColumns((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const updateColumn = (id: string, title: string) => {
+    setColumns((prev) => prev.map((c) => (c.id === id ? { ...c, title } : c)));
+  };
+
+  const validate = () => {
+    const next: Record<string, string> = {};
+    if (!name.trim()) next.name = t("nameRequired");
+    if (!password.trim()) next.password = t("passwordRequired");
+    if (password.trim().length < 4) next.password = t("passwordMinLength");
+    if (columns.some((c) => !c.title.trim())) next.columns = t("columnsRequired");
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validate() || !user) return;
+
+    setSubmitting(true);
+    setServerError(null);
+
+    try {
+      const passwordHash = await hashPassword(password.trim());
+      const roomId = await createRoom({
+        name: name.trim(),
+        passwordHash,
+        ownerId: user.uid,
+        ownerName: user.displayName ?? "Facilitator",
+        ownerPhotoURL: user.photoURL ?? null,
+        isAnonymous,
+        columnTitles: columns.map((c) => c.title.trim()),
+        initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
+      });
+      setCreated({ roomId, password: password.trim() });
+    } catch {
+      setServerError(t("serverError"));
+      setSubmitting(false);
+    }
+  };
+
+  if (created) {
+    return (
+      <RoomCreatedScreen
+        roomId={created.roomId}
+        roomName={name.trim()}
+        password={created.password}
+        onOpen={() => router.push(`/room/${created.roomId}`)}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-2xl w-full mx-auto px-6 py-10">
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-2 text-text-muted hover:text-text-secondary text-sm mb-8 transition-colors"
+        >
+          <ArrowLeftIcon />
+          {t("backToRooms")}
+        </Link>
+
+        <div className="bg-bg-card border border-border rounded-lg p-8">
+          <h1 className="text-2xl font-bold text-text-primary mb-1">{t("title")}</h1>
+          <p className="text-text-secondary text-sm mb-8">{t("subtitle")}</p>
+
+          {serverError && (
+            <div className="mb-6 px-4 py-3 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {serverError}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
+            <Field label={t("roomName")} error={errors.name}>
+              <Input
+                type="text"
+                placeholder={t("roomNamePlaceholder")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Field>
+
+            <Field label={t("password")} error={errors.password} hint={t("passwordHint")}>
+              <Input
+                type="password"
+                placeholder={t("passwordPlaceholder")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Field>
+
+            <div className="flex items-center justify-between gap-4 py-1">
+              <div>
+                <p className="text-text-primary text-sm font-medium">{t("anonymousMode")}</p>
+                <p className="text-text-muted text-xs mt-0.5">{t("anonymousModeHint")}</p>
+              </div>
+              <Toggle checked={isAnonymous} onChange={setAnonymous} />
+            </div>
+
+            <Divider />
+
+            <div>
+              <p className="text-text-primary text-sm font-medium mb-1">{t("columnsTitle")}</p>
+              <p className="text-text-muted text-xs mb-4">{t("columnsHint")}</p>
+
+              <div className="space-y-2">
+                {columns.map((col) => (
+                  <div key={col.id} className="flex items-center gap-2">
+                    <Input
+                      type="text"
+                      size="sm"
+                      placeholder={t("columnPlaceholder")}
+                      value={col.title}
+                      onChange={(e) => updateColumn(col.id, e.target.value)}
+                      className="flex-1"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeColumn(col.id)}
+                      disabled={columns.length === 1}
+                      className="size-10 flex items-center justify-center rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Remove column"
+                    >
+                      <XIcon />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {errors.columns && (
+                <p className="mt-2 text-xs text-red-400">{errors.columns}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={addColumn}
+                className="mt-3 flex items-center gap-1.5 text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                <PlusIcon size={12} />
+                {t("addColumn")}
+              </button>
+
+              <div className="mt-4 flex items-center gap-3 h-10 px-3 rounded-md border border-dashed border-border bg-bg-elevated/50">
+                <LockIcon size={13} />
+                <span className="text-text-muted text-sm flex-1">{t("actionItems")}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-text-muted">
+                  {t("autoAdded")}
+                </span>
+              </div>
+            </div>
+
+            <Divider />
+
+            <CarryOverSection
+              carryOver={carryOver}
+              endedRooms={endedRooms}
+              roomsLoading={roomsLoading}
+            />
+
+            <Divider />
+
+            <div className="flex justify-end">
+              <Button type="submit" size="lg" disabled={submitting}>
+                {submitting ? t("creating") : t("createRoom")}
+                {!submitting && <ArrowRightIcon size={14} />}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function Divider() {
+  return <div className="h-px bg-border" />;
+}
