@@ -6,6 +6,7 @@ import { useRooms } from "@/hooks/useRooms";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import type { Room } from "@/types";
 
@@ -121,13 +122,10 @@ function RoomsSkeleton() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          className="bg-bg-card border border-border rounded-lg p-6 animate-pulse"
-        >
-          <div className="h-5 w-16 rounded-sm bg-bg-elevated mb-4" />
-          <div className="h-6 w-3/4 rounded bg-bg-elevated mb-2" />
-          <div className="h-3 w-1/3 rounded bg-bg-elevated" />
+        <div key={i} className="bg-bg-card border border-border rounded-lg p-6">
+          <Skeleton className="h-5 w-16 rounded-sm mb-4" />
+          <Skeleton className="h-6 w-3/4 mb-2" />
+          <Skeleton className="h-3 w-1/3" />
         </div>
       ))}
     </div>

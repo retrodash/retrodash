@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { Navbar } from "@/components/ui/Navbar";
+import { Skeleton } from "@/components/ui/Skeleton";
 import type { Card, Column } from "@/types";
 
 export default function SummaryPage({
@@ -273,18 +274,18 @@ function SummarySkeleton() {
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
       <div className="h-16 bg-bg-surface border-b border-border" />
-      <div className="max-w-5xl w-full mx-auto px-6 py-10 space-y-8 animate-pulse">
-        <div className="h-8 w-72 bg-bg-card rounded" />
+      <div className="max-w-5xl w-full mx-auto px-6 py-10 space-y-8">
+        <Skeleton className="h-8 w-72 bg-bg-card" />
         <div className="space-y-2">
-          <div className="h-5 w-32 bg-bg-card rounded" />
-          <div className="h-24 bg-bg-card rounded-lg" />
+          <Skeleton className="h-5 w-32 bg-bg-card" />
+          <Skeleton className="h-24 bg-bg-card rounded-lg" />
         </div>
         <div className="grid grid-cols-2 gap-6">
           {[0, 1].map((i) => (
             <div key={i} className="space-y-2">
-              <div className="h-5 w-24 bg-bg-card rounded" />
-              <div className="h-16 bg-bg-card rounded-md" />
-              <div className="h-16 bg-bg-card rounded-md" />
+              <Skeleton className="h-5 w-24 bg-bg-card" />
+              <Skeleton className="h-16 bg-bg-card rounded-md" />
+              <Skeleton className="h-16 bg-bg-card rounded-md" />
             </div>
           ))}
         </div>

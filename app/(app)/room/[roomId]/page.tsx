@@ -13,7 +13,7 @@ import { ShareRoomModal } from "@/components/room/ShareRoomModal";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import type { Room } from "@/types";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 export default function RoomPage({
   params,
@@ -35,7 +35,7 @@ export default function RoomPage({
   useEffect(() => {
     if (!user || roomLoading || !room) return;
     getParticipant(roomId, user.uid).then((p) =>
-      setParticipantStatus(p ? "joined" : "stranger")
+      setParticipantStatus(p ? "joined" : "stranger"),
     );
   }, [roomId, user, room, roomLoading]);
 
@@ -47,7 +47,8 @@ export default function RoomPage({
   }, [room?.status, roomId, router, participantStatus]);
 
   const isFacilitator = user?.uid === room?.ownerId;
-  const loading = roomLoading || cardsLoading || participantStatus === "loading";
+  const loading =
+    roomLoading || cardsLoading || participantStatus === "loading";
 
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 
@@ -62,7 +63,10 @@ export default function RoomPage({
     return (
       <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4">
         <p className="text-text-secondary">Room not found.</p>
-        <Link href="/dashboard" className="text-accent-cyan text-sm hover:underline">
+        <Link
+          href="/dashboard"
+          className="text-accent-cyan text-sm hover:underline"
+        >
           Back to dashboard
         </Link>
       </div>
@@ -157,10 +161,19 @@ function EndRetroButton({
     return (
       <div className="flex items-center gap-2">
         <span className="text-text-muted text-xs">End retro?</span>
-        <Button variant="destructive" size="sm" onClick={onClick} disabled={loading}>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={onClick}
+          disabled={loading}
+        >
           {loading ? "Ending…" : "Yes, end"}
         </Button>
-        <Button variant="ghost-text" size="sm" onClick={() => setConfirming(false)}>
+        <Button
+          variant="ghost-text"
+          size="sm"
+          onClick={() => setConfirming(false)}
+        >
           Cancel
         </Button>
       </div>
@@ -185,7 +198,10 @@ function BoardSkeleton() {
       <div className="h-16 bg-bg-surface border-b border-border" />
       <div className="flex gap-4 p-6">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="w-72 shrink-0 h-64 bg-bg-surface rounded-lg border border-border animate-pulse" />
+          <Skeleton
+            key={i}
+            className="w-72 shrink-0 h-64 bg-bg-surface border border-border"
+          />
         ))}
       </div>
     </div>
@@ -209,4 +225,3 @@ function LinkIcon() {
     </svg>
   );
 }
-
