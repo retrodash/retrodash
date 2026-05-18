@@ -1,7 +1,9 @@
+import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/Reveal";
 import { CTALink, type CTAProps } from "@/components/ui/CTALink";
 
 export function FinalCTASection({ ctaHref, ctaLabel, loading }: CTAProps) {
+  const t = useTranslations("landing.cta");
   return (
     <section className="py-32 border-t border-border relative overflow-hidden bg-bg-surface">
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
@@ -19,33 +21,24 @@ export function FinalCTASection({ ctaHref, ctaLabel, loading }: CTAProps) {
         <Reveal>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-6">
-              Get started today
+              {t("sectionLabel")}
             </p>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
-              Your team deserves{" "}
+              {t("title")}{" "}
               <span
                 className="bg-clip-text text-transparent"
                 style={{ backgroundImage: "var(--gradient-brand)" }}
               >
-                better retros.
+                {t("titleGradient")}
               </span>
             </h2>
             <p className="text-text-secondary text-lg mb-10 max-w-md mx-auto leading-relaxed">
-              Free forever. No credit card required. Your first retrospective
-              takes less than a minute to set up.
+              {t("subtitle")}
             </p>
             <div className="flex justify-center">
-              <CTALink
-                href={ctaHref}
-                label={ctaLabel}
-                loading={loading}
-                size="lg"
-                variant="gradient"
-              />
+              <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="lg" variant="gradient" />
             </div>
-            <p className="mt-6 text-text-muted text-xs">
-              Works with any Scrum or Kanban team &middot; Sign in with Google
-            </p>
+            <p className="mt-6 text-text-muted text-xs">{t("notice")}</p>
           </div>
         </Reveal>
       </div>

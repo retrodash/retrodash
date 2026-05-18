@@ -1,48 +1,28 @@
+import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/Reveal";
 
-const STEPS = [
-  {
-    number: "01",
-    title: "Create a Room",
-    description:
-      "Name your retro, choose your columns, and protect it with a password. Ready in under a minute.",
-  },
-  {
-    number: "02",
-    title: "Invite Your Team",
-    description:
-      "Share the room link and password with your teammates. Anyone with the link can join.",
-  },
-  {
-    number: "03",
-    title: "Run the Retro",
-    description:
-      "Add cards, vote on what matters most, discuss as a team, and close with clear action items.",
-  },
-] as const;
-
 export function HowItWorksSection() {
+  const t = useTranslations("landing.steps");
+
+  const steps = [
+    { number: "01", title: t("step1Title"), description: t("step1Desc") },
+    { number: "02", title: t("step2Title"), description: t("step2Desc") },
+    { number: "03", title: t("step3Title"), description: t("step3Desc") },
+  ];
+
   return (
-    <section
-      id="how-it-works"
-      className="py-28 border-t border-border bg-bg-surface"
-    >
+    <section id="how-it-works" className="py-28 border-t border-border bg-bg-surface">
       <div className="max-w-6xl mx-auto px-6">
         <Reveal className="max-w-xl mb-14">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-3">
-            How it works
+            {t("sectionLabel")}
           </p>
-          <h2 className="text-3xl font-bold tracking-tight">
-            Up and running in minutes.
-          </h2>
-          <p className="mt-4 text-text-secondary leading-relaxed">
-            No onboarding calls. No complex setup. Just open a room and start
-            reflecting.
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight">{t("title")}</h2>
+          <p className="mt-4 text-text-secondary leading-relaxed">{t("subtitle")}</p>
         </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {STEPS.map((step, i) => (
+          {steps.map((step, i) => (
             <Reveal key={step.number} delay={i * 100}>
               <div className="flex flex-col">
                 <div
@@ -53,16 +33,10 @@ export function HowItWorksSection() {
                     border: "1.5px solid transparent",
                   }}
                 >
-                  <span className="text-sm font-bold text-text-primary">
-                    {step.number}
-                  </span>
+                  <span className="text-sm font-bold text-text-primary">{step.number}</span>
                 </div>
-                <h3 className="font-semibold text-text-primary text-base mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-text-secondary text-sm leading-relaxed">
-                  {step.description}
-                </p>
+                <h3 className="font-semibold text-text-primary text-base mb-2">{step.title}</h3>
+                <p className="text-text-secondary text-sm leading-relaxed">{step.description}</p>
               </div>
             </Reveal>
           ))}

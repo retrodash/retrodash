@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { LandingNav } from "./LandingNav";
 import { HeroSection } from "./HeroSection";
@@ -10,8 +11,9 @@ import { SiteFooter } from "./SiteFooter";
 
 export function LandingClient() {
   const { user, loading } = useAuth();
+  const t = useTranslations("landing");
   const ctaHref = user ? "/dashboard" : "/login";
-  const ctaLabel = user ? "Access Dashboard" : "Get Started";
+  const ctaLabel = user ? t("nav.accessDashboard") : t("nav.getStarted");
 
   return (
     <div className="min-h-screen bg-bg-base text-text-primary flex flex-col overflow-x-hidden">
