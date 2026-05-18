@@ -10,6 +10,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Field } from "@/components/ui/Field";
+import { Toggle } from "@/components/ui/Toggle";
 
 type ColumnEntry = { id: string; title: string };
 
@@ -222,32 +223,6 @@ export default function NewRoomPage() {
 }
 
 // ── Helpers ────────────────────────────────────────────────────
-
-function Toggle({
-  checked,
-  onChange,
-}: {
-  checked: boolean;
-  onChange: (val: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer ${
-        checked ? "bg-accent-cyan" : "bg-bg-elevated border border-border"
-      }`}
-    >
-      <span
-        className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
-          checked ? "translate-x-6" : "translate-x-1"
-        }`}
-      />
-    </button>
-  );
-}
 
 function Divider() {
   return <div className="h-px bg-border" />;
