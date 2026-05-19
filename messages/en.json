@@ -131,7 +131,10 @@
     "cancel": "Cancel",
     "confirmEnd": "End Retro",
     "inviteTeammates": "Invite teammates",
-    "viewParticipants": "View participants"
+    "viewParticipants": "View participants",
+    "participants": "Participants",
+    "unknown": "Unknown",
+    "host": "Host"
   },
   "summary": {
     "myRooms": "My Rooms",
