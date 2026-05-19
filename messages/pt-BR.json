@@ -151,6 +151,12 @@
   "navbar": {
     "signOut": "Sair"
   },
+  "theme": {
+    "label": "Tema de cores",
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Escuro"
+  },
   "statusBadge": {
     "waiting": "Aguardando",
     "live": "Ao Vivo",

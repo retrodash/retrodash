@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { signOut } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 interface NavbarProps {
   logoHref?: string;
@@ -50,6 +51,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
 
       <div className="flex items-center gap-3 shrink-0">
         {actions}
+        <ThemeToggle />
         <LanguageSwitcher />
         <span aria-hidden className="text-border hidden sm:block">|</span>
         {user?.photoURL && (
