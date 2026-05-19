@@ -45,7 +45,7 @@ export async function generateMetadata({
       url: BASE_URL,
       siteName: "RetroDash",
       locale: locale === "pt-BR" ? "pt_BR" : "en_US",
-      images: [{ url: "/og-image.png", width: 1456, height: 816, alt: t.alt }],
+      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: t.alt }],
       type: "website",
     },
     twitter: {
