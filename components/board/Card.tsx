@@ -48,6 +48,12 @@ export function CardItem({
   const canDelete = isOwnCard || isFacilitator;
   const isDone = card.done ?? false;
 
+  const voteClass = !canVote
+    ? "text-text-muted cursor-default opacity-50"
+    : hasVoted
+      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 cursor-pointer"
+      : "text-text-muted hover:text-text-primary hover:bg-bg-card cursor-pointer";
+
   const handlePublish = async () => {
     setPublishing(true);
     await publishCard(roomId, card.id);
@@ -85,7 +91,10 @@ export function CardItem({
       const res = await fetch("/api/improve-text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: editText, type: isActionItem ? "action" : "card" }),
+        body: JSON.stringify({
+          text: editText,
+          type: isActionItem ? "action" : "card",
+        }),
       });
       const data = await res.json();
       if (data.improved) setEditText(data.improved);
@@ -108,8 +117,11 @@ export function CardItem({
         <div className="absolute top-2 right-2 flex sm:opacity-0 sm:group-hover:opacity-100 transition-opacity items-center gap-1">
           {canEdit && (
             <button
-              onClick={() => { setEditText(card.text); setIsEditing(true); }}
-              className="size-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors"
+              onClick={() => {
+                setEditText(card.text);
+                setIsEditing(true);
+              }}
+              className="size-6 flex items-center justify-center rounded text-text-muted hover:text-text-primary cursor-pointer hover:bg-bg-card transition-colors"
               aria-label={t("editLabel")}
             >
               <PencilIcon />
@@ -118,7 +130,7 @@ export function CardItem({
           {canDelete && (
             <button
               onClick={handleDelete}
-              className="size-6 flex items-center justify-center rounded text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
+              className="size-6 flex items-center justify-center rounded cursor-pointer text-text-muted hover:text-red-400 hover:bg-bg-card transition-colors"
               aria-label={t("deleteLabel")}
             >
               <TrashIcon />
@@ -135,13 +147,19 @@ export function CardItem({
             onChange={(e) => setEditText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Escape") handleCancelEdit();
-              if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSaveEdit();
+              if (e.key === "Enter" && (e.ctrlKey || e.metaKey))
+                handleSaveEdit();
             }}
             rows={3}
             className="bg-bg-card border-accent-cyan"
           />
           <div className="flex items-center gap-2">
-            <Button size="xs" variant="cyan" onClick={handleSaveEdit} disabled={saving || !editText.trim()}>
+            <Button
+              size="xs"
+              variant="cyan"
+              onClick={handleSaveEdit}
+              disabled={saving || !editText.trim()}
+            >
               {t("save")}
             </Button>
             <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
@@ -216,14 +234,7 @@ export function CardItem({
                 onClick={handleVote}
                 disabled={!canVote}
                 aria-label={hasVoted ? t("removeVote") : t("vote")}
-                className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
-                  ${
-                    canVote
-                      ? hasVoted
-                        ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
-                        : "text-text-muted hover:text-text-primary hover:bg-bg-card"
-                      : "text-text-muted cursor-default"
-                  }`}
+                className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors ${voteClass}`}
               >
                 <ThumbUpIcon filled={hasVoted} />
                 {card.votes > 0 && <span>{card.votes}</span>}
@@ -236,7 +247,13 @@ export function CardItem({
   );
 }
 
-function AuthorChip({ name, photoURL }: { name: string; photoURL?: string | null }) {
+function AuthorChip({
+  name,
+  photoURL,
+}: {
+  name: string;
+  photoURL?: string | null;
+}) {
   return (
     <div className="flex items-center gap-1.5 min-w-0">
       <Avatar photoURL={photoURL} name={name} size={24} />
@@ -248,7 +265,13 @@ function AuthorChip({ name, photoURL }: { name: string; photoURL?: string | null
 function SmallCheckIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M1.5 5l2.5 2.5 4.5-4.5"
+        stroke="var(--color-bg-base)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -256,7 +279,12 @@ function SmallCheckIcon() {
 function PencilIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <path
+        d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -264,14 +292,30 @@ function PencilIcon() {
 function TrashIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <path d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M1.5 3h9M4.5 3V2h3v1M2.5 3l.7 7h5.6l.7-7"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 function SparkleIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" />
     </svg>
   );
@@ -279,9 +323,27 @@ function SparkleIcon() {
 
 function MiniSpinner() {
   return (
-    <svg className="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+    <svg
+      className="animate-spin"
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      />
     </svg>
   );
 }
