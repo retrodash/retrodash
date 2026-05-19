@@ -10,35 +10,52 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
 });
 
-export const metadata: Metadata = {
-  title: "RetroDash — Reflect Together. Improve Always.",
-  description:
-    "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
-  metadataBase: new URL("https://retrodash.vercel.app"),
-  openGraph: {
+const BASE_URL = "https://retrodash.vercel.app";
+
+const meta = {
+  en: {
     title: "RetroDash — Reflect Together. Improve Always.",
     description:
       "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
-    url: "https://retrodash.vercel.app",
-    siteName: "RetroDash",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1456,
-        height: 816,
-        alt: "RetroDash — Reflect Together. Improve Always.",
-      },
-    ],
-    type: "website",
+    alt: "RetroDash — Reflect Together. Improve Always.",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "RetroDash — Reflect Together. Improve Always.",
+  "pt-BR": {
+    title: "RetroDash — Reflita Juntos. Melhore Sempre.",
     description:
-      "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
-    images: ["/og-image.png"],
+      "Conduza retrospectivas estruturadas com seu time Scrum ou Kanban em tempo real. Salas privadas, cards, votação e itens de ação — tudo em um só lugar.",
+    alt: "RetroDash — Reflita Juntos. Melhore Sempre.",
   },
-};
+} as const;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = meta[locale as keyof typeof meta] ?? meta.en;
+
+  return {
+    title: t.title,
+    description: t.description,
+    metadataBase: new URL(BASE_URL),
+    openGraph: {
+      title: t.title,
+      description: t.description,
+      url: BASE_URL,
+      siteName: "RetroDash",
+      locale: locale === "pt-BR" ? "pt_BR" : "en_US",
+      images: [{ url: "/og-image.png", width: 1456, height: 816, alt: t.alt }],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.title,
+      description: t.description,
+      images: ["/og-image.png"],
+    },
+  };
+}
 
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "pt-BR" }];
