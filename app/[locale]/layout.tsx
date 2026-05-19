@@ -11,8 +11,33 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "RetroDash",
-  description: "Reflect Together. Improve Always.",
+  title: "RetroDash — Reflect Together. Improve Always.",
+  description:
+    "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
+  metadataBase: new URL("https://retrodash.vercel.app"),
+  openGraph: {
+    title: "RetroDash — Reflect Together. Improve Always.",
+    description:
+      "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
+    url: "https://retrodash.vercel.app",
+    siteName: "RetroDash",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1456,
+        height: 816,
+        alt: "RetroDash — Reflect Together. Improve Always.",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RetroDash — Reflect Together. Improve Always.",
+    description:
+      "Run structured retrospectives with your Scrum or Kanban team in real time. Private rooms, cards, voting, and action items — all in one place.",
+    images: ["/og-image.png"],
+  },
 };
 
 export function generateStaticParams() {
