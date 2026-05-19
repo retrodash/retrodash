@@ -23,7 +23,7 @@ export function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
           >
             {t("nav.howItWorks")}
           </a>
-          <ThemeToggle />
+          <ThemeToggle variant="dropdown" />
           <LanguageSwitcher />
           <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="sm" />
         </nav>

@@ -51,7 +51,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
 
       <div className="flex items-center gap-3 shrink-0">
         {actions}
-        <ThemeToggle />
+        <ThemeToggle variant="dropdown" />
         <LanguageSwitcher />
         <span aria-hidden className="text-border hidden sm:block">|</span>
         {user?.photoURL && (
