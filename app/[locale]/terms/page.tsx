@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { LegalPage } from "@/components/legal/LegalPage";
-import { getPrivacyContent } from "@/components/legal/privacyContent";
+import { getTermsContent } from "@/components/legal/termsContent";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — RetroDash",
-  description: "How RetroDash collects, uses, and protects your personal information.",
+  title: "Terms of Service — RetroDash",
+  description: "The terms and conditions governing your use of RetroDash.",
 };
 
-export default async function PrivacyPage({
+export default async function TermsPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <LegalPage content={getPrivacyContent(locale)} />;
+  return <LegalPage content={getTermsContent(locale)} />;
 }

@@ -9,7 +9,7 @@ type Section = {
   blocks: Block[];
 };
 
-export type PrivacyContent = {
+export type LegalContent = {
   backHome: string;
   label: string;
   title: string;
@@ -22,7 +22,7 @@ const CONTACT_EMAIL = "privacy@retrodash.app";
 const DATE_EN = "May 18, 2026";
 const DATE_PT = "18 de maio de 2026";
 
-const en: PrivacyContent = {
+const en: LegalContent = {
   backHome: "← Back to Home",
   label: "Legal",
   title: "Privacy Policy",
@@ -314,7 +314,7 @@ const en: PrivacyContent = {
   ],
 };
 
-const pt: PrivacyContent = {
+const pt: LegalContent = {
   backHome: "← Voltar ao Início",
   label: "Jurídico",
   title: "Política de Privacidade",
@@ -606,6 +606,6 @@ const pt: PrivacyContent = {
   ],
 };
 
-export function getPrivacyContent(locale: string): PrivacyContent {
+export function getPrivacyContent(locale: string): LegalContent {
   return locale === "pt-BR" ? pt : en;
 }
