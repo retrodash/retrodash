@@ -26,7 +26,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
     router.push("/login");
   };
 
-  const logo = <RetroDashLogo width={110} />;
+  const logo = <RetroDashLogo width={110} className="w-20.5 sm:w-27.5" />;
 
   return (
     <header className="bg-bg-surface border-b border-border px-4 sm:px-6 h-16 flex items-center justify-between shrink-0">
