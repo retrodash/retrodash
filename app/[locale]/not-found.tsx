@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 
 export default async function NotFound() {
   const t = await getTranslations("notFound");
@@ -14,7 +14,7 @@ export default async function NotFound() {
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-md">
         <Link href="/" className="mb-12 opacity-80 hover:opacity-100 transition-opacity">
-          <Image src="/logo.svg" alt="RetroDash" width={160} height={70} style={{ height: 'auto' }} priority />
+          <RetroDashLogo width={160} />
         </Link>
 
         <p

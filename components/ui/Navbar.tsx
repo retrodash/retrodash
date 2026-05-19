@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { signOut } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 
 interface NavbarProps {
   logoHref?: string;
@@ -24,9 +26,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
     router.push("/login");
   };
 
-  const logo = (
-    <Image src="/logo.svg" alt="RetroDash" width={110} height={48} style={{ height: 'auto' }} priority />
-  );
+  const logo = <RetroDashLogo width={110} />;
 
   return (
     <header className="bg-bg-surface border-b border-border px-4 sm:px-6 h-16 flex items-center justify-between shrink-0">
@@ -50,6 +50,7 @@ export function Navbar({ logoHref, children, actions }: NavbarProps) {
 
       <div className="flex items-center gap-3 shrink-0">
         {actions}
+        <ThemeToggle variant="dropdown" />
         <LanguageSwitcher />
         <span aria-hidden className="text-border hidden sm:block">|</span>
         {user?.photoURL && (

@@ -151,6 +151,12 @@
   "navbar": {
     "signOut": "Sign out"
   },
+  "theme": {
+    "label": "Color theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "statusBadge": {
     "waiting": "Waiting",
     "live": "Live",

@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { WordmarkLogo } from "@/components/ui/WordmarkLogo";
 import { CTALink, type CTAProps } from "@/components/ui/CTALink";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
   const t = useTranslations("landing");
@@ -22,6 +23,7 @@ export function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
           >
             {t("nav.howItWorks")}
           </a>
+          <ThemeToggle variant="dropdown" />
           <LanguageSwitcher />
           <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="sm" />
         </nav>
