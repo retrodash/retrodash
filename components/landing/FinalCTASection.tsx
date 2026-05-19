@@ -17,7 +17,7 @@ export function FinalCTASection({ ctaHref, ctaLabel, loading }: CTAProps) {
         />
       </div>
 
-      <div className="relative max-w-3xl mx-auto px-6 text-center">
+      <div className="relative max-w-3xl mx-auto px-4 lg:px-6 text-center">
         <Reveal>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-6">

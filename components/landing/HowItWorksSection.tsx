@@ -12,7 +12,7 @@ export function HowItWorksSection() {
 
   return (
     <section id="how-it-works" className="py-28 border-t border-border bg-bg-surface">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 lg:px-6">
         <Reveal className="max-w-xl mb-14">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan mb-3">
             {t("sectionLabel")}

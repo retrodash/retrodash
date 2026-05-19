@@ -8,7 +8,7 @@ export function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
   const t = useTranslations("landing");
   return (
     <header className="sticky top-0 z-50 bg-bg-base/80 backdrop-blur-md border-b border-border">
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
         <WordmarkLogo />
         <nav className="flex items-center gap-5">
           <div className="hidden sm:flex items-center gap-5">
