@@ -111,7 +111,7 @@ export function NewRoomClient() {
     <div className="min-h-screen bg-bg-base flex flex-col">
       <Navbar />
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-6 py-10">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10">
         <Link
           href="/dashboard"
           className="inline-flex items-center gap-2 text-text-muted hover:text-text-secondary text-sm mb-8 transition-colors"
@@ -120,7 +120,7 @@ export function NewRoomClient() {
           {t("backToRooms")}
         </Link>
 
-        <div className="bg-bg-card border border-border rounded-lg p-8">
+        <div className="bg-bg-card border border-border rounded-lg p-5 sm:p-8">
           <h1 className="text-2xl font-bold text-text-primary mb-1">{t("title")}</h1>
           <p className="text-text-secondary text-sm mb-8">{t("subtitle")}</p>
 

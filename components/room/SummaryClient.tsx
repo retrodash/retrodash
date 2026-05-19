@@ -66,8 +66,8 @@ export function SummaryClient({ roomId }: { roomId: string }) {
         </span>
       </Navbar>
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-6 py-10 space-y-10">
-        <div className="flex items-start justify-between gap-4">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <Link
               href="/dashboard"
@@ -92,7 +92,7 @@ export function SummaryClient({ roomId }: { roomId: string }) {
           <button
             disabled
             title={t("comingSoon")}
-            className="h-9 px-4 rounded-md border border-border text-text-muted text-sm font-medium flex items-center gap-2 opacity-50 cursor-not-allowed shrink-0"
+            className="self-start h-9 px-4 rounded-md border border-border text-text-muted text-sm font-medium flex items-center gap-2 opacity-50 cursor-not-allowed shrink-0"
           >
             <ExportIcon />
             {t("export")}
@@ -299,13 +299,13 @@ function SummarySkeleton() {
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
       <div className="h-16 bg-bg-surface border-b border-border" />
-      <div className="max-w-5xl w-full mx-auto px-6 py-10 space-y-8">
+      <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8">
         <Skeleton className="h-8 w-72 bg-bg-card" />
         <div className="space-y-2">
           <Skeleton className="h-5 w-32 bg-bg-card" />
           <Skeleton className="h-24 bg-bg-card rounded-lg" />
         </div>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {[0, 1].map((i) => (
             <div key={i} className="space-y-2">
               <Skeleton className="h-5 w-24 bg-bg-card" />

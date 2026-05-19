@@ -105,7 +105,7 @@ export function CardItem({
       }`}
     >
       {!isEditing && (
-        <div className="absolute top-2 right-2 hidden group-hover:flex items-center gap-1">
+        <div className="absolute top-2 right-2 flex sm:opacity-0 sm:group-hover:opacity-100 transition-opacity items-center gap-1">
           {canEdit && (
             <button
               onClick={() => { setEditText(card.text); setIsEditing(true); }}

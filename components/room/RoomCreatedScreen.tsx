@@ -42,8 +42,8 @@ export function RoomCreatedScreen({
   };
 
   return (
-    <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6">
-      <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-8 space-y-6">
+    <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-4 sm:px-6">
+      <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-5 sm:p-8 space-y-6">
         <div>
           <p className="text-accent-cyan text-[11px] font-semibold uppercase tracking-widest mb-1">
             {t("createdHeader")}

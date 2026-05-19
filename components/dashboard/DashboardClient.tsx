@@ -23,10 +23,10 @@ export function DashboardClient() {
     <div className="min-h-screen bg-bg-base flex flex-col">
       <Navbar />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-10 space-y-12">
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-12">
         {/* ── My Rooms ──────────────────────────────────────── */}
         <section>
-          <div className="flex items-start justify-between mb-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6 sm:mb-8">
             <div>
               <h1 className="text-3xl font-bold text-text-primary tracking-tight">
                 {t("myRooms")}
@@ -34,7 +34,7 @@ export function DashboardClient() {
               <p className="text-text-secondary text-sm mt-1">{t("myRoomsSubtitle")}</p>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <Button variant="ghost" onClick={() => setJoinOpen(true)}>
                 {t("joinRoom")}
               </Button>
