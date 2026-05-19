@@ -233,6 +233,14 @@ export function GlobeIcon({ size = 15 }: { size?: number }) {
   );
 }
 
+export function MenuIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function CheckBoxIcon() {
   return (
     <svg
