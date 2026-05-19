@@ -154,6 +154,11 @@
   "navbar": {
     "signOut": "Sair"
   },
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "ptBR": "Português"
+  },
   "theme": {
     "label": "Tema de cores",
     "system": "Sistema",
