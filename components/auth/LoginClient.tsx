@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, Link } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { signInWithGoogle } from "@/lib/auth";
@@ -102,13 +102,13 @@ export function LoginClient() {
 
           <p className="mt-6 text-center text-xs text-text-muted leading-relaxed">
             {t("byContinuing")}{" "}
-            <a href="#" className="text-accent-cyan hover:underline transition-colors">
+            <Link href="/terms" className="text-accent-cyan hover:underline transition-colors">
               {t("termsOfService")}
-            </a>{" "}
+            </Link>{" "}
             {t("and")}{" "}
-            <a href="#" className="text-accent-cyan hover:underline transition-colors">
+            <Link href="/privacy" className="text-accent-cyan hover:underline transition-colors">
               {t("privacyPolicy")}
-            </a>
+            </Link>
             .
           </p>
         </div>

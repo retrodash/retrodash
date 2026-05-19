@@ -46,7 +46,9 @@
       "notice": "Funciona com qualquer equipe Scrum ou Kanban · Entre com o Google"
     },
     "footer": {
-      "tagline": "Reflita Juntos. Melhore Sempre."
+      "tagline": "Reflita Juntos. Melhore Sempre.",
+      "privacy": "Política de Privacidade",
+      "terms": "Termos de Serviço"
     }
   },
   "login": {

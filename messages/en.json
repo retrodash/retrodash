@@ -46,7 +46,9 @@
       "notice": "Works with any Scrum or Kanban team · Sign in with Google"
     },
     "footer": {
-      "tagline": "Reflect Together. Improve Always."
+      "tagline": "Reflect Together. Improve Always.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
     }
   },
   "login": {
