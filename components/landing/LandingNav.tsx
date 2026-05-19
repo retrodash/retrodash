@@ -29,8 +29,15 @@ export function LandingNav({ ctaHref, ctaLabel, loading }: CTAProps) {
             <ThemeToggle variant="dropdown" />
             <LanguageSwitcher />
           </div>
-          <span aria-hidden className="text-border hidden sm:block">|</span>
-          <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="sm" />
+          <span aria-hidden className="text-border hidden sm:block">
+            |
+          </span>
+          <CTALink
+            href={ctaHref}
+            label={ctaLabel}
+            loading={loading}
+            size="sm"
+          />
         </nav>
       </div>
     </header>
