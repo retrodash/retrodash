@@ -48,6 +48,12 @@ export function CardItem({
   const canDelete = isOwnCard || isFacilitator;
   const isDone = card.done ?? false;
 
+  const voteClass = !canVote
+    ? "text-text-muted cursor-default opacity-50"
+    : hasVoted
+      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 cursor-pointer"
+      : "text-text-muted hover:text-text-primary hover:bg-bg-card cursor-pointer";
+
   const handlePublish = async () => {
     setPublishing(true);
     await publishCard(roomId, card.id);
@@ -228,14 +234,7 @@ export function CardItem({
                 onClick={handleVote}
                 disabled={!canVote}
                 aria-label={hasVoted ? t("removeVote") : t("vote")}
-                className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors cursor-pointer
-                  ${
-                    canVote
-                      ? hasVoted
-                        ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25"
-                        : "text-text-muted hover:text-text-primary hover:bg-bg-card"
-                      : "text-text-muted cursor-default"
-                  }`}
+                className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors ${voteClass}`}
               >
                 <ThumbUpIcon filled={hasVoted} />
                 {card.votes > 0 && <span>{card.votes}</span>}
