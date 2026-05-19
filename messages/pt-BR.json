@@ -131,7 +131,10 @@
     "cancel": "Cancelar",
     "confirmEnd": "Encerrar Retro",
     "inviteTeammates": "Convidar membros",
-    "viewParticipants": "Ver participantes"
+    "viewParticipants": "Ver participantes",
+    "participants": "Participantes",
+    "unknown": "Desconhecido",
+    "host": "Anfitrião"
   },
   "summary": {
     "myRooms": "Minhas Salas",

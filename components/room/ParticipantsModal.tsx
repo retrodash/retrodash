@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useParticipants } from "@/hooks/useParticipants";
 import { Modal } from "@/components/ui/Modal";
 
@@ -10,11 +11,12 @@ interface ParticipantsModalProps {
 }
 
 export function ParticipantsModal({ roomId, onClose }: ParticipantsModalProps) {
+  const t = useTranslations("room");
   const { participants, loading } = useParticipants(roomId);
 
   return (
     <Modal
-      title={`Participants${!loading ? ` (${participants.length})` : ""}`}
+      title={`${t("participants")}${!loading ? ` (${participants.length})` : ""}`}
       onClose={onClose}
       size="sm"
     >
@@ -33,11 +35,11 @@ export function ParticipantsModal({ roomId, onClose }: ParticipantsModalProps) {
             <li key={p.id} className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-bg-elevated transition-colors">
               <Avatar name={p.displayName} photoURL={p.photoURL} />
               <span className="flex-1 text-sm text-text-primary truncate">
-                {p.displayName || "Unknown"}
+                {p.displayName || t("unknown")}
               </span>
               {p.role === "facilitator" && (
                 <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-sm shrink-0">
-                  Host
+                  {t("host")}
                 </span>
               )}
             </li>
