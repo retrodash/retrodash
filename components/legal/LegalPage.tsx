@@ -2,14 +2,6 @@ import { WordmarkLogo } from "@/components/ui/WordmarkLogo";
 import { Link } from "@/i18n/navigation";
 import type { LegalContent } from "./privacyContent";
 
-function LegalNote({ text }: { text: string }) {
-  return (
-    <div className="flex gap-3 rounded-lg bg-accent-cta/5 border border-accent-cta/20 p-4">
-      <p className="text-sm text-accent-cta/80 leading-relaxed">{text}</p>
-    </div>
-  );
-}
-
 function Section({ section }: { section: LegalContent["sections"][number] }) {
   return (
     <section id={section.id}>
@@ -35,9 +27,6 @@ function Section({ section }: { section: LegalContent["sections"][number] }) {
                 ))}
               </ul>
             );
-          }
-          if (block.type === "legal") {
-            return <LegalNote key={i} text={block.text} />;
           }
           return null;
         })}
@@ -70,10 +59,6 @@ export function LegalPage({ content }: { content: LegalContent }) {
         <h1 className="text-4xl font-bold text-text-primary tracking-tight">{c.title}</h1>
         <p className="mt-3 text-sm text-text-muted">{c.lastUpdated}</p>
 
-        <div className="mt-6 flex gap-3 rounded-lg bg-bg-card border border-border p-4">
-          <span className="text-accent-cta text-base leading-none mt-0.5 shrink-0">⚠️</span>
-          <p className="text-sm text-text-secondary leading-relaxed">{c.disclaimer}</p>
-        </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-6 py-16 space-y-14">

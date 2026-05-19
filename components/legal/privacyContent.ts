@@ -1,7 +1,6 @@
 type Block =
   | { type: "p"; text: string }
-  | { type: "ul"; items: string[] }
-  | { type: "legal"; text: string };
+  | { type: "ul"; items: string[] };
 
 type Section = {
   id: string;
@@ -59,10 +58,6 @@ const en: LegalContent = {
             "Technical data: Firebase automatically collects your IP address, browser type, operating system, and device identifiers to operate, secure, and improve the service.",
           ],
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: If your product ever handles special categories of data (health, biometric, financial, or children's data), additional obligations under GDPR Article 9 and equivalent laws apply. Consult a data privacy attorney.",
-        },
       ],
     },
     {
@@ -98,10 +93,6 @@ const en: LegalContent = {
             "Comply with legal obligations and enforce our Terms of Service.",
           ],
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required (GDPR): For users in the European Union, each processing purpose must be tied to a specific legal basis under GDPR Article 6 (e.g., contract performance, legitimate interest, consent). Map each purpose to its legal basis before publishing.",
-        },
       ],
     },
     {
@@ -123,10 +114,6 @@ const en: LegalContent = {
           type: "p",
           text: "We may also disclose your information if required by law, court order, or a legitimate government request, or to protect the rights, safety, or property of RetroDash, our users, or the public.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: Adding any new third-party service (analytics, error tracking, A/B testing, marketing) requires updating this section and ensuring appropriate Data Processing Agreements (DPAs) are in place — especially for GDPR and LGPD compliance.",
-        },
       ],
     },
     {
@@ -144,10 +131,6 @@ const en: LegalContent = {
         {
           type: "p",
           text: "For Brazil users (LGPD): international data transfers are conducted on the basis of the necessity of the transfer for the provision of the contracted service (Lei 13.709/2018, Art. 33, VIII).",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: Verify periodically that Firebase and Vercel maintain valid transfer mechanisms for the jurisdictions where your users are located. This requires periodic review as regulations evolve.",
         },
       ],
     },
@@ -195,10 +178,6 @@ const en: LegalContent = {
           type: "p",
           text: "We will respond to verified requests within 30 days. We may need to verify your identity before processing your request.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: Response timeframes, verification requirements, and permissible exceptions for rights requests vary by jurisdiction. An attorney should review your response process before going live.",
-        },
       ],
     },
     {
@@ -219,10 +198,6 @@ const en: LegalContent = {
         {
           type: "p",
           text: "You can clear local storage and cookies through your browser settings at any time, which will log you out of the platform.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required (GDPR/ePrivacy): Even essential cookies may require disclosure in a cookie banner under some interpretations of EU ePrivacy law. An attorney should advise whether a cookie consent mechanism is required for your user base.",
         },
       ],
     },
@@ -262,10 +237,6 @@ const en: LegalContent = {
           type: "p",
           text: `If you are a parent or guardian and believe your child has provided us with personal data, please contact us at ${CONTACT_EMAIL} and we will take steps to delete that data promptly.`,
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: If your platform may be accessed by minors, COPPA (US), GDPR (EU, age 16 in most Member States), and the UK Children's Code impose strict requirements including parental consent and age verification. Consult an attorney on applicability.",
-        },
       ],
     },
     {
@@ -304,10 +275,6 @@ const en: LegalContent = {
             `Email: ${CONTACT_EMAIL}`,
             "We aim to respond to all privacy inquiries within 30 days.",
           ],
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required (GDPR): If you process personal data of EU residents at scale or process special-category data, you may be required to appoint a Data Protection Officer (DPO) and register with relevant data protection authorities. An attorney should advise on applicability.",
         },
       ],
     },
@@ -351,10 +318,6 @@ const pt: LegalContent = {
             "Dados técnicos: o Firebase coleta automaticamente seu endereço IP, tipo de navegador, sistema operacional e identificadores de dispositivo para operar, proteger e melhorar o serviço.",
           ],
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Se o produto processar categorias especiais de dados (saúde, biométricos, financeiros ou dados de crianças), obrigações adicionais previstas na LGPD (Art. 11) e equivalentes se aplicam. Consulte um advogado especializado.",
-        },
       ],
     },
     {
@@ -390,10 +353,6 @@ const pt: LegalContent = {
             "Cumprir obrigações legais e fazer cumprir nossos Termos de Serviço.",
           ],
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária (LGPD/GDPR): Para usuários no Brasil, cada finalidade de tratamento deve ter uma base legal prevista na LGPD (Art. 7). Para usuários na União Europeia, aplica-se o Art. 6 do GDPR. Mapeie cada finalidade para sua base legal antes de publicar.",
-        },
       ],
     },
     {
@@ -415,10 +374,6 @@ const pt: LegalContent = {
           type: "p",
           text: "Também podemos divulgar suas informações quando exigido por lei, ordem judicial ou solicitação legítima de autoridade governamental, ou para proteger direitos, segurança ou propriedade do RetroDash, de nossos usuários ou do público.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: A adição de qualquer novo serviço de terceiros (analytics, rastreamento de erros, testes A/B, marketing) exige a atualização desta seção e a celebração de Contratos de Processamento de Dados (DPAs) adequados, especialmente para conformidade com a LGPD e o GDPR.",
-        },
       ],
     },
     {
@@ -436,10 +391,6 @@ const pt: LegalContent = {
         {
           type: "p",
           text: "Para usuários na UE (GDPR): as transferências para os EUA baseiam-se em Cláusulas Contratuais Padrão (SCCs) ou outros mecanismos adequados mantidos pelo Firebase e pela Vercel.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Verifique periodicamente se o Firebase e a Vercel mantêm mecanismos de transferência válidos para as jurisdições onde seus usuários estão localizados, pois as regulamentações evoluem.",
         },
       ],
     },
@@ -487,10 +438,6 @@ const pt: LegalContent = {
           type: "p",
           text: "Responderemos a solicitações verificadas em até 30 dias. Podemos precisar verificar sua identidade antes de processar a solicitação.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Os prazos, requisitos de verificação e exceções para solicitações de direitos variam por jurisdição. Um advogado deve revisar seu processo de resposta antes de entrar em produção.",
-        },
       ],
     },
     {
@@ -511,10 +458,6 @@ const pt: LegalContent = {
         {
           type: "p",
           text: "Você pode limpar o localStorage e os cookies nas configurações do seu navegador a qualquer momento, o que encerrará sua sessão na plataforma.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária (LGPD/ePrivacy): Mesmo cookies essenciais podem exigir divulgação e, em algumas jurisdições, um banner de consentimento. Um advogado deve orientar sobre a necessidade de um mecanismo de consentimento para cookies na sua base de usuários.",
         },
       ],
     },
@@ -554,10 +497,6 @@ const pt: LegalContent = {
           type: "p",
           text: `Se você é pai, mãe ou responsável e acredita que seu filho forneceu dados pessoais para nós, entre em contato: ${CONTACT_EMAIL}. Tomaremos medidas imediatas para excluir esses dados.`,
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Se a plataforma puder ser acessada por menores, o ECA (Brasil), COPPA (EUA), o GDPR (UE, limite de 16 anos na maioria dos Estados-Membros) e o UK Children's Code impõem requisitos rigorosos. Um advogado deve orientar sobre aplicabilidade.",
-        },
       ],
     },
     {
@@ -596,10 +535,6 @@ const pt: LegalContent = {
             `E-mail: ${CONTACT_EMAIL}`,
             "Nosso objetivo é responder a todas as solicitações de privacidade em até 30 dias.",
           ],
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária (LGPD/GDPR): Se você tratar dados pessoais de titulares brasileiros ou europeus em larga escala, ou tratar dados sensíveis, pode ser necessário indicar um Encarregado de Proteção de Dados (DPO) e registrar o tratamento junto às autoridades competentes. Consulte um advogado.",
         },
       ],
     },

@@ -71,10 +71,6 @@ const en: LegalContent = {
           type: "p",
           text: "You are responsible for maintaining the security of your Google account and for all activity that occurs through it on RetroDash.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: If your service may be used by minors, additional consent and verification requirements apply under COPPA (US), GDPR (EU), and Brazilian law. An attorney must advise on age-gating and parental consent mechanisms.",
-        },
       ],
     },
     {
@@ -119,10 +115,6 @@ const en: LegalContent = {
         {
           type: "p",
           text: "Note on anonymous mode: enabling anonymous mode in a room hides your identity in the user interface, but your user ID is stored internally in our database for moderation and voting-rule enforcement. Anonymous mode does not constitute a guarantee of complete anonymity.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: The scope of the content license, DMCA takedown procedures (US), and equivalent content moderation obligations (EU Digital Services Act, Brazilian LGPD) require attorney review for your specific jurisdiction.",
         },
       ],
     },
@@ -188,10 +180,6 @@ const en: LegalContent = {
           type: "p",
           text: "We are not responsible for any loss of data, including retrospective cards, action items, or room data, caused by technical failures, user error, or any other reason.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: Consumer protection laws in Brazil (CDC), the EU, and other jurisdictions may limit your ability to disclaim implied warranties or limit liability for consumers. An attorney must review this section for applicability in your target markets.",
-        },
       ],
     },
     {
@@ -205,10 +193,6 @@ const en: LegalContent = {
         {
           type: "p",
           text: "IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO USE THE SERVICE IN THE TWELVE MONTHS PRECEDING THE CLAIM, OR (B) USD $10.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: Liability caps and exclusions are heavily jurisdiction-dependent. They may be unenforceable against consumers in Brazil (under the CDC), the EU, or other markets. An attorney must tailor this clause to your specific legal exposure and target audience.",
         },
       ],
     },
@@ -237,10 +221,6 @@ const en: LegalContent = {
         {
           type: "p",
           text: "These Terms shall be governed by and construed in accordance with applicable law. Any disputes arising from these Terms or your use of the Service shall first be attempted to be resolved through good-faith negotiation.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Legal Review Required: The choice of governing law and jurisdiction (arbitration vs. litigation, class action waiver, venue) is a critical legal decision that depends on your company's legal domicile and target markets. An attorney must draft this clause — do not publish without legal review.",
         },
       ],
     },
@@ -353,10 +333,6 @@ const pt: LegalContent = {
           type: "p",
           text: "Você é responsável por manter a segurança da sua conta Google e por toda a atividade que ocorre por meio dela no RetroDash.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Se o serviço puder ser usado por menores, requisitos adicionais de consentimento e verificação se aplicam sob o ECA (Brasil), COPPA (EUA) e GDPR (UE). Um advogado deve orientar sobre mecanismos de verificação de idade e consentimento parental.",
-        },
       ],
     },
     {
@@ -401,10 +377,6 @@ const pt: LegalContent = {
         {
           type: "p",
           text: "Nota sobre o modo anônimo: ativar o modo anônimo em uma sala oculta sua identidade na interface do usuário, mas seu ID de usuário é armazenado internamente em nosso banco de dados para fins de moderação e aplicação das regras de votação. O modo anônimo não constitui uma garantia de anonimato completo.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: O escopo da licença de conteúdo, procedimentos de remoção por violação de direitos autorais (DMCA nos EUA, Marco Civil no Brasil) e obrigações equivalentes de moderação de conteúdo (Lei de Serviços Digitais da UE, LGPD) requerem revisão jurídica.",
         },
       ],
     },
@@ -470,10 +442,6 @@ const pt: LegalContent = {
           type: "p",
           text: "Não somos responsáveis por qualquer perda de dados, incluindo cards de retrospectiva, itens de ação ou dados de sala, causada por falhas técnicas, erro do usuário ou qualquer outro motivo.",
         },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: As leis de proteção ao consumidor no Brasil (CDC — Código de Defesa do Consumidor), na UE e em outras jurisdições podem limitar sua capacidade de excluir garantias implícitas. Um advogado deve revisar esta cláusula para os mercados-alvo.",
-        },
       ],
     },
     {
@@ -487,10 +455,6 @@ const pt: LegalContent = {
         {
           type: "p",
           text: "EM NENHUM CASO NOSSA RESPONSABILIDADE TOTAL PARA COM VOCÊ EXCEDERÁ O MAIOR ENTRE (A) O VALOR QUE VOCÊ PAGOU PELO USO DO SERVIÇO NOS DOZE MESES ANTERIORES À RECLAMAÇÃO, OU (B) USD $10.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: Limitações de responsabilidade podem ser inaplicáveis contra consumidores no Brasil (CDC), na UE ou em outros mercados. Um advogado deve adaptar esta cláusula à sua exposição jurídica específica e ao público-alvo.",
         },
       ],
     },
@@ -519,10 +483,6 @@ const pt: LegalContent = {
         {
           type: "p",
           text: "Estes Termos serão regidos e interpretados de acordo com a legislação aplicável. Quaisquer disputas decorrentes destes Termos ou do uso do Serviço serão primeiro sujeitas a tentativa de resolução por meio de negociação de boa-fé.",
-        },
-        {
-          type: "legal",
-          text: "⚠️ Revisão Jurídica Necessária: A escolha da lei aplicável, foro de resolução de disputas (arbitragem vs. litígio judicial, renúncia a ação coletiva) é uma decisão jurídica crítica que depende do domicílio legal da sua empresa e dos mercados-alvo. Um advogado deve redigir esta cláusula — não publique sem revisão jurídica.",
         },
       ],
     },
