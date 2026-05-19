@@ -87,6 +87,29 @@ export function RoomClient({ roomId }: RoomClientProps) {
     <div className="h-screen bg-bg-base flex flex-col overflow-hidden">
       <Navbar
         logoHref="/dashboard"
+        showHamburger
+        leftActions={
+          <>
+            {!room.isAnonymous && (
+              <button
+                onClick={() => setParticipantsOpen(true)}
+                title={t("viewParticipants")}
+                className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+                aria-label={t("viewParticipants")}
+              >
+                <PeopleIcon />
+              </button>
+            )}
+            <button
+              onClick={() => setShareOpen(true)}
+              title={t("inviteTeammates")}
+              className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
+              aria-label={t("inviteTeammates")}
+            >
+              <LinkIcon />
+            </button>
+          </>
+        }
         actions={
           <>
             {isFacilitator && room.status === "waiting" && (
@@ -110,24 +133,6 @@ export function RoomClient({ roomId }: RoomClientProps) {
       >
         <h1 className="text-text-primary font-semibold text-sm truncate">{room.name}</h1>
         <StatusBadge status={room.status} />
-        {!room.isAnonymous && (
-          <button
-            onClick={() => setParticipantsOpen(true)}
-            title={t("viewParticipants")}
-            className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
-            aria-label={t("viewParticipants")}
-          >
-            <PeopleIcon />
-          </button>
-        )}
-        <button
-          onClick={() => setShareOpen(true)}
-          title={t("inviteTeammates")}
-          className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
-          aria-label={t("inviteTeammates")}
-        >
-          <LinkIcon />
-        </button>
       </Navbar>
 
       <div className="flex-1 min-h-0">

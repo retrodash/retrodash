@@ -154,6 +154,11 @@
   "navbar": {
     "signOut": "Sign out"
   },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ptBR": "Português"
+  },
   "theme": {
     "label": "Color theme",
     "system": "System",
