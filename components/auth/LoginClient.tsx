@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 import { useRouter, Link } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -43,7 +44,7 @@ export function LoginClient() {
         </div>
 
         <div className="relative z-10">
-          <Image src="/logo.svg" alt="RetroDash" width={240} height={104} style={{ height: 'auto' }} priority />
+          <RetroDashLogo width={240} />
         </div>
 
         <div className="relative z-10 max-w-md">
@@ -72,7 +73,7 @@ export function LoginClient() {
       {/* ── Right: auth panel ─────────────────────────────────── */}
       <div className="w-full lg:w-120 flex flex-col items-center justify-center px-8 py-12 lg:px-16">
         <div className="mb-10 lg:hidden">
-          <Image src="/logo.svg" alt="RetroDash" width={200} height={86} style={{ height: 'auto' }} priority />
+          <RetroDashLogo width={200} />
         </div>
 
         <div className="w-full max-w-sm">
