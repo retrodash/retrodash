@@ -6,6 +6,7 @@ import { getPrivacyContent } from "@/components/legal/privacyContent";
 export const metadata: Metadata = {
   title: "Privacy Policy — RetroDash",
   description: "How RetroDash collects, uses, and protects your personal information.",
+  robots: { index: false, follow: false },
 };
 
 export default async function PrivacyPage({

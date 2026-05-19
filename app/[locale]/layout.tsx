@@ -39,6 +39,7 @@ export async function generateMetadata({
     title: t.title,
     description: t.description,
     metadataBase: new URL(BASE_URL),
+    robots: { index: true, follow: true },
     openGraph: {
       title: t.title,
       description: t.description,
