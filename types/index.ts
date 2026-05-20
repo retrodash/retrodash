@@ -4,6 +4,7 @@ export interface Room {
   id: string;
   name: string;
   password: string;
+  isPublic: boolean;
   ownerId: string;
   isAnonymous: boolean;
   status: "waiting" | "active" | "ended";

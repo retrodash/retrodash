@@ -84,6 +84,7 @@ export async function getUncompletedActionItems(roomId: string): Promise<Card[]>
 export async function createRoom({
   name,
   passwordHash,
+  isPublic,
   ownerId,
   ownerName,
   ownerPhotoURL,
@@ -94,6 +95,7 @@ export async function createRoom({
 }: {
   name: string;
   passwordHash: string;
+  isPublic: boolean;
   ownerId: string;
   ownerName: string;
   ownerPhotoURL: string | null;
@@ -108,6 +110,7 @@ export async function createRoom({
   batch.set(roomRef, {
     name,
     password: passwordHash,
+    isPublic,
     ownerId,
     isAnonymous,
     status: "waiting",

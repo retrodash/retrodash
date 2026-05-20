@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { updateRoomStatus, getParticipant } from "@/lib/firestore";
+import { updateRoomStatus, getParticipant, joinRoom } from "@/lib/firestore";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
@@ -41,6 +41,12 @@ export function RoomClient({ roomId }: RoomClientProps) {
       setParticipantStatus(p ? "joined" : "stranger"),
     );
   }, [roomId, user, room, roomLoading]);
+
+  useEffect(() => {
+    if (!user || !room || participantStatus !== "stranger" || !room.isPublic) return;
+    joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null)
+      .then(() => setParticipantStatus("joined"));
+  }, [participantStatus, room, user, roomId]);
 
   useEffect(() => {
     if (room?.status === "ended" && participantStatus === "joined") {
@@ -156,6 +162,7 @@ export function RoomClient({ roomId }: RoomClientProps) {
         <ShareRoomModal
           roomId={roomId}
           roomName={room.name}
+          isPublic={room.isPublic}
           onClose={() => setShareOpen(false)}
         />
       )}

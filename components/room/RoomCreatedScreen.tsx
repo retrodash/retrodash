@@ -9,6 +9,7 @@ interface RoomCreatedScreenProps {
   roomId: string;
   roomName: string;
   password: string;
+  isPublic?: boolean;
   onOpen: () => void;
 }
 
@@ -16,6 +17,7 @@ export function RoomCreatedScreen({
   roomId,
   roomName,
   password,
+  isPublic = false,
   onOpen,
 }: RoomCreatedScreenProps) {
   const t = useTranslations("newRoom");
@@ -49,36 +51,40 @@ export function RoomCreatedScreen({
             {t("createdHeader")}
           </p>
           <h1 className="text-text-primary font-bold text-xl leading-snug">{roomName}</h1>
-          <p className="text-text-secondary text-sm mt-1">{t("createdShare")}</p>
+          <p className="text-text-secondary text-sm mt-1">
+            {isPublic ? t("createdSharePublic") : t("createdShare")}
+          </p>
         </div>
 
-        <div>
-          <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
-            {t("passwordLabel")}
-          </label>
-          <div className="flex gap-2">
-            <div className="flex-1 flex items-center bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-text-primary text-sm tracking-widest min-w-0">
-              <span className="truncate">
-                {showPassword ? password : "•".repeat(password.length)}
-              </span>
+        {!isPublic && (
+          <div>
+            <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
+              {t("passwordLabel")}
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1 flex items-center bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-text-primary text-sm tracking-widest min-w-0">
+                <span className="truncate">
+                  {showPassword ? password : "•".repeat(password.length)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="ml-2 shrink-0 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOffIcon size={15} /> : <EyeIcon />}
+                </button>
+              </div>
               <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="ml-2 shrink-0 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => copy(password, setCopiedPassword)}
+                className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
+                style={copiedPassword ? copiedStyle : defaultStyle}
               >
-                {showPassword ? <EyeOffIcon size={15} /> : <EyeIcon />}
+                {copiedPassword ? t("copied") : t("copy")}
               </button>
             </div>
-            <button
-              onClick={() => copy(password, setCopiedPassword)}
-              className="h-10 px-4 rounded-md text-xs font-semibold transition-all cursor-pointer shrink-0 border"
-              style={copiedPassword ? copiedStyle : defaultStyle}
-            >
-              {copiedPassword ? t("copied") : t("copy")}
-            </button>
           </div>
-        </div>
+        )}
 
         <div>
           <label className="text-text-muted text-[11px] font-semibold uppercase tracking-widest mb-2 block">
