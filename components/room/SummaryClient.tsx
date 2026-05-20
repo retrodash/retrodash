@@ -41,7 +41,12 @@ export function SummaryClient({ roomId }: { roomId: string }) {
   }, [roomId, user, room, roomLoading]);
 
   useEffect(() => {
-    if (participantStatus === "stranger" && room && !room.isPublic) {
+    if (!room) return;
+    if (participantStatus === "stranger" && !room.isPublic) {
+      router.replace(`/room/${roomId}`);
+      return;
+    }
+    if (room.status !== "ended") {
       router.replace(`/room/${roomId}`);
     }
   }, [participantStatus, room, roomId, router]);
