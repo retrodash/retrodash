@@ -43,6 +43,10 @@ export function RoomClient({ roomId }: RoomClientProps) {
   }, [roomId, user, room, roomLoading]);
 
   useEffect(() => {
+    if (!roomLoading && !room) router.replace("/dashboard");
+  }, [roomLoading, room, router]);
+
+  useEffect(() => {
     if (!user || !room || participantStatus !== "stranger" || !room.isPublic) return;
     joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null)
       .then(() => setParticipantStatus("joined"));
@@ -55,7 +59,7 @@ export function RoomClient({ roomId }: RoomClientProps) {
   }, [room?.status, roomId, router, participantStatus]);
 
   const isFacilitator = user?.uid === room?.ownerId;
-  const loading = roomLoading || cardsLoading || participantStatus === "loading";
+  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
 
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 

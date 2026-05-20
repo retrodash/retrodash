@@ -41,6 +41,10 @@ export function SummaryClient({ roomId }: { roomId: string }) {
   }, [roomId, user, room, roomLoading]);
 
   useEffect(() => {
+    if (!roomLoading && !room) router.replace("/dashboard");
+  }, [roomLoading, room, router]);
+
+  useEffect(() => {
     if (!room) return;
     if (participantStatus === "stranger" && !room.isPublic) {
       router.replace(`/room/${roomId}`);
@@ -51,7 +55,7 @@ export function SummaryClient({ roomId }: { roomId: string }) {
     }
   }, [participantStatus, room, roomId, router]);
 
-  const loading = roomLoading || cardsLoading || participantStatus === "loading";
+  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
 
   if (loading) return <SummarySkeleton />;
 
