@@ -159,7 +159,8 @@
     "host": "Host"
   },
   "navbar": {
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "feedback": "Feedback"
   },
   "language": {
     "label": "Language",
@@ -241,5 +242,26 @@
     "vote": "Vote",
     "improveWithAI": "Improve with AI",
     "improving": "Improving…"
+  },
+  "feedback": {
+    "title": "Feedback & Suggestions",
+    "subtitle": "Have a bug to report or an idea to share? We'd love to hear from you.",
+    "backToDashboard": "← Back to dashboard",
+    "typeLabel": "Type",
+    "typeBug": "Bug Report",
+    "typeFeature": "Feature Request",
+    "typeGeneral": "General",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Describe your feedback in detail…",
+    "messageHint": "Between 20 and 2000 characters.",
+    "messageRequired": "Please enter a message.",
+    "messageMinLength": "Message must be at least 20 characters.",
+    "messageMaxLength": "Message must be at most 2000 characters.",
+    "submit": "Send Feedback",
+    "submitting": "Sending…",
+    "serverError": "Something went wrong. Please try again.",
+    "successTitle": "Thank you for your feedback!",
+    "successSubtitle": "We appreciate you taking the time to share your thoughts. It helps us improve RetroDash.",
+    "sendAnother": "Send another"
   }
 }

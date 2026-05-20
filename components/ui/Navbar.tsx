@@ -103,6 +103,15 @@ export function Navbar({
           <span aria-hidden className="text-border hidden sm:block">
             |
           </span>
+          <Link
+            href="/feedback"
+            className="text-text-muted hover:text-text-primary text-sm transition-colors hidden sm:block"
+          >
+            {t("feedback")}
+          </Link>
+          <span aria-hidden className="text-border hidden sm:block">
+            |
+          </span>
           {user?.photoURL && (
             <Image
               src={user.photoURL}
@@ -171,6 +180,18 @@ export function Navbar({
                   >
                     PT
                   </button>
+                </div>
+
+                <div className="mx-3 h-px bg-border" />
+
+                <div className="px-3 py-2.5">
+                  <Link
+                    href="/feedback"
+                    onClick={() => setMenuOpen(false)}
+                    className="block text-sm text-text-secondary hover:text-text-primary transition-colors"
+                  >
+                    {t("feedback")}
+                  </Link>
                 </div>
 
                 <div className="mx-3 h-px bg-border" />
