@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useParticipants } from "@/hooks/useParticipants";
@@ -20,8 +20,18 @@ export function ParticipantsModal({ roomId, isFacilitator, onClose }: Participan
   const { participants, loading } = useParticipants(roomId);
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
   const [removing, setRemoving] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
-  const participantToRemove = participants.find((p) => p.id === confirmRemoveId);
+  useEffect(() => {
+    if (!confirmRemoveId) return;
+    function handleOutsideClick(e: MouseEvent) {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setConfirmRemoveId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [confirmRemoveId]);
 
   async function handleRemove() {
     if (!confirmRemoveId) return;
@@ -50,57 +60,65 @@ export function ParticipantsModal({ roomId, isFacilitator, onClose }: Participan
           ))}
         </div>
       ) : (
-        <>
-          <ul className="space-y-1">
-            {participants.map((p) => (
-              <li key={p.id} className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-bg-elevated transition-colors">
-                <Avatar name={p.displayName} photoURL={p.photoURL} />
-                <span className="flex-1 text-sm text-text-primary truncate">
-                  {p.displayName || t("unknown")}
+        <ul className="space-y-1">
+          {participants.map((p) => (
+            <li key={p.id} className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-bg-elevated transition-colors">
+              <Avatar name={p.displayName} photoURL={p.photoURL} />
+              <span className="flex-1 text-sm text-text-primary truncate">
+                {p.displayName || t("unknown")}
+              </span>
+
+              {p.role === "facilitator" ? (
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-sm shrink-0">
+                  {t("host")}
                 </span>
-                {p.role === "facilitator" ? (
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-sm shrink-0">
-                    {t("host")}
-                  </span>
-                ) : isFacilitator ? (
+              ) : isFacilitator ? (
+                <div className="relative shrink-0">
                   <button
-                    onClick={() => setConfirmRemoveId(p.id)}
+                    onClick={() =>
+                      setConfirmRemoveId(confirmRemoveId === p.id ? null : p.id)
+                    }
                     aria-label={t("removeParticipantLabel")}
-                    className="size-6 flex items-center justify-center rounded cursor-pointer text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors shrink-0"
+                    className="size-6 flex items-center justify-center rounded cursor-pointer text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors"
                   >
                     <XIcon size={12} />
                   </button>
-                ) : null}
-              </li>
-            ))}
-          </ul>
 
-          {confirmRemoveId && participantToRemove && (
-            <div className="border-t border-border pt-4 mt-4">
-              <p className="text-sm text-text-secondary leading-relaxed">
-                {t("removeParticipantConfirm", { name: participantToRemove.displayName || t("unknown") })}
-              </p>
-              <div className="flex gap-2 mt-3 justify-end">
-                <Button
-                  variant="ghost-text"
-                  size="sm"
-                  onClick={() => setConfirmRemoveId(null)}
-                  disabled={removing}
-                >
-                  {t("cancel")}
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleRemove}
-                  disabled={removing}
-                >
-                  {removing ? t("removing") : t("removeParticipantButton")}
-                </Button>
-              </div>
-            </div>
-          )}
-        </>
+                  {confirmRemoveId === p.id && (
+                    <div
+                      ref={popoverRef}
+                      className="absolute right-0 top-full mt-2 z-10 w-56 bg-bg-card border border-border rounded-lg shadow-xl p-3"
+                    >
+                      <p className="text-xs text-text-secondary leading-relaxed mb-3">
+                        {t("removeParticipantConfirm", {
+                          name: p.displayName || t("unknown"),
+                        })}
+                      </p>
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          variant="ghost-text"
+                          size="xs"
+                          onClick={() => setConfirmRemoveId(null)}
+                          disabled={removing}
+                        >
+                          {t("cancel")}
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="xs"
+                          onClick={handleRemove}
+                          disabled={removing}
+                        >
+                          {removing ? t("removing") : t("removeParticipantButton")}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </li>
+          ))}
+        </ul>
       )}
     </Modal>
   );
