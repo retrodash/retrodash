@@ -101,6 +101,13 @@
     "addColumn": "Adicionar coluna",
     "actionItems": "Itens de Ação",
     "autoAdded": "Adicionado automaticamente",
+    "visibility": "Visibilidade da Sala",
+    "private": "Privada",
+    "privateHint": "Senha necessária para entrar",
+    "public": "Pública",
+    "publicHint": "Qualquer pessoa com o link pode entrar, sem senha",
+    "createdSharePublic": "Compartilhe o código ou link da sala com sua equipe.",
+    "publicBadge": "Sala pública",
     "creating": "Criando…",
     "createRoom": "Criar Sala",
     "serverError": "Algo deu errado. Por favor, tente novamente.",
@@ -131,7 +138,10 @@
     "cancel": "Cancelar",
     "confirmEnd": "Encerrar Retro",
     "inviteTeammates": "Convidar membros",
-    "viewParticipants": "Ver participantes"
+    "viewParticipants": "Ver participantes",
+    "participants": "Participantes",
+    "unknown": "Desconhecido",
+    "host": "Anfitrião"
   },
   "summary": {
     "myRooms": "Minhas Salas",
@@ -149,7 +159,19 @@
     "host": "Anfitrião"
   },
   "navbar": {
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "feedback": "Feedback"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "ptBR": "Português"
+  },
+  "theme": {
+    "label": "Tema de cores",
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Escuro"
   },
   "statusBadge": {
     "waiting": "Aguardando",
@@ -182,6 +204,7 @@
     "title": "Convidar membros",
     "subtitle": "Compartilhe o link ou código abaixo para convidar pessoas para",
     "subtitleEnd": "Eles precisarão da senha da sala para entrar.",
+    "subtitleEndPublic": "Sem senha necessária — basta compartilhar o link ou código.",
     "roomCode": "Código da Sala",
     "shareLink": "Link de Compartilhamento",
     "copied": "Copiado!",
@@ -219,5 +242,26 @@
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
     "improving": "Melhorando…"
+  },
+  "feedback": {
+    "title": "Feedback e Sugestões",
+    "subtitle": "Encontrou um bug ou tem uma ideia? Adoraríamos ouvir você.",
+    "backToDashboard": "← Voltar ao dashboard",
+    "typeLabel": "Tipo",
+    "typeBug": "Relato de Bug",
+    "typeFeature": "Solicitação de Funcionalidade",
+    "typeGeneral": "Geral",
+    "messageLabel": "Mensagem",
+    "messagePlaceholder": "Descreva seu feedback em detalhes…",
+    "messageHint": "Entre 20 e 2000 caracteres.",
+    "messageRequired": "Por favor, escreva uma mensagem.",
+    "messageMinLength": "A mensagem deve ter pelo menos 20 caracteres.",
+    "messageMaxLength": "A mensagem deve ter no máximo 2000 caracteres.",
+    "submit": "Enviar Feedback",
+    "submitting": "Enviando…",
+    "serverError": "Algo deu errado. Tente novamente.",
+    "successTitle": "Obrigado pelo seu feedback!",
+    "successSubtitle": "Agradecemos por dedicar um tempo para compartilhar seus pensamentos. Isso nos ajuda a melhorar o RetroDash.",
+    "sendAnother": "Enviar outro"
   }
 }

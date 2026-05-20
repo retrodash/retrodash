@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 import "./globals.css";
 
 export default function NotFound() {
@@ -14,7 +14,7 @@ export default function NotFound() {
 
           <div className="relative z-10 flex flex-col items-center text-center max-w-md">
             <Link href="/" className="mb-12 opacity-80 hover:opacity-100 transition-opacity">
-              <Image src="/logo.svg" alt="RetroDash" width={160} height={70} style={{ height: 'auto' }} priority />
+              <RetroDashLogo width={160} />
             </Link>
 
             <p

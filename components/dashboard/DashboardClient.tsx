@@ -40,7 +40,7 @@ export function DashboardClient() {
               </Button>
               <Link
                 href="/room/new"
-                className="h-10 px-5 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+                className="h-9 px-4 text-xs sm:h-10 sm:px-5 sm:text-sm rounded-md font-semibold flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
               >
                 <PlusIcon />
                 {t("newRoom")}

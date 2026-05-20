@@ -4,6 +4,7 @@ export interface Room {
   id: string;
   name: string;
   password: string;
+  isPublic: boolean;
   ownerId: string;
   isAnonymous: boolean;
   status: "waiting" | "active" | "ended";
@@ -38,4 +39,17 @@ export interface Participant {
   photoURL: string | null;
   joinedAt: Timestamp;
   role: "facilitator" | "member";
+}
+
+export type FeedbackType = "bug" | "feature" | "general";
+
+export interface Feedback {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhoto: string | null;
+  type: FeedbackType;
+  message: string;
+  createdAt: Timestamp;
 }

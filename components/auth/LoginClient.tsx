@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 import { useRouter, Link } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -9,7 +10,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { GoogleIcon } from "@/components/ui/Icons";
 import { Spinner } from "@/components/ui/Spinner";
 
-export function LoginClient() {
+function safeRedirect(redirect?: string): string {
+  if (redirect && redirect.startsWith("/") && !redirect.startsWith("//"))
+    return redirect;
+  return "/dashboard";
+}
+
+export function LoginClient({ redirect }: { redirect?: string }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const t = useTranslations("login");
@@ -17,8 +24,8 @@ export function LoginClient() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && user) router.push("/dashboard");
-  }, [user, loading, router]);
+    if (!loading && user) router.push(safeRedirect(redirect));
+  }, [user, loading, router, redirect]);
 
   const handleGoogleSignIn = async () => {
     setSigningIn(true);
@@ -43,7 +50,7 @@ export function LoginClient() {
         </div>
 
         <div className="relative z-10">
-          <Image src="/logo.svg" alt="RetroDash" width={240} height={104} style={{ height: 'auto' }} priority />
+          <RetroDashLogo width={240} />
         </div>
 
         <div className="relative z-10 max-w-md">
@@ -72,7 +79,7 @@ export function LoginClient() {
       {/* ── Right: auth panel ─────────────────────────────────── */}
       <div className="w-full lg:w-120 flex flex-col items-center justify-center px-8 py-12 lg:px-16">
         <div className="mb-10 lg:hidden">
-          <Image src="/logo.svg" alt="RetroDash" width={200} height={86} style={{ height: 'auto' }} priority />
+          <RetroDashLogo width={200} />
         </div>
 
         <div className="w-full max-w-sm">

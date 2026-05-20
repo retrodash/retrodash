@@ -18,21 +18,28 @@ export function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
         />
       </div>
 
-      <div className="relative max-w-6xl mx-auto px-6 py-24 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-6xl mx-auto px-4 lg:px-6 py-24 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
           <div
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-bg-card border border-border text-[11px] font-semibold uppercase tracking-widest text-text-muted"
-            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0ms both" }}
+            style={{
+              animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0ms both",
+            }}
           >
             <span className="size-1.5 rounded-full bg-accent-cyan animate-pulse" />
             {t("hero.badge")}
           </div>
 
-          <div style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 100ms both" }}>
-            <h1 className="text-5xl lg:text-[3.75rem] font-bold leading-[1.1] tracking-tight">
+          <div
+            style={{
+              animation:
+                "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 100ms both",
+            }}
+          >
+            <h1 className="text-5xl lg:text-[4rem] font-bold leading-[1.1] tracking-tight">
               {t("hero.title")}{" "}
               <span
-                className="bg-clip-text text-transparent"
+                className="block bg-clip-text text-transparent"
                 style={{ backgroundImage: "var(--gradient-brand)" }}
               >
                 {t("hero.titleGradient")}
@@ -45,9 +52,17 @@ export function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
 
           <div
             className="flex items-center gap-5 flex-wrap"
-            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 220ms both" }}
+            style={{
+              animation:
+                "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 220ms both",
+            }}
           >
-            <CTALink href={ctaHref} label={ctaLabel} loading={loading} size="lg" />
+            <CTALink
+              href={ctaHref}
+              label={ctaLabel}
+              loading={loading}
+              size="lg"
+            />
             <a
               href="#how-it-works"
               className="text-text-muted hover:text-text-primary text-sm transition-colors inline-flex items-center gap-1.5"
@@ -59,7 +74,10 @@ export function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
 
           <p
             className="text-text-muted text-xs"
-            style={{ animation: "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 320ms both" }}
+            style={{
+              animation:
+                "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 320ms both",
+            }}
           >
             {t("hero.freeNotice")}
           </p>
@@ -67,7 +85,9 @@ export function HeroSection({ ctaHref, ctaLabel, loading }: CTAProps) {
 
         <div
           className="hidden lg:block"
-          style={{ animation: "fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 150ms both" }}
+          style={{
+            animation: "fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 150ms both",
+          }}
         >
           <BoardPreview />
         </div>

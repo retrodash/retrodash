@@ -1,27 +1,16 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: next-themes writes `dark` to <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Font */
   --font-sans: var(--font-jakarta), system-ui, sans-serif;
 
-  /* Accent colors */
+  /* Static brand tokens — same in every theme */
   --color-accent-cyan:   #00E5CC;
   --color-accent-violet: #7B61FF;
   --color-cta:           #F5A623;
-
-  /* Background colors */
-  --color-bg-base:     #0A0B0F;
-  --color-bg-surface:  #0F1117;
-  --color-bg-card:     #1C1E28;
-  --color-bg-elevated: #171921;
-
-  /* Border */
-  --color-border: #252836;
-
-  /* Text colors */
-  --color-text-primary:   #F0F2F5;
-  --color-text-secondary: #8B90A7;
-  --color-text-muted:     #4A4F68;
 
   /* Border radius */
   --radius:    14px;
@@ -30,6 +19,19 @@
   --radius-lg: 22px;
 }
 
+/* Dynamic color tokens — resolved from per-theme CSS vars */
+@theme inline {
+  --color-bg-base:        var(--t-bg-base);
+  --color-bg-surface:     var(--t-bg-surface);
+  --color-bg-card:        var(--t-bg-card);
+  --color-bg-elevated:    var(--t-bg-elevated);
+  --color-border:         var(--t-border);
+  --color-text-primary:   var(--t-text-primary);
+  --color-text-secondary: var(--t-text-secondary);
+  --color-text-muted:     var(--t-text-muted);
+}
+
+/* ── Light theme (default) ──────────────────────────────────── */
 :root {
   --gradient-brand: linear-gradient(90deg, #00E5CC, #7B61FF);
 
@@ -43,6 +45,27 @@
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
+
+  --t-bg-base:        #F8F9FC;
+  --t-bg-surface:     #F0F2F8;
+  --t-bg-card:        #E8EBF4;
+  --t-bg-elevated:    #ECEEF6;
+  --t-border:         #D0D5E8;
+  --t-text-primary:   #0F1117;
+  --t-text-secondary: #4A4F68;
+  --t-text-muted:     #8B90A7;
+}
+
+/* ── Dark theme ─────────────────────────────────────────────── */
+.dark {
+  --t-bg-base:        #0A0B0F;
+  --t-bg-surface:     #0F1117;
+  --t-bg-card:        #1C1E28;
+  --t-bg-elevated:    #171921;
+  --t-border:         #252836;
+  --t-text-primary:   #F0F2F5;
+  --t-text-secondary: #8B90A7;
+  --t-text-muted:     #4A4F68;
 }
 
 html {

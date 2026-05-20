@@ -7,10 +7,11 @@ import { Modal } from "@/components/ui/Modal";
 interface ShareRoomModalProps {
   roomId: string;
   roomName: string;
+  isPublic?: boolean;
   onClose: () => void;
 }
 
-export function ShareRoomModal({ roomId, roomName, onClose }: ShareRoomModalProps) {
+export function ShareRoomModal({ roomId, roomName, isPublic = false, onClose }: ShareRoomModalProps) {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const t = useTranslations("shareRoomModal");
@@ -28,7 +29,7 @@ export function ShareRoomModal({ roomId, roomName, onClose }: ShareRoomModalProp
       <p className="text-text-secondary text-sm mb-5 leading-relaxed">
         {t("subtitle")}{" "}
         <span className="text-text-primary font-medium">{roomName}</span>.{" "}
-        {t("subtitleEnd")}
+        {isPublic ? t("subtitleEndPublic") : t("subtitleEnd")}
       </p>
 
       <div className="mb-4">

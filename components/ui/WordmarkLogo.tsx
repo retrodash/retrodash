@@ -1,10 +1,10 @@
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
 
 export function WordmarkLogo() {
   return (
     <Link href="/" className="shrink-0">
-      <Image src="/logo.svg" alt="RetroDash" width={110} height={48} style={{ height: 'auto' }} priority />
+      <RetroDashLogo width={110} className="w-20.5 sm:w-27.5" />
     </Link>
   );
 }

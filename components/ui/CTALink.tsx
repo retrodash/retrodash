@@ -15,9 +15,9 @@ interface CTALinkProps {
 }
 
 const sizes: Record<"sm" | "md" | "lg", string> = {
-  sm: "h-8 px-4 text-xs",
-  md: "h-9 px-5 text-sm",
-  lg: "h-11 px-7 text-sm",
+  sm: "h-7 px-3.5 text-xs sm:h-8 sm:px-4",
+  md: "h-8 px-4 text-sm sm:h-9 sm:px-5",
+  lg: "h-10 px-6 text-sm sm:h-11 sm:px-7",
 };
 
 export function CTALink({
