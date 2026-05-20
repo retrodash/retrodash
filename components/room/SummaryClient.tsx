@@ -1,12 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { Avatar } from "@/components/ui/Avatar";
+import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { useParticipants } from "@/hooks/useParticipants";
+import { getParticipant } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
 import { Skeleton } from "@/components/ui/Skeleton";
 import {
@@ -21,13 +24,40 @@ import {
 import type { Card, Column } from "@/types";
 
 export function SummaryClient({ roomId }: { roomId: string }) {
+  const { user } = useAuth();
   const { room, columns, loading: roomLoading } = useRoom(roomId);
   const { cards, loading: cardsLoading } = useCards(roomId);
   const { participants } = useParticipants(roomId);
   const t = useTranslations("summary");
   const locale = useLocale();
+  const router = useRouter();
+  const [participantStatus, setParticipantStatus] = useState<"loading" | "joined" | "stranger">("loading");
 
-  if (roomLoading || cardsLoading) return <SummarySkeleton />;
+  useEffect(() => {
+    if (!user || roomLoading || !room) return;
+    getParticipant(roomId, user.uid).then((p) =>
+      setParticipantStatus(p ? "joined" : "stranger"),
+    );
+  }, [roomId, user, room, roomLoading]);
+
+  useEffect(() => {
+    if (!roomLoading && !room) router.replace("/dashboard");
+  }, [roomLoading, room, router]);
+
+  useEffect(() => {
+    if (!room) return;
+    if (participantStatus === "stranger" && !room.isPublic) {
+      router.replace(`/room/${roomId}`);
+      return;
+    }
+    if (room.status !== "ended") {
+      router.replace(`/room/${roomId}`);
+    }
+  }, [participantStatus, room, roomId, router]);
+
+  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
+
+  if (loading) return <SummarySkeleton />;
 
   if (!room) {
     return (

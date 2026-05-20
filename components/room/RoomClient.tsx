@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { updateRoomStatus, getParticipant } from "@/lib/firestore";
+import { updateRoomStatus, getParticipant, joinRoom } from "@/lib/firestore";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
@@ -43,13 +43,23 @@ export function RoomClient({ roomId }: RoomClientProps) {
   }, [roomId, user, room, roomLoading]);
 
   useEffect(() => {
+    if (!roomLoading && !room) router.replace("/dashboard");
+  }, [roomLoading, room, router]);
+
+  useEffect(() => {
+    if (!user || !room || participantStatus !== "stranger" || !room.isPublic) return;
+    joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null)
+      .then(() => setParticipantStatus("joined"));
+  }, [participantStatus, room, user, roomId]);
+
+  useEffect(() => {
     if (room?.status === "ended" && participantStatus === "joined") {
       router.push(`/room/${roomId}/summary`);
     }
   }, [room?.status, roomId, router, participantStatus]);
 
   const isFacilitator = user?.uid === room?.ownerId;
-  const loading = roomLoading || cardsLoading || participantStatus === "loading";
+  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
 
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 
@@ -156,6 +166,7 @@ export function RoomClient({ roomId }: RoomClientProps) {
         <ShareRoomModal
           roomId={roomId}
           roomName={room.name}
+          isPublic={room.isPublic}
           onClose={() => setShareOpen(false)}
         />
       )}

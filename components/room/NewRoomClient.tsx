@@ -21,6 +21,7 @@ import {
   XIcon,
   PlusIcon,
   LockIcon,
+  GlobeIcon,
 } from "@/components/ui/Icons";
 
 type ColumnEntry = { id: string; title: string };
@@ -40,12 +41,17 @@ export function NewRoomClient() {
 
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
   const [isAnonymous, setAnonymous] = useState(false);
   const [columns, setColumns] = useState<ColumnEntry[]>(DEFAULT_COLUMNS);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-  const [created, setCreated] = useState<{ roomId: string; password: string } | null>(null);
+  const [created, setCreated] = useState<{
+    roomId: string;
+    password: string;
+    isPublic: boolean;
+  } | null>(null);
 
   const addColumn = () => {
     setColumns((prev) => [...prev, { id: crypto.randomUUID(), title: "" }]);
@@ -62,9 +68,13 @@ export function NewRoomClient() {
   const validate = () => {
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = t("nameRequired");
-    if (!password.trim()) next.password = t("passwordRequired");
-    if (password.trim().length < 4) next.password = t("passwordMinLength");
-    if (columns.some((c) => !c.title.trim())) next.columns = t("columnsRequired");
+    if (!isPublic) {
+      if (!password.trim()) next.password = t("passwordRequired");
+      else if (password.trim().length < 4)
+        next.password = t("passwordMinLength");
+    }
+    if (columns.some((c) => !c.title.trim()))
+      next.columns = t("columnsRequired");
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -77,19 +87,22 @@ export function NewRoomClient() {
     setServerError(null);
 
     try {
-      const passwordHash = await hashPassword(password.trim());
+      const passwordHash = isPublic ? "" : await hashPassword(password.trim());
       const roomId = await createRoom({
         name: name.trim(),
         passwordHash,
+        isPublic,
         ownerId: user.uid,
         ownerName: user.displayName ?? "Facilitator",
         ownerPhotoURL: user.photoURL ?? null,
         isAnonymous,
         columnTitles: columns.map((c) => c.title.trim()),
         actionItemsTitle: t("actionItems"),
-        initialActionItemTexts: carryOver.enabled ? carryOver.selectedTexts : [],
+        initialActionItemTexts: carryOver.enabled
+          ? carryOver.selectedTexts
+          : [],
       });
-      setCreated({ roomId, password: password.trim() });
+      setCreated({ roomId, password: password.trim(), isPublic });
     } catch {
       setServerError(t("serverError"));
       setSubmitting(false);
@@ -102,6 +115,7 @@ export function NewRoomClient() {
         roomId={created.roomId}
         roomName={name.trim()}
         password={created.password}
+        isPublic={created.isPublic}
         onOpen={() => router.push(`/room/${created.roomId}`)}
       />
     );
@@ -121,7 +135,9 @@ export function NewRoomClient() {
         </Link>
 
         <div className="bg-bg-card border border-border rounded-lg p-5 sm:p-8">
-          <h1 className="text-2xl font-bold text-text-primary mb-1">{t("title")}</h1>
+          <h1 className="text-2xl font-bold text-text-primary mb-1">
+            {t("title")}
+          </h1>
           <p className="text-text-secondary text-sm mb-8">{t("subtitle")}</p>
 
           {serverError && (
@@ -140,19 +156,64 @@ export function NewRoomClient() {
               />
             </Field>
 
-            <Field label={t("password")} error={errors.password} hint={t("passwordHint")}>
-              <Input
-                type="password"
-                placeholder={t("passwordPlaceholder")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Field>
+            <div>
+              <p className="text-text-primary text-sm font-medium mb-2">
+                {t("visibility")}
+              </p>
+              <div className="flex rounded-md border border-border overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsPublic(false)}
+                  className={`flex-1 flex items-center justify-center cursor-pointer gap-2 py-2.5 text-sm font-medium transition-colors border-r border-border ${
+                    !isPublic
+                      ? "bg-accent-violet/10 text-accent-violet"
+                      : "text-text-muted hover:text-text-secondary"
+                  }`}
+                >
+                  <LockIcon size={14} />
+                  {t("private")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPublic(true)}
+                  className={`flex-1 flex items-center justify-center cursor-pointer gap-2 py-2.5 text-sm font-medium transition-colors ${
+                    isPublic
+                      ? "bg-accent-cyan/10 text-accent-cyan"
+                      : "text-text-muted hover:text-text-secondary"
+                  }`}
+                >
+                  <GlobeIcon size={14} />
+                  {t("public")}
+                </button>
+              </div>
+              <p className="text-text-muted text-xs mt-1.5">
+                {isPublic ? t("publicHint") : t("privateHint")}
+              </p>
+            </div>
+
+            {!isPublic && (
+              <Field
+                label={t("password")}
+                error={errors.password}
+                hint={t("passwordHint")}
+              >
+                <Input
+                  type="password"
+                  placeholder={t("passwordPlaceholder")}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Field>
+            )}
 
             <div className="flex items-center justify-between gap-4 py-1">
               <div>
-                <p className="text-text-primary text-sm font-medium">{t("anonymousMode")}</p>
-                <p className="text-text-muted text-xs mt-0.5">{t("anonymousModeHint")}</p>
+                <p className="text-text-primary text-sm font-medium">
+                  {t("anonymousMode")}
+                </p>
+                <p className="text-text-muted text-xs mt-0.5">
+                  {t("anonymousModeHint")}
+                </p>
               </div>
               <Toggle checked={isAnonymous} onChange={setAnonymous} />
             </div>
@@ -160,7 +221,9 @@ export function NewRoomClient() {
             <Divider />
 
             <div>
-              <p className="text-text-primary text-sm font-medium mb-1">{t("columnsTitle")}</p>
+              <p className="text-text-primary text-sm font-medium mb-1">
+                {t("columnsTitle")}
+              </p>
               <p className="text-text-muted text-xs mb-4">{t("columnsHint")}</p>
 
               <div className="space-y-2">
@@ -202,7 +265,9 @@ export function NewRoomClient() {
 
               <div className="mt-4 flex items-center gap-3 h-10 px-3 rounded-md border border-dashed border-border bg-bg-elevated/50">
                 <LockIcon size={13} />
-                <span className="text-text-muted text-sm flex-1">{t("actionItems")}</span>
+                <span className="text-text-muted text-sm flex-1">
+                  {t("actionItems")}
+                </span>
                 <span className="text-[11px] font-semibold uppercase tracking-widest text-text-muted">
                   {t("autoAdded")}
                 </span>
