@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
-import { MenuIcon } from "@/components/ui/Icons";
+import { MenuIcon, MessageIcon } from "@/components/ui/Icons";
 
 interface NavbarProps {
   logoHref?: string;
@@ -105,9 +105,10 @@ export function Navbar({
           </span>
           <Link
             href="/feedback"
-            className="text-text-muted hover:text-text-primary text-sm transition-colors hidden sm:block"
+            title={t("feedback")}
+            className="text-text-muted hover:text-text-primary transition-colors hidden sm:block"
           >
-            {t("feedback")}
+            <MessageIcon size={16} />
           </Link>
           <span aria-hidden className="text-border hidden sm:block">
             |
