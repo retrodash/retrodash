@@ -10,12 +10,6 @@ export function SiteFooter() {
         <WordmarkLogo />
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <Link
-            href="/feedback"
-            className="text-text-muted hover:text-text-secondary text-xs transition-colors"
-          >
-            {t("feedback")}
-          </Link>
-          <Link
             href="/privacy"
             className="text-text-muted hover:text-text-secondary text-xs transition-colors"
           >
