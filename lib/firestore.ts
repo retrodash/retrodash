@@ -250,6 +250,24 @@ export async function toggleVote(
   });
 }
 
+export async function removeParticipant(roomId: string, userId: string): Promise<void> {
+  await deleteDoc(doc(db, "rooms", roomId, "participants", userId));
+}
+
+export async function deleteRoom(roomId: string): Promise<void> {
+  const batch = writeBatch(db);
+  const [participantsSnap, columnsSnap, cardsSnap] = await Promise.all([
+    getDocs(collection(db, "rooms", roomId, "participants")),
+    getDocs(collection(db, "rooms", roomId, "columns")),
+    getDocs(collection(db, "rooms", roomId, "cards")),
+  ]);
+  [...participantsSnap.docs, ...columnsSnap.docs, ...cardsSnap.docs].forEach((d) =>
+    batch.delete(d.ref)
+  );
+  batch.delete(doc(db, "rooms", roomId));
+  await batch.commit();
+}
+
 export async function addFeedback({
   userId,
   userName,

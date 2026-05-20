@@ -82,7 +82,14 @@
     "emptyTitle": "No rooms yet",
     "emptySubtitle": "Create your first retrospective room and invite your team to reflect and improve together.",
     "createFirstRoom": "Create your first room",
-    "created": "Created {date}"
+    "created": "Created {date}",
+    "deleteRoom": "Delete Room",
+    "deleteRoomTitle": "Delete Room",
+    "deleteRoomSubtitle": "This action is permanent and cannot be undone. Type {confirmWord} below to confirm.",
+    "deleteRoomConfirmWord": "DELETE",
+    "deleteRoomPlaceholder": "Type DELETE to confirm",
+    "deleteRoomConfirmButton": "Delete Room",
+    "deleting": "Deleting…"
   },
   "newRoom": {
     "title": "Create a Room",
@@ -141,7 +148,11 @@
     "viewParticipants": "View participants",
     "participants": "Participants",
     "unknown": "Unknown",
-    "host": "Host"
+    "host": "Host",
+    "removeParticipantLabel": "Remove participant",
+    "removeParticipantConfirm": "Are you sure you want to remove {name} from this room?",
+    "removeParticipantButton": "Remove",
+    "removing": "Removing…"
   },
   "summary": {
     "myRooms": "My Rooms",

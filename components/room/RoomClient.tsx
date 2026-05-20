@@ -159,7 +159,11 @@ export function RoomClient({ roomId }: RoomClientProps) {
       </div>
 
       {participantsOpen && (
-        <ParticipantsModal roomId={roomId} onClose={() => setParticipantsOpen(false)} />
+        <ParticipantsModal
+          roomId={roomId}
+          isFacilitator={isFacilitator}
+          onClose={() => setParticipantsOpen(false)}
+        />
       )}
 
       {shareOpen && (
