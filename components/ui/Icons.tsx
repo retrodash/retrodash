@@ -241,6 +241,14 @@ export function MenuIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+export function MessageIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path d="M14 1H2a1 1 0 00-1 1v8a1 1 0 001 1h3l2.5 3L10 11h4a1 1 0 001-1V2a1 1 0 00-1-1z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function CheckBoxIcon() {
   return (
     <svg

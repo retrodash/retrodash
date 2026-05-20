@@ -40,3 +40,16 @@ export interface Participant {
   joinedAt: Timestamp;
   role: "facilitator" | "member";
 }
+
+export type FeedbackType = "bug" | "feature" | "general";
+
+export interface Feedback {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhoto: string | null;
+  type: FeedbackType;
+  message: string;
+  createdAt: Timestamp;
+}

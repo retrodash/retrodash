@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
-import { MenuIcon } from "@/components/ui/Icons";
+import { MenuIcon, MessageIcon } from "@/components/ui/Icons";
 
 interface NavbarProps {
   logoHref?: string;
@@ -103,6 +103,16 @@ export function Navbar({
           <span aria-hidden className="text-border hidden sm:block">
             |
           </span>
+          <Link
+            href="/feedback"
+            title={t("feedback")}
+            className="text-text-muted hover:text-text-primary transition-colors hidden sm:block"
+          >
+            <MessageIcon size={16} />
+          </Link>
+          <span aria-hidden className="text-border hidden sm:block">
+            |
+          </span>
           {user?.photoURL && (
             <Image
               src={user.photoURL}
@@ -171,6 +181,18 @@ export function Navbar({
                   >
                     PT
                   </button>
+                </div>
+
+                <div className="mx-3 h-px bg-border" />
+
+                <div className="px-3 py-2.5">
+                  <Link
+                    href="/feedback"
+                    onClick={() => setMenuOpen(false)}
+                    className="block text-sm text-text-secondary hover:text-text-primary transition-colors"
+                  >
+                    {t("feedback")}
+                  </Link>
                 </div>
 
                 <div className="mx-3 h-px bg-border" />

@@ -10,7 +10,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { GoogleIcon } from "@/components/ui/Icons";
 import { Spinner } from "@/components/ui/Spinner";
 
-export function LoginClient() {
+function safeRedirect(redirect?: string): string {
+  if (redirect && redirect.startsWith("/") && !redirect.startsWith("//"))
+    return redirect;
+  return "/dashboard";
+}
+
+export function LoginClient({ redirect }: { redirect?: string }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const t = useTranslations("login");
@@ -18,8 +24,8 @@ export function LoginClient() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && user) router.push("/dashboard");
-  }, [user, loading, router]);
+    if (!loading && user) router.push(safeRedirect(redirect));
+  }, [user, loading, router, redirect]);
 
   const handleGoogleSignIn = async () => {
     setSigningIn(true);

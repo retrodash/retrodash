@@ -17,7 +17,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
-import type { Card } from "@/types";
+import type { Card, FeedbackType } from "@/types";
 import { db } from "@/lib/firebase";
 
 // ── Room queries ───────────────────────────────────────────────
@@ -247,5 +247,31 @@ export async function toggleVote(
   await updateDoc(doc(db, "rooms", roomId, "cards", cardId), {
     votes:   increment(hasVoted ? -1 : 1),
     votedBy: hasVoted ? arrayRemove(userId) : arrayUnion(userId),
+  });
+}
+
+export async function addFeedback({
+  userId,
+  userName,
+  userEmail,
+  userPhoto,
+  type,
+  message,
+}: {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhoto: string | null;
+  type: FeedbackType;
+  message: string;
+}): Promise<void> {
+  await addDoc(collection(db, "feedback"), {
+    userId,
+    userName,
+    userEmail,
+    userPhoto,
+    type,
+    message,
+    createdAt: serverTimestamp(),
   });
 }
