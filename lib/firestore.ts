@@ -12,6 +12,7 @@ import {
   updateDoc,
   deleteDoc,
   writeBatch,
+  onSnapshot,
   serverTimestamp,
   increment,
   arrayUnion,
@@ -159,6 +160,16 @@ export async function createRoom({
 export async function getParticipant(roomId: string, userId: string) {
   const snap = await getDoc(doc(db, "rooms", roomId, "participants", userId));
   return snap.exists() ? snap.data() : null;
+}
+
+export function subscribeToParticipant(
+  roomId: string,
+  userId: string,
+  callback: (exists: boolean) => void,
+): () => void {
+  return onSnapshot(doc(db, "rooms", roomId, "participants", userId), (snap) =>
+    callback(snap.exists()),
+  );
 }
 
 export async function joinRoom(
