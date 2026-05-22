@@ -18,7 +18,7 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
     selectedRoomId, setSelectedRoomId,
     candidateItems, loadingItems,
     checkedIds, toggleItem, toggleAll,
-    selectedTexts,
+    selectedItems,
   } = carryOver;
   const t = useTranslations("carryOver");
 
@@ -72,13 +72,17 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
                     {allChecked ? t("deselectAll") : t("selectAll")}
                   </button>
                   <span className="text-xs text-text-muted">
-                    {t("selectedCount", { selected: selectedTexts.length, total: candidateItems.length })}
+                    {t("selectedCount", { selected: selectedItems.length, total: candidateItems.length })}
                   </span>
                 </div>
 
                 <div className="space-y-1">
                   {candidateItems.map((item) => {
                     const checked = checkedIds.has(item.id);
+                    const status: "pending" | "keep" =
+                      (item.actionStatus ?? (item.done ? "done" : "pending")) === "keep"
+                        ? "keep"
+                        : "pending";
                     return (
                       <button
                         key={item.id}
@@ -96,7 +100,13 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
                         >
                           {checked && <CheckIcon />}
                         </span>
-                        <span className="text-sm text-text-primary leading-snug">{item.text}</span>
+                        <span className="flex-1 text-sm text-text-primary leading-snug">{item.text}</span>
+                        {status === "keep" && (
+                          <span className="shrink-0 inline-flex items-center gap-1 px-1.5 h-5 rounded text-[10px] font-semibold bg-accent-violet/15 text-accent-violet">
+                            <LoopIcon />
+                            {t("statusKeep")}
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -114,6 +124,17 @@ function CheckIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
       <path d="M1.5 5l2.5 2.5L8.5 2" stroke="var(--color-bg-base)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function LoopIcon() {
+  return (
+    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M17 2l4 4-4 4" />
+      <path d="M3 11V9a4 4 0 014-4h14" />
+      <path d="M7 22l-4-4 4-4" />
+      <path d="M21 13v2a4 4 0 01-4 4H3" />
     </svg>
   );
 }
