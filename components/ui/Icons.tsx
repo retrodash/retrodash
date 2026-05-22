@@ -249,6 +249,20 @@ export function MessageIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+export function TrashIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" aria-hidden>
+      <path
+        d="M1.75 3.5h10.5M5.25 3.5V2.5h3.5v1M3 3.5l.8 8.17h6.4L11 3.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function CheckBoxIcon() {
   return (
     <svg

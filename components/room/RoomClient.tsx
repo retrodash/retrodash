@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { updateRoomStatus, getParticipant, joinRoom } from "@/lib/firestore";
+import { updateRoomStatus, subscribeToParticipant, joinRoom } from "@/lib/firestore";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
@@ -34,13 +34,21 @@ export function RoomClient({ roomId }: RoomClientProps) {
   const [participantStatus, setParticipantStatus] = useState<
     "loading" | "joined" | "stranger"
   >("loading");
+  const hasJoinedRef = useRef(false);
 
   useEffect(() => {
     if (!user || roomLoading || !room) return;
-    getParticipant(roomId, user.uid).then((p) =>
-      setParticipantStatus(p ? "joined" : "stranger"),
-    );
-  }, [roomId, user, room, roomLoading]);
+    return subscribeToParticipant(roomId, user.uid, (exists) => {
+      if (exists) {
+        hasJoinedRef.current = true;
+        setParticipantStatus("joined");
+      } else if (hasJoinedRef.current) {
+        router.replace("/dashboard");
+      } else {
+        setParticipantStatus("stranger");
+      }
+    });
+  }, [roomId, user, room, roomLoading, router]);
 
   useEffect(() => {
     if (!roomLoading && !room) router.replace("/dashboard");
@@ -159,7 +167,11 @@ export function RoomClient({ roomId }: RoomClientProps) {
       </div>
 
       {participantsOpen && (
-        <ParticipantsModal roomId={roomId} onClose={() => setParticipantsOpen(false)} />
+        <ParticipantsModal
+          roomId={roomId}
+          isFacilitator={isFacilitator}
+          onClose={() => setParticipantsOpen(false)}
+        />
       )}
 
       {shareOpen && (

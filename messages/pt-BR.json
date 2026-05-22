@@ -82,7 +82,14 @@
     "emptyTitle": "Nenhuma sala ainda",
     "emptySubtitle": "Crie sua primeira sala de retrospectiva e convide sua equipe para refletir e melhorar juntos.",
     "createFirstRoom": "Criar primeira sala",
-    "created": "Criado em {date}"
+    "created": "Criado em {date}",
+    "deleteRoom": "Excluir Sala",
+    "deleteRoomTitle": "Excluir Sala",
+    "deleteRoomSubtitle": "Esta ação é permanente e não pode ser desfeita. Digite {confirmWord} abaixo para confirmar.",
+    "deleteRoomConfirmWord": "EXCLUIR",
+    "deleteRoomPlaceholder": "Digite EXCLUIR para confirmar",
+    "deleteRoomConfirmButton": "Excluir Sala",
+    "deleting": "Excluindo…"
   },
   "newRoom": {
     "title": "Criar uma Sala",
@@ -141,7 +148,11 @@
     "viewParticipants": "Ver participantes",
     "participants": "Participantes",
     "unknown": "Desconhecido",
-    "host": "Anfitrião"
+    "host": "Anfitrião",
+    "removeParticipantLabel": "Remover participante",
+    "removeParticipantConfirm": "Tem certeza que deseja remover {name} da sala?",
+    "removeParticipantButton": "Remover",
+    "removing": "Removendo…"
   },
   "summary": {
     "myRooms": "Minhas Salas",
