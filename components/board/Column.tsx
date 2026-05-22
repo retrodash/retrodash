@@ -57,7 +57,7 @@ export function BoardColumn({
     setIsAdding(false);
   };
 
-  const handleAddLinkedActionItem = async (linkedCardId: string, text: string) => {
+  const handleAddLinkedActionItem = async (linkedCardId: string, linkedCardText: string, text: string) => {
     if (!actionItemsColumnId) return;
     await addCard(roomId, {
       columnId: actionItemsColumnId,
@@ -67,6 +67,7 @@ export function BoardColumn({
       authorPhotoURL: userPhotoURL,
       isActionItem: true,
       linkedCardId,
+      linkedCardText,
     });
   };
 
@@ -131,7 +132,7 @@ export function BoardColumn({
             }
             onAddLinkedActionItem={
               !column.isActionItems && actionItemsColumnId
-                ? (text) => handleAddLinkedActionItem(card.id, text)
+                ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
                 : undefined
             }
             linkedCard={

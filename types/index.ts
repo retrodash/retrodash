@@ -32,6 +32,7 @@ export interface Card {
   actionStatus?: "pending" | "done" | "keep";
   published?: boolean;
   linkedCardId?: string;
+  linkedCardText?: string;
   createdAt: Timestamp;
 }
 

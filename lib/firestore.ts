@@ -107,7 +107,7 @@ export async function createRoom({
   isAnonymous: boolean;
   columnTitles: string[];
   actionItemsTitle: string;
-  initialActionItems?: { text: string; actionStatus: "pending" | "keep" }[];
+  initialActionItems?: { text: string; actionStatus: "pending" | "keep"; linkedCardText?: string }[];
 }): Promise<string> {
   const batch = writeBatch(db);
   const roomRef = doc(collection(db, "rooms"));
@@ -143,7 +143,7 @@ export async function createRoom({
     role: "facilitator",
   });
 
-  initialActionItems.forEach(({ text, actionStatus }) => {
+  initialActionItems.forEach(({ text, actionStatus, linkedCardText }) => {
     const cardRef = doc(collection(db, "rooms", roomRef.id, "cards"));
     batch.set(cardRef, {
       columnId: actionItemsRef.id,
@@ -153,6 +153,7 @@ export async function createRoom({
       votes: 0,
       votedBy: [],
       actionStatus,
+      ...(linkedCardText && { linkedCardText }),
       createdAt: serverTimestamp(),
     });
   });
@@ -214,7 +215,8 @@ export async function addCard(
     authorPhotoURL = null,
     isActionItem = false,
     linkedCardId,
-  }: { columnId: string; text: string; authorId: string; authorName: string; authorPhotoURL?: string | null; isActionItem?: boolean; linkedCardId?: string }
+    linkedCardText,
+  }: { columnId: string; text: string; authorId: string; authorName: string; authorPhotoURL?: string | null; isActionItem?: boolean; linkedCardId?: string; linkedCardText?: string }
 ): Promise<void> {
   await addDoc(collection(db, "rooms", roomId, "cards"), {
     columnId,
@@ -227,6 +229,7 @@ export async function addCard(
     published: false,
     ...(isActionItem && { actionStatus: "pending" }),
     ...(linkedCardId && { linkedCardId }),
+    ...(linkedCardText && { linkedCardText }),
     createdAt: serverTimestamp(),
   });
 }

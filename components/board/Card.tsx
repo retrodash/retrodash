@@ -58,7 +58,6 @@ export function CardItem({
   const actionStatus: "pending" | "done" | "keep" =
     card.actionStatus ?? (card.done ? "done" : "pending");
 
-
   const voteClass = !canVote
     ? "text-text-muted cursor-default opacity-50"
     : hasVoted
@@ -204,10 +203,12 @@ export function CardItem({
         </div>
       ) : isActionItem ? (
         <div className="pr-14">
-          {linkedCard && (
+          {(linkedCard ?? card.linkedCardText) && (
             <div className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted">
               <LinkIcon />
-              <span className="truncate italic">{linkedCard.text}</span>
+              <span className="truncate italic">
+                {linkedCard?.text ?? card.linkedCardText}
+              </span>
             </div>
           )}
           <p
@@ -230,11 +231,18 @@ export function CardItem({
           {!isDraft && (linkedActionItems?.length ?? 0) > 0 && (
             <div className="mt-2 pt-2 border-t border-border/40 space-y-1">
               {linkedActionItems!.map((item) => (
-                <div key={item.id} className="flex items-start gap-1.5 text-xs text-text-muted">
-                  <span className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-cyan" : ""}`}>
+                <div
+                  key={item.id}
+                  className="flex items-center gap-1.5 text-xs text-text-muted"
+                >
+                  <span
+                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-cyan" : ""}`}
+                  >
                     <MiniCheckIcon done={item.actionStatus === "done"} />
                   </span>
-                  <span className={`leading-relaxed ${item.actionStatus === "done" ? "line-through" : ""}`}>
+                  <span
+                    className={`leading-relaxed ${item.actionStatus === "done" ? "line-through" : ""}`}
+                  >
                     {item.text}
                   </span>
                 </div>
@@ -268,7 +276,10 @@ export function CardItem({
                       {t("add")}
                     </button>
                     <button
-                      onClick={() => { setIsAddingLinkedItem(false); setLinkedItemText(""); }}
+                      onClick={() => {
+                        setIsAddingLinkedItem(false);
+                        setLinkedItemText("");
+                      }}
                       className="px-2 h-5 rounded text-[10px] text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                     >
                       {t("cancel")}
@@ -392,7 +403,6 @@ function AuthorChip({
   );
 }
 
-
 function PencilIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
@@ -468,14 +478,26 @@ function MiniSpinner() {
 function SmallPlusIcon() {
   return (
     <svg width="10" height="10" viewBox="0 0 13 13" fill="none" aria-hidden>
-      <path d="M6.5 1.5v10M1.5 6.5h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M6.5 1.5v10M1.5 6.5h10"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function LinkIcon() {
   return (
-    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden className="shrink-0">
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+      className="shrink-0"
+    >
       <path
         d="M5 6.5a2.5 2.5 0 003.54.04l1.5-1.5A2.5 2.5 0 006.5 1.5L5.75 2.25"
         stroke="currentColor"
@@ -495,9 +517,25 @@ function LinkIcon() {
 function MiniCheckIcon({ done }: { done: boolean }) {
   return (
     <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden>
-      <rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.2" fill={done ? "currentColor" : "none"} fillOpacity={done ? 0.2 : 0} />
+      <rect
+        x="1"
+        y="1"
+        width="10"
+        height="10"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        fill={done ? "currentColor" : "none"}
+        fillOpacity={done ? 0.2 : 0}
+      />
       {done && (
-        <path d="M3.5 6l2 2 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d="M3.5 6l2 2 3-3"
+          stroke="currentColor"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       )}
     </svg>
   );

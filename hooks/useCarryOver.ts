@@ -7,6 +7,7 @@ import type { Card, Room } from "@/types";
 export interface CarryOverItem {
   text: string;
   actionStatus: "pending" | "keep";
+  linkedCardText?: string;
 }
 
 export interface CarryOverState {
@@ -88,6 +89,7 @@ export function useCarryOver(endedRooms: Room[]): CarryOverState {
         (item.actionStatus ?? (item.done ? "done" : "pending")) === "keep"
           ? "keep"
           : "pending",
+      ...(item.linkedCardText && { linkedCardText: item.linkedCardText }),
     }));
 
   return {

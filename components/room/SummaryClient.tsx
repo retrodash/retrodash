@@ -178,7 +178,7 @@ export function SummaryClient({ roomId }: { roomId: string }) {
           ) : (
             <div className="mt-4 bg-bg-card border border-border rounded-lg divide-y divide-border overflow-hidden">
               {actionCards.map((card) => (
-                <ActionItemRow key={card.id} card={card} isAnonymous={room.isAnonymous} />
+                <ActionItemRow key={card.id} card={card} isAnonymous={room.isAnonymous} allCards={publishedCards} />
               ))}
             </div>
           )}
@@ -235,10 +235,14 @@ function SectionHeader({
   );
 }
 
-function ActionItemRow({ card, isAnonymous }: { card: Card; isAnonymous: boolean }) {
+function ActionItemRow({ card, isAnonymous, allCards }: { card: Card; isAnonymous: boolean; allCards: Card[] }) {
   const t = useTranslations("summary");
   const status: "pending" | "done" | "keep" =
     card.actionStatus ?? (card.done ? "done" : "pending");
+
+  const sourceCardText = card.linkedCardId
+    ? (allCards.find((c) => c.id === card.linkedCardId)?.text ?? card.linkedCardText)
+    : card.linkedCardText;
 
   return (
     <div className="flex items-start gap-3 px-5 py-4">
@@ -254,6 +258,11 @@ function ActionItemRow({ card, isAnonymous }: { card: Card; isAnonymous: boolean
         {status === "done" ? <CheckIcon /> : status === "keep" ? <LoopIcon /> : <CircleIcon />}
       </span>
       <div className="flex-1 min-w-0">
+        {sourceCardText && (
+          <p className="text-[11px] text-text-muted italic mb-1 truncate">
+            {t("fromCard")} {sourceCardText}
+          </p>
+        )}
         <p
           className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word ${
             status === "done"

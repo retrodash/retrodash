@@ -100,7 +100,14 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
                         >
                           {checked && <CheckIcon />}
                         </span>
-                        <span className="flex-1 text-sm text-text-primary leading-snug">{item.text}</span>
+                        <span className="flex-1 min-w-0">
+                          {item.linkedCardText && (
+                            <span className="block text-[11px] text-text-muted italic truncate mb-0.5">
+                              {t("fromCard")} {item.linkedCardText}
+                            </span>
+                          )}
+                          <span className="text-sm text-text-primary leading-snug">{item.text}</span>
+                        </span>
                         {status === "keep" && (
                           <span className="shrink-0 inline-flex items-center gap-1 px-1.5 h-5 rounded text-[10px] font-semibold bg-accent-violet/15 text-accent-violet">
                             <LoopIcon />
