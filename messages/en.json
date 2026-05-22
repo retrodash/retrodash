@@ -152,6 +152,7 @@
     "participants": "Participants",
     "actionItems": "Action Items",
     "noActionItems": "No action items were added.",
+    "keepGoing": "Keep going",
     "retroRecap": "Retro Recap",
     "noCards": "No cards added.",
     "notFound": "Room not found.",
@@ -219,7 +220,8 @@
     "noItems": "No uncompleted action items in this room.",
     "deselectAll": "Deselect all",
     "selectAll": "Select all",
-    "selectedCount": "{selected} of {total} selected"
+    "selectedCount": "{selected} of {total} selected",
+    "statusKeep": "Keep"
   },
   "board": {
     "actionItems": "Action Items",
@@ -238,6 +240,11 @@
     "deleteLabel": "Delete",
     "markAsDone": "Mark as done",
     "markAsNotDone": "Mark as not done",
+    "markAsKeep": "Mark as keep going",
+    "markAsPending": "Mark as pending",
+    "statusPending": "Pending",
+    "statusDone": "Done",
+    "statusKeep": "Keep",
     "removeVote": "Remove vote",
     "vote": "Vote",
     "improveWithAI": "Improve with AI",

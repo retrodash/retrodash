@@ -98,8 +98,8 @@ export function NewRoomClient() {
         isAnonymous,
         columnTitles: columns.map((c) => c.title.trim()),
         actionItemsTitle: t("actionItems"),
-        initialActionItemTexts: carryOver.enabled
-          ? carryOver.selectedTexts
+        initialActionItems: carryOver.enabled
+          ? carryOver.selectedItems
           : [],
       });
       setCreated({ roomId, password: password.trim(), isPublic });

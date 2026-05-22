@@ -7,7 +7,7 @@ import {
   updateCard,
   deleteCard,
   toggleVote,
-  toggleCardDone,
+  setActionStatus,
   publishCard,
 } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
@@ -46,7 +46,9 @@ export function CardItem({
   const canVote = !isOwnCard && !isDraft;
   const canEdit = isOwnCard;
   const canDelete = isOwnCard || isFacilitator;
-  const isDone = card.done ?? false;
+  const actionStatus: "pending" | "done" | "keep" =
+    card.actionStatus ?? (card.done ? "done" : "pending");
+
 
   const voteClass = !canVote
     ? "text-text-muted cursor-default opacity-50"
@@ -108,9 +110,11 @@ export function CardItem({
       className={`group relative bg-bg-elevated rounded-md p-3 border transition-colors ${
         isDraft
           ? "border-dashed border-border/60 opacity-80"
-          : isActionItem && isDone
+          : isActionItem && actionStatus === "done"
             ? "border-accent-cyan/20"
-            : "border-transparent hover:border-border"
+            : isActionItem && actionStatus === "keep"
+              ? "border-accent-violet/20"
+              : "border-transparent hover:border-border"
       }`}
     >
       {!isEditing && (
@@ -180,21 +184,14 @@ export function CardItem({
           </div>
         </div>
       ) : isActionItem ? (
-        <div className="flex items-start gap-2.5 pr-14">
-          <button
-            onClick={() => toggleCardDone(roomId, card.id, isDone)}
-            aria-label={isDone ? t("markAsNotDone") : t("markAsDone")}
-            className={`mt-0.5 shrink-0 size-4 rounded border transition-colors cursor-pointer flex items-center justify-center ${
-              isDone
-                ? "bg-accent-cyan border-accent-cyan"
-                : "bg-transparent border-text-muted"
-            }`}
-          >
-            {isDone && <SmallCheckIcon />}
-          </button>
+        <div className="pr-14">
           <p
             className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word transition-colors ${
-              isDone ? "line-through text-text-muted" : "text-text-primary"
+              actionStatus === "done"
+                ? "line-through text-text-muted"
+                : actionStatus === "keep"
+                  ? "text-accent-violet"
+                  : "text-text-primary"
             }`}
           >
             {card.text}
@@ -240,9 +237,56 @@ export function CardItem({
                 {card.votes > 0 && <span>{card.votes}</span>}
               </button>
             </div>
-          ) : null}
+          ) : (
+            <div className={isAnonymous ? "ml-auto" : ""}>
+              <ActionStatusSegment
+                status={actionStatus}
+                onChange={(s) => setActionStatus(roomId, card.id, s)}
+                t={t}
+              />
+            </div>
+          )}
         </div>
       )}
+    </div>
+  );
+}
+
+function ActionStatusSegment({
+  status,
+  onChange,
+  t,
+}: {
+  status: "pending" | "done" | "keep";
+  onChange: (s: "pending" | "done" | "keep") => void;
+  t: ReturnType<typeof import("next-intl").useTranslations<"board">>;
+}) {
+  const options = [
+    { value: "pending" as const, label: t("statusPending") },
+    { value: "done" as const, label: t("statusDone") },
+    { value: "keep" as const, label: t("statusKeep") },
+  ];
+
+  return (
+    <div className="flex items-center gap-px bg-bg-card border border-border rounded p-0.5">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          onClick={() => onChange(opt.value)}
+          className={`px-2 h-5 rounded-sm text-[10px] font-medium transition-colors cursor-pointer ${
+            status === opt.value
+              ? opt.value === "done"
+                ? "bg-accent-cyan/20 text-accent-cyan"
+                : opt.value === "keep"
+                  ? "bg-accent-violet/20 text-accent-violet"
+                  : "bg-bg-elevated text-text-primary"
+              : "text-text-muted hover:text-text-primary"
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
     </div>
   );
 }
@@ -262,19 +306,6 @@ function AuthorChip({
   );
 }
 
-function SmallCheckIcon() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path
-        d="M1.5 5l2.5 2.5 4.5-4.5"
-        stroke="var(--color-bg-base)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function PencilIcon() {
   return (

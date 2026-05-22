@@ -4,6 +4,11 @@ import { useState, useEffect } from "react";
 import { getUncompletedActionItems } from "@/lib/firestore";
 import type { Card, Room } from "@/types";
 
+export interface CarryOverItem {
+  text: string;
+  actionStatus: "pending" | "keep";
+}
+
 export interface CarryOverState {
   enabled: boolean;
   setEnabled: (v: boolean) => void;
@@ -14,7 +19,7 @@ export interface CarryOverState {
   checkedIds: Set<string>;
   toggleItem: (id: string) => void;
   toggleAll: () => void;
-  selectedTexts: string[];
+  selectedItems: CarryOverItem[];
 }
 
 export function useCarryOver(endedRooms: Room[]): CarryOverState {
@@ -75,9 +80,15 @@ export function useCarryOver(endedRooms: Room[]): CarryOverState {
     }
   };
 
-  const selectedTexts = candidateItems
+  const selectedItems: CarryOverItem[] = candidateItems
     .filter((item) => checkedIds.has(item.id))
-    .map((item) => item.text);
+    .map((item) => ({
+      text: item.text,
+      actionStatus:
+        (item.actionStatus ?? (item.done ? "done" : "pending")) === "keep"
+          ? "keep"
+          : "pending",
+    }));
 
   return {
     enabled,
@@ -89,6 +100,6 @@ export function useCarryOver(endedRooms: Room[]): CarryOverState {
     checkedIds,
     toggleItem,
     toggleAll,
-    selectedTexts,
+    selectedItems,
   };
 }

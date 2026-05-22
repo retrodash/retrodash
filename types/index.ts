@@ -29,6 +29,7 @@ export interface Card {
   votes: number;
   votedBy: string[];
   done?: boolean;
+  actionStatus?: "pending" | "done" | "keep";
   published?: boolean;
   createdAt: Timestamp;
 }

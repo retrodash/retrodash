@@ -74,11 +74,15 @@ export async function getUncompletedActionItems(roomId: string): Promise<Card[]>
     query(
       collection(db, "rooms", roomId, "cards"),
       where("columnId", "==", actionColId),
-      where("done", "==", false),
       orderBy("createdAt", "asc"),
     ),
   );
-  return cardSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as Card);
+  return cardSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }) as Card)
+    .filter((c) => {
+      if (c.actionStatus !== undefined) return c.actionStatus !== "done";
+      return !(c.done ?? false);
+    });
 }
 
 export async function createRoom({
@@ -91,7 +95,7 @@ export async function createRoom({
   isAnonymous,
   columnTitles,
   actionItemsTitle,
-  initialActionItemTexts = [],
+  initialActionItems = [],
 }: {
   name: string;
   passwordHash: string;
@@ -102,7 +106,7 @@ export async function createRoom({
   isAnonymous: boolean;
   columnTitles: string[];
   actionItemsTitle: string;
-  initialActionItemTexts?: string[];
+  initialActionItems?: { text: string; actionStatus: "pending" | "keep" }[];
 }): Promise<string> {
   const batch = writeBatch(db);
   const roomRef = doc(collection(db, "rooms"));
@@ -138,7 +142,7 @@ export async function createRoom({
     role: "facilitator",
   });
 
-  initialActionItemTexts.forEach((text) => {
+  initialActionItems.forEach(({ text, actionStatus }) => {
     const cardRef = doc(collection(db, "rooms", roomRef.id, "cards"));
     batch.set(cardRef, {
       columnId: actionItemsRef.id,
@@ -147,7 +151,7 @@ export async function createRoom({
       authorName: ownerName,
       votes: 0,
       votedBy: [],
-      done: false,
+      actionStatus,
       createdAt: serverTimestamp(),
     });
   });
@@ -209,7 +213,7 @@ export async function addCard(
     votes: 0,
     votedBy: [],
     published: false,
-    ...(isActionItem && { done: false }),
+    ...(isActionItem && { actionStatus: "pending" }),
     createdAt: serverTimestamp(),
   });
 }
@@ -218,12 +222,12 @@ export async function publishCard(roomId: string, cardId: string): Promise<void>
   await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { published: true });
 }
 
-export async function toggleCardDone(
+export async function setActionStatus(
   roomId: string,
   cardId: string,
-  done: boolean
+  status: "pending" | "done" | "keep"
 ): Promise<void> {
-  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { done: !done });
+  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { actionStatus: status });
 }
 
 export async function updateCard(
