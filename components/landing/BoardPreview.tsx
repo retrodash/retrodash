@@ -40,7 +40,7 @@ function PreviewActionColumn({
   items,
 }: {
   title: string;
-  items: { text: string; done: boolean }[];
+  items: { text: string; status: "pending" | "done" | "keep" }[];
 }) {
   return (
     <div className="bg-bg-card rounded-lg p-2 space-y-1.5">
@@ -54,19 +54,15 @@ function PreviewActionColumn({
         >
           <div
             className={`size-2.5 rounded-sm border shrink-0 flex items-center justify-center ${
-              item.done
+              item.status === "done"
                 ? "bg-accent-cyan border-accent-cyan"
-                : "border-text-muted"
+                : item.status === "keep"
+                  ? "bg-accent-violet border-accent-violet"
+                  : "border-text-muted"
             }`}
           >
-            {item.done && (
-              <svg
-                width="6"
-                height="6"
-                viewBox="0 0 6 6"
-                fill="none"
-                aria-hidden
-              >
+            {item.status === "done" && (
+              <svg width="6" height="6" viewBox="0 0 6 6" fill="none" aria-hidden>
                 <path
                   d="M1 3l1.5 1.5L5 1.5"
                   stroke="var(--color-bg-base)"
@@ -76,10 +72,20 @@ function PreviewActionColumn({
                 />
               </svg>
             )}
+            {item.status === "keep" && (
+              <svg width="6" height="6" viewBox="0 0 8 8" fill="none" aria-hidden>
+                <path d="M6.5 4a2.5 2.5 0 1 1-.75-1.75" stroke="var(--color-bg-base)" strokeWidth="1.2" strokeLinecap="round"/>
+                <path d="M4.5 1.5h1.5v1.5" stroke="var(--color-bg-base)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
           </div>
           <span
             className={`text-[9px] leading-tight ${
-              item.done ? "line-through text-text-muted" : "text-text-secondary"
+              item.status === "done"
+                ? "line-through text-text-muted"
+                : item.status === "keep"
+                  ? "text-accent-violet"
+                  : "text-text-secondary"
             }`}
           >
             {item.text}
@@ -137,9 +143,9 @@ export function BoardPreview() {
           <PreviewActionColumn
             title="Action items"
             items={[
-              { text: "Add PR template", done: true },
-              { text: "Weekly async update", done: false },
-              { text: "Refine story sizing", done: false },
+              { text: "Add PR template", status: "done" },
+              { text: "Daily standups", status: "keep" },
+              { text: "Refine story sizing", status: "pending" },
             ]}
           />
         </div>

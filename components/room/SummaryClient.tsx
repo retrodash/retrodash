@@ -17,6 +17,7 @@ import {
   CheckCircleIcon,
   CheckIcon,
   CircleIcon,
+  LoopIcon,
   ThumbUpIcon,
   ExportIcon,
   PeopleIcon,
@@ -235,21 +236,40 @@ function SectionHeader({
 }
 
 function ActionItemRow({ card, isAnonymous }: { card: Card; isAnonymous: boolean }) {
-  const done = card.done ?? false;
+  const t = useTranslations("summary");
+  const status: "pending" | "done" | "keep" =
+    card.actionStatus ?? (card.done ? "done" : "pending");
 
   return (
     <div className="flex items-start gap-3 px-5 py-4">
-      <span className={`mt-0.5 shrink-0 ${done ? "text-accent-cyan" : "text-text-muted"}`}>
-        {done ? <CheckIcon /> : <CircleIcon />}
+      <span
+        className={`mt-0.5 shrink-0 ${
+          status === "done"
+            ? "text-accent-cyan"
+            : status === "keep"
+              ? "text-accent-violet"
+              : "text-text-muted"
+        }`}
+      >
+        {status === "done" ? <CheckIcon /> : status === "keep" ? <LoopIcon /> : <CircleIcon />}
       </span>
       <div className="flex-1 min-w-0">
         <p
           className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word ${
-            done ? "line-through text-text-muted" : "text-text-primary"
+            status === "done"
+              ? "line-through text-text-muted"
+              : status === "keep"
+                ? "text-accent-violet"
+                : "text-text-primary"
           }`}
         >
           {card.text}
         </p>
+        {status === "keep" && (
+          <span className="inline-block mt-1 text-[10px] font-semibold uppercase tracking-widest text-accent-violet/70">
+            {t("keepGoing")}
+          </span>
+        )}
         {!isAnonymous && (
           <div className="flex items-center gap-1.5 mt-1.5">
             <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />

@@ -152,6 +152,7 @@
     "participants": "Participantes",
     "actionItems": "Itens de Ação",
     "noActionItems": "Nenhum item de ação foi adicionado.",
+    "keepGoing": "Manter",
     "retroRecap": "Resumo da Retro",
     "noCards": "Nenhum card adicionado.",
     "notFound": "Sala não encontrada.",
@@ -219,7 +220,8 @@
     "noItems": "Nenhum item de ação não concluído nesta sala.",
     "deselectAll": "Desmarcar todos",
     "selectAll": "Selecionar todos",
-    "selectedCount": "{selected} de {total} selecionados"
+    "selectedCount": "{selected} de {total} selecionados",
+    "statusKeep": "Manter"
   },
   "board": {
     "actionItems": "Itens de Ação",
@@ -238,6 +240,11 @@
     "deleteLabel": "Excluir",
     "markAsDone": "Marcar como concluído",
     "markAsNotDone": "Marcar como não concluído",
+    "markAsKeep": "Marcar como manter",
+    "markAsPending": "Marcar como pendente",
+    "statusPending": "Pendente",
+    "statusDone": "Concluído",
+    "statusKeep": "Manter",
     "removeVote": "Remover voto",
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
