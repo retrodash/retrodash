@@ -168,7 +168,8 @@
     "noCards": "Nenhum card adicionado.",
     "notFound": "Sala não encontrada.",
     "backToDashboard": "Voltar ao dashboard",
-    "host": "Anfitrião"
+    "host": "Anfitrião",
+    "fromCard": "De:"
   },
   "navbar": {
     "signOut": "Sair",
@@ -232,7 +233,8 @@
     "deselectAll": "Desmarcar todos",
     "selectAll": "Selecionar todos",
     "selectedCount": "{selected} de {total} selecionados",
-    "statusKeep": "Manter"
+    "statusKeep": "Manter",
+    "fromCard": "De:"
   },
   "board": {
     "actionItems": "Itens de Ação",
@@ -259,7 +261,8 @@
     "removeVote": "Remover voto",
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
-    "improving": "Melhorando…"
+    "improving": "Melhorando…",
+    "fromCard": "De:"
   },
   "feedback": {
     "title": "Feedback e Sugestões",

@@ -17,6 +17,8 @@ interface ColumnProps {
   userPhotoURL: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
+  actionItemsColumnId?: string;
+  allVisibleCards?: Card[];
 }
 
 export function BoardColumn({
@@ -28,6 +30,8 @@ export function BoardColumn({
   userPhotoURL,
   isAnonymous,
   isFacilitator,
+  actionItemsColumnId,
+  allVisibleCards = [],
 }: ColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [newText, setNewText] = useState("");
@@ -51,6 +55,20 @@ export function BoardColumn({
     setNewText("");
     setAdding(false);
     setIsAdding(false);
+  };
+
+  const handleAddLinkedActionItem = async (linkedCardId: string, linkedCardText: string, text: string) => {
+    if (!actionItemsColumnId) return;
+    await addCard(roomId, {
+      columnId: actionItemsColumnId,
+      text,
+      authorId: userId,
+      authorName: userName,
+      authorPhotoURL: userPhotoURL,
+      isActionItem: true,
+      linkedCardId,
+      linkedCardText,
+    });
   };
 
   const handleImprove = async () => {
@@ -107,6 +125,21 @@ export function BoardColumn({
             isAnonymous={isAnonymous}
             isFacilitator={isFacilitator}
             isActionItem={column.isActionItems}
+            linkedActionItems={
+              !column.isActionItems && actionItemsColumnId
+                ? allVisibleCards.filter((c) => c.linkedCardId === card.id)
+                : undefined
+            }
+            onAddLinkedActionItem={
+              !column.isActionItems && actionItemsColumnId
+                ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
+                : undefined
+            }
+            linkedCard={
+              column.isActionItems && card.linkedCardId
+                ? allVisibleCards.find((c) => c.id === card.linkedCardId)
+                : undefined
+            }
           />
         ))}
       </div>

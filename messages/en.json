@@ -168,7 +168,8 @@
     "noCards": "No cards added.",
     "notFound": "Room not found.",
     "backToDashboard": "Back to dashboard",
-    "host": "Host"
+    "host": "Host",
+    "fromCard": "From:"
   },
   "navbar": {
     "signOut": "Sign out",
@@ -232,7 +233,8 @@
     "deselectAll": "Deselect all",
     "selectAll": "Select all",
     "selectedCount": "{selected} of {total} selected",
-    "statusKeep": "Keep"
+    "statusKeep": "Keep",
+    "fromCard": "From:"
   },
   "board": {
     "actionItems": "Action Items",
@@ -259,7 +261,8 @@
     "removeVote": "Remove vote",
     "vote": "Vote",
     "improveWithAI": "Improve with AI",
-    "improving": "Improving…"
+    "improving": "Improving…",
+    "fromCard": "From:"
   },
   "feedback": {
     "title": "Feedback & Suggestions",
