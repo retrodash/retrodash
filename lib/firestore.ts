@@ -12,6 +12,7 @@ import {
   updateDoc,
   deleteDoc,
   writeBatch,
+  onSnapshot,
   serverTimestamp,
   increment,
   arrayUnion,
@@ -161,6 +162,16 @@ export async function getParticipant(roomId: string, userId: string) {
   return snap.exists() ? snap.data() : null;
 }
 
+export function subscribeToParticipant(
+  roomId: string,
+  userId: string,
+  callback: (exists: boolean) => void,
+): () => void {
+  return onSnapshot(doc(db, "rooms", roomId, "participants", userId), (snap) =>
+    callback(snap.exists()),
+  );
+}
+
 export async function joinRoom(
   roomId: string,
   userId: string,
@@ -248,6 +259,24 @@ export async function toggleVote(
     votes:   increment(hasVoted ? -1 : 1),
     votedBy: hasVoted ? arrayRemove(userId) : arrayUnion(userId),
   });
+}
+
+export async function removeParticipant(roomId: string, userId: string): Promise<void> {
+  await deleteDoc(doc(db, "rooms", roomId, "participants", userId));
+}
+
+export async function deleteRoom(roomId: string): Promise<void> {
+  const batch = writeBatch(db);
+  const [participantsSnap, columnsSnap, cardsSnap] = await Promise.all([
+    getDocs(collection(db, "rooms", roomId, "participants")),
+    getDocs(collection(db, "rooms", roomId, "columns")),
+    getDocs(collection(db, "rooms", roomId, "cards")),
+  ]);
+  [...participantsSnap.docs, ...columnsSnap.docs, ...cardsSnap.docs].forEach((d) =>
+    batch.delete(d.ref)
+  );
+  batch.delete(doc(db, "rooms", roomId));
+  await batch.commit();
 }
 
 export async function addFeedback({

@@ -9,6 +9,7 @@ import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
+import { DeleteRoomModal } from "./DeleteRoomModal";
 import { PlusIcon, BoardIcon } from "@/components/ui/Icons";
 import { RoomCard } from "./RoomCard";
 import type { Room } from "@/types";
@@ -17,6 +18,7 @@ export function DashboardClient() {
   const { rooms, loading } = useRooms();
   const { joinedRooms, loading: joinedLoading } = useJoinedRooms();
   const [joinOpen, setJoinOpen] = useState(false);
+  const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
   const t = useTranslations("dashboard");
 
   return (
@@ -55,7 +57,11 @@ export function DashboardClient() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rooms.map((room) => (
-                <RoomCard key={room.id} room={room} />
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  onDelete={room.status === "ended" ? () => setRoomToDelete(room) : undefined}
+                />
               ))}
             </div>
           )}
@@ -90,6 +96,9 @@ export function DashboardClient() {
       </main>
 
       {joinOpen && <JoinRoomModal onClose={() => setJoinOpen(false)} />}
+      {roomToDelete && (
+        <DeleteRoomModal room={roomToDelete} onClose={() => setRoomToDelete(null)} />
+      )}
     </div>
   );
 }
