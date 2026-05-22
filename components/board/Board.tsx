@@ -28,12 +28,13 @@ export function Board({
 
   const actionCol = columns.find((col) => col.isActionItems);
 
-  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator };
-
   // Show published cards to everyone; show own unpublished (draft) cards only to their author
   const visibleCards = cards.filter(
     (c) => c.published !== false || c.authorId === userId,
   );
+
+  const actionItemsColumnId = actionCol?.id;
+  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, actionItemsColumnId, allVisibleCards: visibleCards };
 
   return (
     <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">

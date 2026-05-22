@@ -259,7 +259,8 @@
     "removeVote": "Remove vote",
     "vote": "Vote",
     "improveWithAI": "Improve with AI",
-    "improving": "Improving…"
+    "improving": "Improving…",
+    "fromCard": "From:"
   },
   "feedback": {
     "title": "Feedback & Suggestions",

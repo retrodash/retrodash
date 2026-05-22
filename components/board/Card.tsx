@@ -22,6 +22,9 @@ interface CardProps {
   isAnonymous: boolean;
   isFacilitator: boolean;
   isActionItem?: boolean;
+  linkedActionItems?: Card[];
+  onAddLinkedActionItem?: (text: string) => Promise<void>;
+  linkedCard?: Card;
 }
 
 export function CardItem({
@@ -32,12 +35,18 @@ export function CardItem({
   isAnonymous,
   isFacilitator,
   isActionItem = false,
+  linkedActionItems,
+  onAddLinkedActionItem,
+  linkedCard,
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(card.text);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [improving, setImproving] = useState(false);
+  const [isAddingLinkedItem, setIsAddingLinkedItem] = useState(false);
+  const [linkedItemText, setLinkedItemText] = useState("");
+  const [addingLinkedItem, setAddingLinkedItem] = useState(false);
   const t = useTranslations("board");
 
   const isOwnCard = card.authorId === userId;
@@ -85,6 +94,16 @@ export function CardItem({
   };
 
   const handleDelete = () => deleteCard(roomId, card.id);
+
+  const handleAddLinkedItem = async () => {
+    const text = linkedItemText.trim();
+    if (!text || !onAddLinkedActionItem) return;
+    setAddingLinkedItem(true);
+    await onAddLinkedActionItem(text);
+    setLinkedItemText("");
+    setIsAddingLinkedItem(false);
+    setAddingLinkedItem(false);
+  };
 
   const handleImprove = async () => {
     if (!editText.trim() || improving) return;
@@ -185,6 +204,12 @@ export function CardItem({
         </div>
       ) : isActionItem ? (
         <div className="pr-14">
+          {linkedCard && (
+            <div className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted">
+              <LinkIcon />
+              <span className="truncate italic">{linkedCard.text}</span>
+            </div>
+          )}
           <p
             className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word transition-colors ${
               actionStatus === "done"
@@ -198,9 +223,70 @@ export function CardItem({
           </p>
         </div>
       ) : (
-        <p className="text-text-primary text-sm leading-relaxed pr-14 whitespace-pre-wrap wrap-break-word">
-          {card.text}
-        </p>
+        <>
+          <p className="text-text-primary text-sm leading-relaxed pr-14 whitespace-pre-wrap wrap-break-word">
+            {card.text}
+          </p>
+          {!isDraft && (linkedActionItems?.length ?? 0) > 0 && (
+            <div className="mt-2 pt-2 border-t border-border/40 space-y-1">
+              {linkedActionItems!.map((item) => (
+                <div key={item.id} className="flex items-start gap-1.5 text-xs text-text-muted">
+                  <span className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-cyan" : ""}`}>
+                    <MiniCheckIcon done={item.actionStatus === "done"} />
+                  </span>
+                  <span className={`leading-relaxed ${item.actionStatus === "done" ? "line-through" : ""}`}>
+                    {item.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          {!isDraft && onAddLinkedActionItem && !isEditing && (
+            <div className="mt-2">
+              {isAddingLinkedItem ? (
+                <div className="space-y-1.5">
+                  <input
+                    autoFocus
+                    value={linkedItemText}
+                    onChange={(e) => setLinkedItemText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddLinkedItem();
+                      if (e.key === "Escape") {
+                        setIsAddingLinkedItem(false);
+                        setLinkedItemText("");
+                      }
+                    }}
+                    placeholder={t("actionItemPlaceholder")}
+                    className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-cyan"
+                  />
+                  <div className="flex gap-1.5">
+                    <button
+                      onClick={handleAddLinkedItem}
+                      disabled={addingLinkedItem || !linkedItemText.trim()}
+                      className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      {t("add")}
+                    </button>
+                    <button
+                      onClick={() => { setIsAddingLinkedItem(false); setLinkedItemText(""); }}
+                      className="px-2 h-5 rounded text-[10px] text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+                    >
+                      {t("cancel")}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsAddingLinkedItem(true)}
+                  className="flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-cyan transition-colors cursor-pointer"
+                >
+                  <SmallPlusIcon />
+                  {t("addActionItem")}
+                </button>
+              )}
+            </div>
+          )}
+        </>
       )}
 
       {!isEditing && (
@@ -375,6 +461,44 @@ function MiniSpinner() {
         fill="currentColor"
         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
       />
+    </svg>
+  );
+}
+
+function SmallPlusIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 13 13" fill="none" aria-hidden>
+      <path d="M6.5 1.5v10M1.5 6.5h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function LinkIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden className="shrink-0">
+      <path
+        d="M5 6.5a2.5 2.5 0 003.54.04l1.5-1.5A2.5 2.5 0 006.5 1.5L5.75 2.25"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M7 5.5a2.5 2.5 0 00-3.54-.04l-1.5 1.5A2.5 2.5 0 005.5 10.5L6.25 9.75"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MiniCheckIcon({ done }: { done: boolean }) {
+  return (
+    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden>
+      <rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.2" fill={done ? "currentColor" : "none"} fillOpacity={done ? 0.2 : 0} />
+      {done && (
+        <path d="M3.5 6l2 2 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      )}
     </svg>
   );
 }

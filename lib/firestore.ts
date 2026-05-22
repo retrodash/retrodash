@@ -213,7 +213,8 @@ export async function addCard(
     authorName,
     authorPhotoURL = null,
     isActionItem = false,
-  }: { columnId: string; text: string; authorId: string; authorName: string; authorPhotoURL?: string | null; isActionItem?: boolean }
+    linkedCardId,
+  }: { columnId: string; text: string; authorId: string; authorName: string; authorPhotoURL?: string | null; isActionItem?: boolean; linkedCardId?: string }
 ): Promise<void> {
   await addDoc(collection(db, "rooms", roomId, "cards"), {
     columnId,
@@ -225,6 +226,7 @@ export async function addCard(
     votedBy: [],
     published: false,
     ...(isActionItem && { actionStatus: "pending" }),
+    ...(linkedCardId && { linkedCardId }),
     createdAt: serverTimestamp(),
   });
 }
