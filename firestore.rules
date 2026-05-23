@@ -1,0 +1,159 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isFacilitator(roomId) {
+      return isAuth() &&
+        exists(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid)).data.role == "facilitator";
+    }
+
+    function isParticipant(roomId) {
+      return isAuth() &&
+        exists(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid));
+    }
+
+    // ── Rooms ──────────────────────────────────────────────────────
+
+    match /rooms/{roomId} {
+      allow get: if isAuth();
+      allow list: if isAuth() && resource.data.ownerId == request.auth.uid;
+
+      allow create: if isAuth() &&
+        request.resource.data.ownerId == request.auth.uid &&
+        request.resource.data.status == "waiting" &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 100 &&
+        request.resource.data.password is string &&
+        request.resource.data.password.size() == 64 &&
+        request.resource.data.isPublic is bool &&
+        request.resource.data.isAnonymous is bool;
+
+      allow update: if isFacilitator(roomId) &&
+        request.resource.data.ownerId == resource.data.ownerId;
+
+      allow delete: if isAuth() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // ── Columns ────────────────────────────────────────────────────
+
+    match /rooms/{roomId}/columns/{columnId} {
+      allow read: if isParticipant(roomId);
+      allow write: if isFacilitator(roomId);
+    }
+
+    // ── Cards ──────────────────────────────────────────────────────
+
+    match /rooms/{roomId}/cards/{cardId} {
+      allow read: if isParticipant(roomId);
+
+      allow create: if isParticipant(roomId) &&
+        request.resource.data.authorId == request.auth.uid &&
+        request.resource.data.votes == 0 &&
+        request.resource.data.votedBy == [] &&
+        request.resource.data.published == false &&
+        request.resource.data.text is string &&
+        request.resource.data.text.size() > 0 &&
+        request.resource.data.text.size() <= 2000;
+
+      allow update: if isParticipant(roomId) && (
+        // Author edits own unpublished card text
+        (resource.data.authorId == request.auth.uid &&
+         !resource.data.published &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text']) &&
+         request.resource.data.text is string &&
+         request.resource.data.text.size() > 0 &&
+         request.resource.data.text.size() <= 2000)
+        ||
+        // Facilitator publishes/unpublishes
+        (isFacilitator(roomId) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['published']) &&
+         request.resource.data.published is bool)
+        ||
+        // Facilitator sets actionStatus
+        (isFacilitator(roomId) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['actionStatus']) &&
+         request.resource.data.actionStatus in ["pending", "done", "keep"])
+        ||
+        // Any participant votes — set-based validation prevents forged vote counts
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['votes', 'votedBy']) &&
+         (
+           // Adding own vote
+           (request.resource.data.votedBy.toSet().difference(resource.data.votedBy.toSet()) == [request.auth.uid].toSet() &&
+            resource.data.votedBy.toSet().difference(request.resource.data.votedBy.toSet()).size() == 0 &&
+            request.resource.data.votes == resource.data.votes + 1)
+           ||
+           // Removing own vote
+           (resource.data.votedBy.toSet().difference(request.resource.data.votedBy.toSet()) == [request.auth.uid].toSet() &&
+            request.resource.data.votedBy.toSet().difference(resource.data.votedBy.toSet()).size() == 0 &&
+            request.resource.data.votes == resource.data.votes - 1)
+         ))
+      );
+
+      allow delete: if isFacilitator(roomId) ||
+        (isParticipant(roomId) &&
+         resource.data.authorId == request.auth.uid &&
+         !resource.data.published);
+    }
+
+    // ── Participants ───────────────────────────────────────────────
+
+    match /rooms/{roomId}/participants/{participantId} {
+      // participantId (doc ID) used instead of resource.data to handle non-existent docs
+      allow read: if isAuth() && (
+        participantId == request.auth.uid ||
+        isParticipant(roomId)
+      );
+
+      // getAfter() validates the facilitator role is consistent with the room's ownerId
+      // even when both documents are written in the same createRoom() batch
+      allow create: if isAuth() &&
+        participantId == request.auth.uid &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.displayName is string &&
+        request.resource.data.displayName.size() > 0 &&
+        request.resource.data.displayName.size() <= 200 &&
+        (
+          request.resource.data.role == "member" ||
+          (request.resource.data.role == "facilitator" &&
+           getAfter(/databases/$(database)/documents/rooms/$(roomId)).data.ownerId == request.auth.uid)
+        );
+
+      allow update: if isAuth() && (
+        // User can refresh their own display name/photo (no role self-escalation)
+        (participantId == request.auth.uid &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'photoURL']))
+        ||
+        // Facilitator can change participant roles
+        (isFacilitator(roomId) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role']) &&
+         request.resource.data.role in ["member", "facilitator"])
+      );
+
+      allow delete: if isAuth() && (
+        participantId == request.auth.uid ||
+        isFacilitator(roomId)
+      );
+    }
+
+    // ── Feedback ───────────────────────────────────────────────────
+
+    match /feedback/{feedbackId} {
+      allow read: if false;
+
+      allow create: if isAuth() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.type in ["bug", "feature", "general"] &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() > 0 &&
+        request.resource.data.message.size() <= 5000 &&
+        request.resource.data.userEmail is string &&
+        request.resource.data.userEmail.size() <= 500;
+    }
+  }
+}
