@@ -152,6 +152,7 @@ export async function createRoom({
       authorName: ownerName,
       votes: 0,
       votedBy: [],
+      published: false,
       actionStatus,
       ...(linkedCardText && { linkedCardText }),
       createdAt: serverTimestamp(),

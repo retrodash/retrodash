@@ -17,6 +17,15 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid));
     }
 
+    // existsAfter/getAfter variants for batch writes: exists() only sees pre-batch
+    // state, so isFacilitator() returns false when the participant is being created
+    // in the same batch as the room. These functions see the post-batch state.
+    function isFacilitatorAfter(roomId) {
+      return isAuth() &&
+        existsAfter(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid)) &&
+        getAfter(/databases/$(database)/documents/rooms/$(roomId)/participants/$(request.auth.uid)).data.role == "facilitator";
+    }
+
     // ── Rooms ──────────────────────────────────────────────────────
 
     match /rooms/{roomId} {
@@ -30,12 +39,22 @@ service cloud.firestore {
         request.resource.data.name.size() > 0 &&
         request.resource.data.name.size() <= 100 &&
         request.resource.data.password is string &&
-        request.resource.data.password.size() == 64 &&
+        (
+          (request.resource.data.isPublic && request.resource.data.password == "") ||
+          (!request.resource.data.isPublic && request.resource.data.password.size() == 64)
+        ) &&
         request.resource.data.isPublic is bool &&
         request.resource.data.isAnonymous is bool;
 
       allow update: if isFacilitator(roomId) &&
-        request.resource.data.ownerId == resource.data.ownerId;
+        request.resource.data.ownerId == resource.data.ownerId &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'description']) &&
+        request.resource.data.status in ["waiting", "active", "ended"] &&
+        (
+          !request.resource.data.diff(resource.data).affectedKeys().hasAny(['description']) ||
+          (request.resource.data.description is string &&
+           request.resource.data.description.size() <= 500)
+        );
 
       allow delete: if isAuth() && resource.data.ownerId == request.auth.uid;
     }
@@ -44,7 +63,7 @@ service cloud.firestore {
 
     match /rooms/{roomId}/columns/{columnId} {
       allow read: if isParticipant(roomId);
-      allow write: if isFacilitator(roomId);
+      allow write: if isFacilitator(roomId) || isFacilitatorAfter(roomId);
     }
 
     // ── Cards ──────────────────────────────────────────────────────
@@ -52,7 +71,8 @@ service cloud.firestore {
     match /rooms/{roomId}/cards/{cardId} {
       allow read: if isParticipant(roomId);
 
-      allow create: if isParticipant(roomId) &&
+      allow create: if
+        (isParticipant(roomId) || isFacilitatorAfter(roomId)) &&
         request.resource.data.authorId == request.auth.uid &&
         request.resource.data.votes == 0 &&
         request.resource.data.votedBy == [] &&
@@ -139,6 +159,14 @@ service cloud.firestore {
         participantId == request.auth.uid ||
         isFacilitator(roomId)
       );
+    }
+
+    // ── CollectionGroup: participants ─────────────────────────────
+    // Required for the collectionGroup("participants") query in useJoinedRooms.
+    // Must match on resource.data.userId (not participantId) so Firestore can
+    // statically validate the where("userId","==",uid) query constraint.
+    match /{path=**}/participants/{participantId} {
+      allow read: if isAuth() && resource.data.userId == request.auth.uid;
     }
 
     // ── Feedback ───────────────────────────────────────────────────
