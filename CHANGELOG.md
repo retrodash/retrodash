@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/retrodash/retrodash/compare/v1.1.0...v1.2.0) (2026-05-23)
+
+### Features
+
+* **security:** add Firestore security rules and fix React 19 ThemeProvider warning ([#20](https://github.com/retrodash/retrodash/issues/20)) ([60a1367](https://github.com/retrodash/retrodash/commit/60a13675cf3588005dcf8aad50e5212e5849c2c4))
+
 ## [1.1.0](https://github.com/retrodash/retrodash/compare/v1.0.0...v1.1.0) (2026-05-22)
 
 ### Features
