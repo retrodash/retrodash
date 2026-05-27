@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
-import { updateRoomStatus, subscribeToParticipant, joinRoom } from "@/lib/firestore";
+import {
+  updateRoomStatus,
+  subscribeToParticipant,
+  joinRoom,
+  getParticipant,
+} from "@/lib/firestore";
 import { Board } from "@/components/board/Board";
 import { JoinRoom } from "@/components/room/JoinRoom";
 import { ShareRoomModal } from "@/components/room/ShareRoomModal";
@@ -17,13 +24,77 @@ import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { PeopleIcon, LinkIcon } from "@/components/ui/Icons";
+import type { Room } from "@/types";
 
 interface RoomClientProps {
   roomId: string;
 }
 
 export function RoomClient({ roomId }: RoomClientProps) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [gate, setGate] = useState<"checking" | "ready" | "needs-password">("checking");
+  const [roomData, setRoomData] = useState<Room | null>(null);
+
+  useEffect(() => {
+    if (authLoading || !user) return;
+    (async () => {
+      const snap = await getDoc(doc(db, "rooms", roomId));
+      if (!snap.exists()) {
+        router.replace("/dashboard");
+        return;
+      }
+      const room = { id: snap.id, ...snap.data() } as Room;
+      setRoomData(room);
+
+      const participant = await getParticipant(roomId, user.uid);
+      if (participant) {
+        setGate("ready");
+        return;
+      }
+
+      if (room.isPublic) {
+        await joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null);
+        setGate("ready");
+        return;
+      }
+
+      setGate("needs-password");
+    })();
+  }, [authLoading, user, roomId, router]);
+
+  if (authLoading || gate === "checking") return <BoardSkeleton />;
+
+  if (gate === "needs-password" && roomData) {
+    return (
+      <JoinRoom
+        room={roomData}
+        userId={user!.uid}
+        userDisplayName={user!.displayName ?? "Member"}
+        userPhotoURL={user!.photoURL ?? null}
+        onJoined={() => setGate("ready")}
+      />
+    );
+  }
+
+  return (
+    <RoomBoard
+      roomId={roomId}
+      userId={user!.uid}
+      userName={user!.displayName ?? "Anonymous"}
+      userPhotoURL={user!.photoURL ?? null}
+    />
+  );
+}
+
+interface RoomBoardProps {
+  roomId: string;
+  userId: string;
+  userName: string;
+  userPhotoURL: string | null;
+}
+
+function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
   const { room, columns, loading: roomLoading } = useRoom(roomId);
   const { cards, loading: cardsLoading } = useCards(roomId);
   const router = useRouter();
@@ -31,43 +102,26 @@ export function RoomClient({ roomId }: RoomClientProps) {
   const [endingRetro, setEndingRetro] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [participantsOpen, setParticipantsOpen] = useState(false);
-  const [participantStatus, setParticipantStatus] = useState<
-    "loading" | "joined" | "stranger"
-  >("loading");
-  const hasJoinedRef = useRef(false);
+  const wasParticipantRef = useRef(false);
 
   useEffect(() => {
-    if (!user || roomLoading || !room) return;
-    return subscribeToParticipant(roomId, user.uid, (exists) => {
+    return subscribeToParticipant(roomId, userId, (exists) => {
       if (exists) {
-        hasJoinedRef.current = true;
-        setParticipantStatus("joined");
-      } else if (hasJoinedRef.current) {
+        wasParticipantRef.current = true;
+      } else if (wasParticipantRef.current) {
         router.replace("/dashboard");
-      } else {
-        setParticipantStatus("stranger");
       }
     });
-  }, [roomId, user, room, roomLoading, router]);
+  }, [roomId, userId, router]);
 
   useEffect(() => {
-    if (!roomLoading && !room) router.replace("/dashboard");
-  }, [roomLoading, room, router]);
-
-  useEffect(() => {
-    if (!user || !room || participantStatus !== "stranger" || !room.isPublic) return;
-    joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null)
-      .then(() => setParticipantStatus("joined"));
-  }, [participantStatus, room, user, roomId]);
-
-  useEffect(() => {
-    if (room?.status === "ended" && participantStatus === "joined") {
+    if (room?.status === "ended") {
       router.push(`/room/${roomId}/summary`);
     }
-  }, [room?.status, roomId, router, participantStatus]);
+  }, [room?.status, roomId, router]);
 
-  const isFacilitator = user?.uid === room?.ownerId;
-  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
+  const isFacilitator = userId === room?.ownerId;
+  const loading = roomLoading || cardsLoading;
 
   const handleStartRetro = () => updateRoomStatus(roomId, "active");
 
@@ -78,28 +132,7 @@ export function RoomClient({ roomId }: RoomClientProps) {
 
   if (loading) return <BoardSkeleton />;
 
-  if (!room) {
-    return (
-      <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4">
-        <p className="text-text-secondary">{t("notFound")}</p>
-        <Link href="/dashboard" className="text-accent-cyan text-sm hover:underline">
-          {t("backToDashboard")}
-        </Link>
-      </div>
-    );
-  }
-
-  if (participantStatus === "stranger") {
-    return (
-      <JoinRoom
-        room={room}
-        userId={user?.uid ?? ""}
-        userDisplayName={user?.displayName ?? "Member"}
-        userPhotoURL={user?.photoURL ?? null}
-        onJoined={() => setParticipantStatus("joined")}
-      />
-    );
-  }
+  if (!room) return null;
 
   return (
     <div className="h-screen bg-bg-base flex flex-col overflow-hidden">
@@ -158,9 +191,9 @@ export function RoomClient({ roomId }: RoomClientProps) {
           columns={columns}
           cards={cards}
           roomId={roomId}
-          userId={user?.uid ?? ""}
-          userName={user?.displayName ?? "Anonymous"}
-          userPhotoURL={user?.photoURL ?? null}
+          userId={userId}
+          userName={userName}
+          userPhotoURL={userPhotoURL}
           isAnonymous={room.isAnonymous}
           isFacilitator={isFacilitator}
         />
