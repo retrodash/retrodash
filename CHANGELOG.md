@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/retrodash/retrodash/compare/v1.2.0...v1.2.1) (2026-05-27)
+
+### Bug Fixes
+
+* **firestore:** fix batch write rules, public room creation, and ThemeProvider ([#21](https://github.com/retrodash/retrodash/issues/21)) ([23db59f](https://github.com/retrodash/retrodash/commit/23db59fd01277b266aebccf735cb6698abaa3e42))
+
 ## [1.2.0](https://github.com/retrodash/retrodash/compare/v1.1.0...v1.2.0) (2026-05-23)
 
 ### Features
