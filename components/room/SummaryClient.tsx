@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { Avatar } from "@/components/ui/Avatar";
@@ -9,7 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { useParticipants } from "@/hooks/useParticipants";
-import { getParticipant } from "@/lib/firestore";
+import { getParticipant, joinRoom } from "@/lib/firestore";
 import { Navbar } from "@/components/ui/Navbar";
 import { Skeleton } from "@/components/ui/Skeleton";
 import {
@@ -22,54 +24,58 @@ import {
   ExportIcon,
   PeopleIcon,
 } from "@/components/ui/Icons";
-import type { Card, Column } from "@/types";
+import type { Card, Column, Room } from "@/types";
 
 export function SummaryClient({ roomId }: { roomId: string }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [gate, setGate] = useState<"checking" | "ready">("checking");
+
+  useEffect(() => {
+    if (authLoading || !user) return;
+    (async () => {
+      const snap = await getDoc(doc(db, "rooms", roomId));
+      if (!snap.exists()) {
+        router.replace("/dashboard");
+        return;
+      }
+      const room = { id: snap.id, ...snap.data() } as Room;
+
+      if (room.status !== "ended") {
+        router.replace(`/room/${roomId}`);
+        return;
+      }
+
+      const participant = await getParticipant(roomId, user.uid);
+      if (participant) {
+        setGate("ready");
+        return;
+      }
+
+      if (room.isPublic) {
+        await joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null);
+        setGate("ready");
+        return;
+      }
+
+      router.replace(`/room/${roomId}`);
+    })();
+  }, [authLoading, user, roomId, router]);
+
+  if (authLoading || gate === "checking") return <SummarySkeleton />;
+  return <SummaryContent roomId={roomId} />;
+}
+
+function SummaryContent({ roomId }: { roomId: string }) {
   const { room, columns, loading: roomLoading } = useRoom(roomId);
   const { cards, loading: cardsLoading } = useCards(roomId);
   const { participants } = useParticipants(roomId);
   const t = useTranslations("summary");
   const locale = useLocale();
-  const router = useRouter();
-  const [participantStatus, setParticipantStatus] = useState<"loading" | "joined" | "stranger">("loading");
 
-  useEffect(() => {
-    if (!user || roomLoading || !room) return;
-    getParticipant(roomId, user.uid).then((p) =>
-      setParticipantStatus(p ? "joined" : "stranger"),
-    );
-  }, [roomId, user, room, roomLoading]);
-
-  useEffect(() => {
-    if (!roomLoading && !room) router.replace("/dashboard");
-  }, [roomLoading, room, router]);
-
-  useEffect(() => {
-    if (!room) return;
-    if (participantStatus === "stranger" && !room.isPublic) {
-      router.replace(`/room/${roomId}`);
-      return;
-    }
-    if (room.status !== "ended") {
-      router.replace(`/room/${roomId}`);
-    }
-  }, [participantStatus, room, roomId, router]);
-
-  const loading = roomLoading || cardsLoading || (!!room && participantStatus === "loading");
-
+  const loading = roomLoading || cardsLoading;
   if (loading) return <SummarySkeleton />;
-
-  if (!room) {
-    return (
-      <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center gap-4">
-        <p className="text-text-secondary">{t("notFound")}</p>
-        <Link href="/dashboard" className="text-accent-cyan text-sm hover:underline">
-          {t("backToDashboard")}
-        </Link>
-      </div>
-    );
-  }
+  if (!room) return null;
 
   const actionItemsCol = columns.find((c) => c.isActionItems);
   const regularCols = columns.filter((c) => !c.isActionItems);
