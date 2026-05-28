@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { useRooms } from "@/hooks/useRooms";
 import { useJoinedRooms } from "@/hooks/useJoinedRooms";
 import { Navbar } from "@/components/ui/Navbar";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
+import { NewRoomModal } from "@/components/room/NewRoomModal";
 import { DeleteRoomModal } from "./DeleteRoomModal";
 import { PlusIcon, BoardIcon } from "@/components/ui/Icons";
 import { RoomCard } from "./RoomCard";
@@ -18,6 +18,7 @@ export function DashboardClient() {
   const { rooms, loading } = useRooms();
   const { joinedRooms, loading: joinedLoading } = useJoinedRooms();
   const [joinOpen, setJoinOpen] = useState(false);
+  const [newRoomOpen, setNewRoomOpen] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
   const t = useTranslations("dashboard");
 
@@ -40,20 +41,20 @@ export function DashboardClient() {
               <Button variant="ghost" onClick={() => setJoinOpen(true)}>
                 {t("joinRoom")}
               </Button>
-              <Link
-                href="/room/new"
-                className="h-9 px-4 text-xs sm:h-10 sm:px-5 sm:text-sm rounded-md font-semibold flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+              <button
+                onClick={() => setNewRoomOpen(true)}
+                className="h-9 px-4 text-xs sm:h-10 sm:px-5 sm:text-sm rounded-md font-semibold flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
               >
                 <PlusIcon />
                 {t("newRoom")}
-              </Link>
+              </button>
             </div>
           </div>
 
           {loading ? (
             <RoomsSkeleton />
           ) : rooms.length === 0 ? (
-            <EmptyState />
+            <EmptyState onNewRoom={() => setNewRoomOpen(true)} />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {rooms.map((room) => (
@@ -97,6 +98,7 @@ export function DashboardClient() {
       </main>
 
       {joinOpen && <JoinRoomModal onClose={() => setJoinOpen(false)} />}
+      {newRoomOpen && <NewRoomModal onClose={() => setNewRoomOpen(false)} />}
       {roomToDelete && (
         <DeleteRoomModal room={roomToDelete} onClose={() => setRoomToDelete(null)} />
       )}
@@ -140,7 +142,7 @@ function JoinedRoomsSection({ rooms }: { rooms: Room[] }) {
   );
 }
 
-function EmptyState() {
+function EmptyState({ onNewRoom }: { onNewRoom: () => void }) {
   const t = useTranslations("dashboard");
   return (
     <div className="flex flex-col items-center justify-center py-28 text-center">
@@ -153,13 +155,13 @@ function EmptyState() {
         {t("emptySubtitle")}
       </p>
 
-      <Link
-        href="/room/new"
-        className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90"
+      <button
+        onClick={onNewRoom}
+        className="h-11 px-6 rounded-md font-semibold text-sm flex items-center gap-2 bg-cta text-bg-base transition-opacity hover:opacity-90 cursor-pointer"
       >
         <PlusIcon />
         {t("createFirstRoom")}
-      </Link>
+      </button>
     </div>
   );
 }

@@ -6,12 +6,13 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
 }
 
 const sizeMap = {
   sm: "max-w-sm",
   md: "max-w-md",
+  lg: "max-w-lg",
 };
 
 export function Modal({ onClose, title, children, size = "sm" }: ModalProps) {
@@ -76,10 +77,10 @@ export function Modal({ onClose, title, children, size = "sm" }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative bg-bg-card border border-border rounded-lg w-full ${sizeMap[size]} p-6 shadow-2xl`}
+        className={`relative bg-bg-card border border-border rounded-lg w-full ${sizeMap[size]} shadow-2xl flex flex-col max-h-[85vh]`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5">
+        {/* Header — stays pinned */}
+        <div className="flex items-center justify-between px-6 pt-6 pb-5 shrink-0">
           <h2
             id={titleId}
             className="text-text-primary font-semibold text-lg"
@@ -95,7 +96,10 @@ export function Modal({ onClose, title, children, size = "sm" }: ModalProps) {
           </button>
         </div>
 
-        {children}
+        {/* Scrollable body */}
+        <div className="overflow-y-auto flex-1 px-6 pb-6">
+          {children}
+        </div>
       </div>
     </div>
   );
