@@ -150,6 +150,7 @@ export async function createRoom({
       text,
       authorId: ownerId,
       authorName: ownerName,
+      authorPhotoURL: ownerPhotoURL,
       votes: 0,
       votedBy: [],
       published: false,
