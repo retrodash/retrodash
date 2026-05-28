@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/retrodash/retrodash/compare/v1.3.0...v1.4.0) (2026-05-28)
+
+### Features
+
+* **gamification:** add retro scoreboard to summary page ([#24](https://github.com/retrodash/retrodash/issues/24)) ([1f85b82](https://github.com/retrodash/retrodash/commit/1f85b82781672c8eee7357502ab1988b99aeacb4))
+
 ## [1.3.0](https://github.com/retrodash/retrodash/compare/v1.2.2...v1.3.0) (2026-05-28)
 
 ### Features
