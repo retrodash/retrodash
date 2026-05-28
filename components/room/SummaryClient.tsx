@@ -12,6 +12,8 @@ import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { useParticipants } from "@/hooks/useParticipants";
 import { getParticipant, joinRoom } from "@/lib/firestore";
+import { calculateRetroScoreboard, saveRetroScoreboard } from "@/lib/scoreboard";
+import { ScoreboardSection } from "@/components/room/ScoreboardSection";
 import { Navbar } from "@/components/ui/Navbar";
 import { Skeleton } from "@/components/ui/Skeleton";
 import {
@@ -74,12 +76,20 @@ function SummaryContent({ roomId }: { roomId: string }) {
   const locale = useLocale();
 
   const loading = roomLoading || cardsLoading;
-  if (loading) return <SummarySkeleton />;
-  if (!room) return null;
 
   const actionItemsCol = columns.find((c) => c.isActionItems);
   const regularCols = columns.filter((c) => !c.isActionItems);
   const publishedCards = cards.filter((c) => c.published !== false);
+  const scoreboard = calculateRetroScoreboard(publishedCards, actionItemsCol?.id, participants);
+
+  useEffect(() => {
+    if (!room || participants.length === 0) return;
+    saveRetroScoreboard(roomId, scoreboard);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId]);
+
+  if (loading) return <SummarySkeleton />;
+  if (!room) return null;
 
   const actionCards = sortByVotes(
     actionItemsCol ? publishedCards.filter((c) => c.columnId === actionItemsCol.id) : [],
@@ -170,6 +180,8 @@ function SummaryContent({ roomId }: { roomId: string }) {
             </div>
           </section>
         )}
+
+        <ScoreboardSection entries={scoreboard} isAnonymous={room.isAnonymous} />
 
         <section>
           <SectionHeader

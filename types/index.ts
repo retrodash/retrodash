@@ -44,6 +44,16 @@ export interface Participant {
   role: "facilitator" | "member";
 }
 
+export interface ScoreboardEntry {
+  userId: string;
+  userName: string;
+  userPhotoURL: string | null;
+  cardsCount: number;
+  actionItemsCount: number;
+  totalPoints: number;
+  position: number;
+}
+
 export type FeedbackType = "bug" | "feature" | "general";
 
 export interface Feedback {
