@@ -1,16 +1,15 @@
 import type { LegalContent } from "./privacyContent";
 
-const CONTACT_EMAIL = "legal@retrodash.app";
-const DATE_EN = "May 18, 2026";
-const DATE_PT = "18 de maio de 2026";
+const CONTACT_EMAIL = "patrickigor.ip@gmail.com";
+const DATE_EN = "May 27, 2026";
+const DATE_PT = "27 de maio de 2026";
 
 const en: LegalContent = {
   backHome: "← Back to Home",
   label: "Legal",
   title: "Terms of Service",
   lastUpdated: `Last updated: ${DATE_EN}`,
-  disclaimer:
-    "This document is provided for informational purposes only and does not constitute legal advice. Always have a qualified attorney review and approve these terms before publication.",
+  disclaimer: "",
   sections: [
     {
       id: "acceptance",
@@ -18,11 +17,11 @@ const en: LegalContent = {
       blocks: [
         {
           type: "p",
-          text: 'By accessing or using RetroDash ("the Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Service.',
+          text: `By accessing or using RetroDash ("the Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Service.`,
         },
         {
           type: "p",
-          text: "These Terms apply to all users of the Service, including room facilitators and participants. By signing in with Google, you confirm that you have read, understood, and agree to these Terms and our Privacy Policy.",
+          text: "These Terms apply to all users of the Service, including room facilitators and participants. By signing in with Google, you confirm that you have read, understood, and agree to these Terms, our Privacy Policy, and our Cookie and Local Storage Policy.",
         },
       ],
     },
@@ -32,17 +31,24 @@ const en: LegalContent = {
       blocks: [
         {
           type: "p",
-          text: "RetroDash is a real-time retrospective platform for Scrum and Kanban teams. It allows authenticated users to:",
+          text: "RetroDash (retrodash.com.br) is a real-time retrospective platform for Scrum and Kanban teams. It allows authenticated users to:",
         },
         {
           type: "ul",
           items: [
-            "Create and manage password-protected retrospective rooms.",
+            "Create and manage password-protected or public retrospective rooms.",
             "Add, edit, and delete retrospective cards within those rooms.",
             "Vote on cards created by other participants.",
             "Assign and track action items.",
             "View a summary of completed retrospective sessions.",
           ],
+        },
+        {
+          type: "p-link",
+          before: "The Service also includes an optional AI-powered text improvement feature powered by Google Gemini. When you use this feature, the text of the relevant card is sent to the Gemini API. See our Privacy Policy's ",
+          linkText: "AI Text Improvement section",
+          href: "/privacy#ai-text-improvement",
+          after: " for full details.",
         },
         {
           type: "p",
@@ -61,11 +67,15 @@ const en: LegalContent = {
         {
           type: "ul",
           items: [
-            "You are at least 13 years of age (or at least 16 in the European Union).",
+            "You are at least 13 years of age (or at least 16 in the European Union, in accordance with applicable local law).",
             "You have the legal capacity to enter into a binding agreement.",
             "You will use the Service in compliance with these Terms and all applicable laws.",
             "Your Google account information is accurate and up to date.",
           ],
+        },
+        {
+          type: "p",
+          text: "RetroDash is designed for professional team contexts. The platform is not directed at minors. There is no technical age-verification mechanism — the representation above is made by you when signing in with Google. If the platform becomes aware that a user below the applicable minimum age has created an account, the account and all associated data will be deleted promptly.",
         },
         {
           type: "p",
@@ -114,17 +124,31 @@ const en: LegalContent = {
         },
         {
           type: "p",
-          text: "Note on anonymous mode: enabling anonymous mode in a room hides your identity in the user interface, but your user ID is stored internally in our database for moderation and voting-rule enforcement. Anonymous mode does not constitute a guarantee of complete anonymity.",
+          text: "Note on anonymous mode: enabling anonymous mode in a room hides your identity in the user interface, but your user ID is stored internally in our database for moderation purposes and voting-rule enforcement. Anonymous mode does not constitute a guarantee of complete anonymity.",
+        },
+      ],
+    },
+    {
+      id: "ai-feature",
+      title: "6. AI Text Improvement (Google Gemini)",
+      blocks: [
+        {
+          type: "p",
+          text: `The Service includes an optional "Improve Text" button on retrospective cards. By clicking this button, you acknowledge that the text content of that card will be sent to the Google Gemini API for processing. This action is entirely voluntary — you are not required to use this feature, and the rest of the platform functions normally without it.`,
+        },
+        {
+          type: "p",
+          text: "No personal identifiers (name, email, user ID) are included in requests to the Gemini API. You remain solely responsible for the final content saved to any card, regardless of whether you accepted a Gemini suggestion. RetroDash makes no warranty regarding the accuracy, quality, or appropriateness of any AI-generated suggestion.",
         },
       ],
     },
     {
       id: "intellectual-property",
-      title: "6. Intellectual Property",
+      title: "7. Intellectual Property",
       blocks: [
         {
           type: "p",
-          text: "The RetroDash name, logo, design, and all platform code, features, and interfaces are the exclusive property of RetroDash and are protected by applicable intellectual property laws. You may not copy, reproduce, modify, distribute, or create derivative works from any part of the Service without express written permission.",
+          text: "The RetroDash name, logo, design, and all platform code, features, and interfaces are the exclusive property of Igor Patrick Ponticelli and are protected by applicable intellectual property laws. You may not copy, reproduce, modify, distribute, or create derivative works from any part of the Service without express written permission.",
         },
         {
           type: "p",
@@ -134,17 +158,17 @@ const en: LegalContent = {
     },
     {
       id: "privacy",
-      title: "7. Privacy",
+      title: "8. Privacy",
       blocks: [
         {
           type: "p",
-          text: "Your use of the Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review it to understand our data collection, use, and retention practices.",
+          text: "Your use of the Service is also governed by our Privacy Policy and our Cookie and Local Storage Policy, both incorporated into these Terms by reference. Please review them to understand our data collection, use, and retention practices.",
         },
       ],
     },
     {
       id: "third-party",
-      title: "8. Third-Party Services",
+      title: "9. Third-Party Services",
       blocks: [
         {
           type: "p",
@@ -154,8 +178,9 @@ const en: LegalContent = {
           type: "ul",
           items: [
             "Google Sign-In (Firebase Authentication): your use of Google Sign-In is subject to Google's Terms of Service and Privacy Policy.",
-            "Firebase Firestore (Google LLC): data is stored and processed on Firebase infrastructure subject to Google's terms.",
+            "Firebase Firestore (Google LLC): data is stored and processed on Firebase infrastructure, subject to Google's terms.",
             "Vercel Inc.: the application is hosted on Vercel, subject to Vercel's terms of service.",
+            "Google Gemini API (Google LLC): used for the optional AI text improvement feature, subject to Google's API terms.",
           ],
         },
         {
@@ -166,11 +191,11 @@ const en: LegalContent = {
     },
     {
       id: "disclaimers",
-      title: "9. Disclaimer of Warranties",
+      title: "10. Disclaimer of Warranties",
       blocks: [
         {
           type: "p",
-          text: 'THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.',
+          text: `THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.`,
         },
         {
           type: "p",
@@ -184,7 +209,7 @@ const en: LegalContent = {
     },
     {
       id: "limitation-of-liability",
-      title: "10. Limitation of Liability",
+      title: "11. Limitation of Liability",
       blocks: [
         {
           type: "p",
@@ -194,11 +219,15 @@ const en: LegalContent = {
           type: "p",
           text: "IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO USE THE SERVICE IN THE TWELVE MONTHS PRECEDING THE CLAIM, OR (B) USD $10.",
         },
+        {
+          type: "p",
+          text: "Nothing in this clause limits or excludes liability that cannot be excluded under applicable consumer protection law, including the Brazilian Consumer Protection Code (Lei 8.078/90) or LGPD, or equivalent consumer rights legislation in your jurisdiction.",
+        },
       ],
     },
     {
       id: "termination",
-      title: "11. Termination",
+      title: "12. Termination",
       blocks: [
         {
           type: "p",
@@ -206,7 +235,7 @@ const en: LegalContent = {
         },
         {
           type: "p",
-          text: "You may stop using the Service at any time. You may request deletion of your account and associated data by contacting us at " + CONTACT_EMAIL + ".",
+          text: `You may stop using the Service at any time. You may request deletion of your account and all associated data by contacting us at ${CONTACT_EMAIL}. We commit to processing deletion requests within 15 business days of verified receipt, with email confirmation upon completion.`,
         },
         {
           type: "p",
@@ -216,17 +245,37 @@ const en: LegalContent = {
     },
     {
       id: "governing-law",
-      title: "12. Governing Law and Dispute Resolution",
+      title: "13. Governing Law and Dispute Resolution",
       blocks: [
         {
           type: "p",
-          text: "These Terms shall be governed by and construed in accordance with applicable law. Any disputes arising from these Terms or your use of the Service shall first be attempted to be resolved through good-faith negotiation.",
+          text: "These Terms are governed by the laws of Brazil. All parties agree to first attempt good-faith negotiation before initiating any formal dispute process.",
+        },
+        {
+          type: "h3",
+          text: "Users resident or domiciled in Brazil",
+        },
+        {
+          type: "p",
+          text: "Any disputes arising from these Terms or your use of the Service that are not resolved through negotiation shall be submitted to the exclusive jurisdiction of the courts of the Comarca de Blumenau, Santa Catarina, Brazil. Where any clause in these Terms conflicts with the Brazilian Consumer Protection Code (Lei 8.078/90) or the LGPD (Lei 13.709/2018), those laws shall prevail in favor of the consumer or data subject.",
+        },
+        {
+          type: "h3",
+          text: "Users outside Brazil",
+        },
+        {
+          type: "p",
+          text: "Any disputes arising from these Terms or your use of the Service that are not resolved through negotiation shall be finally settled by arbitration administered by the International Chamber of Commerce (ICC) under its Rules of Arbitration. The seat of arbitration shall be Paris, France. The language of proceedings shall be English. The governing law shall be Brazilian law. Each party shall bear its own costs unless the arbitrator awards otherwise.",
+        },
+        {
+          type: "p",
+          text: "Notwithstanding the above, nothing in this clause limits mandatory consumer protection rights available to you under the laws of your country of residence.",
         },
       ],
     },
     {
       id: "changes",
-      title: "13. Changes to These Terms",
+      title: "14. Changes to These Terms",
       blocks: [
         {
           type: "p",
@@ -235,8 +284,8 @@ const en: LegalContent = {
         {
           type: "ul",
           items: [
-            'Update the "Last updated" date at the top of this page.',
-            "Post a prominent notice within the RetroDash application.",
+            "Update the \"Last updated\" date at the top of this page.",
+            "Post a notice within the RetroDash application.",
             "Where required by law, notify you by email at least 30 days before changes take effect.",
           ],
         },
@@ -248,7 +297,7 @@ const en: LegalContent = {
     },
     {
       id: "contact",
-      title: "14. Contact Us",
+      title: "15. Contact Us",
       blocks: [
         {
           type: "p",
@@ -258,7 +307,7 @@ const en: LegalContent = {
           type: "ul",
           items: [
             `Email: ${CONTACT_EMAIL}`,
-            "We aim to respond to all legal inquiries within 30 days.",
+            "We aim to respond to all legal inquiries within 15 business days.",
           ],
         },
       ],
@@ -271,8 +320,7 @@ const pt: LegalContent = {
   label: "Jurídico",
   title: "Termos de Serviço",
   lastUpdated: `Última atualização: ${DATE_PT}`,
-  disclaimer:
-    "Este documento é fornecido apenas para fins informativos e não constitui aconselhamento jurídico. Sempre consulte um advogado qualificado antes de publicar estes termos.",
+  disclaimer: "",
   sections: [
     {
       id: "aceitacao",
@@ -280,11 +328,11 @@ const pt: LegalContent = {
       blocks: [
         {
           type: "p",
-          text: 'Ao acessar ou usar o RetroDash ("o Serviço"), você concorda em cumprir estes Termos de Serviço ("Termos"). Se você não concordar com estes Termos, não poderá usar o Serviço.',
+          text: `Ao acessar ou usar o RetroDash ("o Serviço"), você concorda em cumprir estes Termos de Serviço ("Termos"). Se você não concordar com estes Termos, não poderá usar o Serviço.`,
         },
         {
           type: "p",
-          text: "Estes Termos se aplicam a todos os usuários do Serviço, incluindo facilitadores e participantes de salas. Ao fazer login com o Google, você confirma que leu, compreendeu e concorda com estes Termos e com nossa Política de Privacidade.",
+          text: "Estes Termos se aplicam a todos os usuários do Serviço, incluindo facilitadores e participantes de salas. Ao fazer login com o Google, você confirma que leu, compreendeu e concorda com estes Termos, com nossa Política de Privacidade e com nossa Política de Cookies e Armazenamento Local.",
         },
       ],
     },
@@ -294,17 +342,24 @@ const pt: LegalContent = {
       blocks: [
         {
           type: "p",
-          text: "O RetroDash é uma plataforma de retrospectiva em tempo real para equipes Scrum e Kanban. Ele permite que usuários autenticados:",
+          text: "O RetroDash (retrodash.com.br) é uma plataforma de retrospectiva em tempo real para equipes Scrum e Kanban. Ele permite que usuários autenticados:",
         },
         {
           type: "ul",
           items: [
-            "Criem e gerenciem salas de retrospectiva protegidas por senha.",
+            "Criem e gerenciem salas de retrospectiva protegidas por senha ou públicas.",
             "Adicionem, editem e excluam cards de retrospectiva nessas salas.",
             "Votem em cards criados por outros participantes.",
             "Atribuam e acompanhem itens de ação.",
             "Visualizem um resumo das sessões de retrospectiva concluídas.",
           ],
+        },
+        {
+          type: "p-link",
+          before: "O Serviço também inclui um recurso opcional de melhoria de texto com IA, baseado no Google Gemini. Ao usar esse recurso, o texto do card relevante é enviado à API Gemini. Consulte a seção ",
+          linkText: "Melhoria de Texto com IA",
+          href: "/privacy#ai-text-improvement",
+          after: " da nossa Política de Privacidade para detalhes completos.",
         },
         {
           type: "p",
@@ -323,11 +378,15 @@ const pt: LegalContent = {
         {
           type: "ul",
           items: [
-            "Você tem pelo menos 13 anos de idade (ou pelo menos 16 anos na União Europeia).",
+            "Você tem pelo menos 13 anos de idade (ou pelo menos 16 anos na União Europeia, conforme a legislação local aplicável).",
             "Você tem capacidade legal para celebrar um contrato vinculante.",
             "Você usará o Serviço em conformidade com estes Termos e toda a legislação aplicável.",
             "As informações da sua conta Google são precisas e estão atualizadas.",
           ],
+        },
+        {
+          type: "p",
+          text: "O RetroDash é projetado para contextos profissionais de equipe. A plataforma não é direcionada a menores. Não há mecanismo técnico de verificação de idade — a declaração acima é feita por você ao fazer login com o Google. Se a plataforma tomar conhecimento de que um usuário abaixo da idade mínima aplicável criou uma conta, essa conta e todos os dados associados serão excluídos imediatamente.",
         },
         {
           type: "p",
@@ -381,12 +440,26 @@ const pt: LegalContent = {
       ],
     },
     {
-      id: "propriedade-intelectual",
-      title: "6. Propriedade Intelectual",
+      id: "recurso-ia",
+      title: "6. Melhoria de Texto com IA (Google Gemini)",
       blocks: [
         {
           type: "p",
-          text: "O nome, logotipo, design e todo o código, recursos e interfaces do RetroDash são propriedade exclusiva do RetroDash e estão protegidos pelas leis de propriedade intelectual aplicáveis. Você não pode copiar, reproduzir, modificar, distribuir ou criar obras derivadas de qualquer parte do Serviço sem permissão prévia por escrito.",
+          text: `O Serviço inclui um botão opcional "Melhorar com IA" nos cards de retrospectiva. Ao clicar neste botão, você reconhece que o conteúdo textual daquele card será enviado à API do Google Gemini para processamento. Esta ação é totalmente voluntária — você não é obrigado a usar este recurso, e o restante da plataforma funciona normalmente sem ele.`,
+        },
+        {
+          type: "p",
+          text: "Nenhum identificador pessoal (nome, e-mail, ID de usuário) é incluído nas requisições à API Gemini. Você continua sendo o único responsável pelo conteúdo final salvo em qualquer card, independentemente de ter aceito ou não uma sugestão do Gemini. O RetroDash não oferece nenhuma garantia quanto à precisão, qualidade ou adequação de qualquer sugestão gerada por IA.",
+        },
+      ],
+    },
+    {
+      id: "propriedade-intelectual",
+      title: "7. Propriedade Intelectual",
+      blocks: [
+        {
+          type: "p",
+          text: "O nome, logotipo, design e todo o código, recursos e interfaces do RetroDash são propriedade exclusiva de Igor Patrick Ponticelli e estão protegidos pelas leis de propriedade intelectual aplicáveis. Você não pode copiar, reproduzir, modificar, distribuir ou criar obras derivadas de qualquer parte do Serviço sem permissão prévia por escrito.",
         },
         {
           type: "p",
@@ -396,17 +469,17 @@ const pt: LegalContent = {
     },
     {
       id: "privacidade",
-      title: "7. Privacidade",
+      title: "8. Privacidade",
       blocks: [
         {
           type: "p",
-          text: "Seu uso do Serviço também é regido pela nossa Política de Privacidade, incorporada a estes Termos por referência. Revise-a para entender nossas práticas de coleta, uso e retenção de dados.",
+          text: "Seu uso do Serviço também é regido pela nossa Política de Privacidade e pela nossa Política de Cookies e Armazenamento Local, ambas incorporadas a estes Termos por referência. Revise-as para entender nossas práticas de coleta, uso e retenção de dados.",
         },
       ],
     },
     {
       id: "terceiros",
-      title: "8. Serviços de Terceiros",
+      title: "9. Serviços de Terceiros",
       blocks: [
         {
           type: "p",
@@ -418,6 +491,7 @@ const pt: LegalContent = {
             "Google Sign-In (Firebase Authentication): seu uso do Google Sign-In está sujeito aos Termos de Serviço e à Política de Privacidade do Google.",
             "Firebase Firestore (Google LLC): os dados são armazenados e processados na infraestrutura do Firebase, sujeitos aos termos do Google.",
             "Vercel Inc.: o aplicativo é hospedado na Vercel, sujeito aos termos de serviço da Vercel.",
+            "API do Google Gemini (Google LLC): utilizada para o recurso opcional de melhoria de texto com IA, sujeita aos termos de API do Google.",
           ],
         },
         {
@@ -428,11 +502,11 @@ const pt: LegalContent = {
     },
     {
       id: "isencao-garantias",
-      title: "9. Isenção de Garantias",
+      title: "10. Isenção de Garantias",
       blocks: [
         {
           type: "p",
-          text: 'O SERVIÇO É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" E "CONFORME DISPONÍVEL", SEM GARANTIAS DE QUALQUER TIPO, EXPRESSAS OU IMPLÍCITAS, INCLUINDO, MAS NÃO SE LIMITANDO A, GARANTIAS DE COMERCIALIZAÇÃO, ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO E NÃO VIOLAÇÃO.',
+          text: `O SERVIÇO É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" E "CONFORME DISPONÍVEL", SEM GARANTIAS DE QUALQUER TIPO, EXPRESSAS OU IMPLÍCITAS, INCLUINDO, MAS NÃO SE LIMITANDO A, GARANTIAS DE COMERCIALIZAÇÃO, ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO E NÃO VIOLAÇÃO.`,
         },
         {
           type: "p",
@@ -446,7 +520,7 @@ const pt: LegalContent = {
     },
     {
       id: "limitacao-responsabilidade",
-      title: "10. Limitação de Responsabilidade",
+      title: "11. Limitação de Responsabilidade",
       blocks: [
         {
           type: "p",
@@ -456,11 +530,15 @@ const pt: LegalContent = {
           type: "p",
           text: "EM NENHUM CASO NOSSA RESPONSABILIDADE TOTAL PARA COM VOCÊ EXCEDERÁ O MAIOR ENTRE (A) O VALOR QUE VOCÊ PAGOU PELO USO DO SERVIÇO NOS DOZE MESES ANTERIORES À RECLAMAÇÃO, OU (B) USD $10.",
         },
+        {
+          type: "p",
+          text: "Nada nesta cláusula limita ou exclui responsabilidades que não possam ser afastadas pela legislação de proteção ao consumidor aplicável, incluindo o Código de Defesa do Consumidor (Lei 8.078/90) e a LGPD (Lei 13.709/2018), ou legislação equivalente em sua jurisdição.",
+        },
       ],
     },
     {
       id: "rescisao",
-      title: "11. Rescisão",
+      title: "12. Rescisão",
       blocks: [
         {
           type: "p",
@@ -468,7 +546,7 @@ const pt: LegalContent = {
         },
         {
           type: "p",
-          text: "Você pode parar de usar o Serviço a qualquer momento. Você pode solicitar a exclusão da sua conta e dados associados entrando em contato: " + CONTACT_EMAIL + ".",
+          text: `Você pode parar de usar o Serviço a qualquer momento. Você pode solicitar a exclusão da sua conta e de todos os dados associados entrando em contato em ${CONTACT_EMAIL}. Comprometemo-nos a processar as solicitações de exclusão em até 15 dias úteis após a verificação do recebimento, com confirmação por e-mail ao término.`,
         },
         {
           type: "p",
@@ -478,17 +556,37 @@ const pt: LegalContent = {
     },
     {
       id: "lei-aplicavel",
-      title: "12. Lei Aplicável e Resolução de Disputas",
+      title: "13. Lei Aplicável e Resolução de Disputas",
       blocks: [
         {
           type: "p",
-          text: "Estes Termos serão regidos e interpretados de acordo com a legislação aplicável. Quaisquer disputas decorrentes destes Termos ou do uso do Serviço serão primeiro sujeitas a tentativa de resolução por meio de negociação de boa-fé.",
+          text: "Estes Termos são regidos pela legislação brasileira. As partes concordam em primeiro tentar resolver quaisquer disputas por meio de negociação de boa-fé antes de iniciar qualquer processo formal.",
+        },
+        {
+          type: "h3",
+          text: "Usuários residentes ou domiciliados no Brasil",
+        },
+        {
+          type: "p",
+          text: "Quaisquer disputas decorrentes destes Termos ou do uso do Serviço que não sejam resolvidas por negociação serão submetidas à jurisdição exclusiva do Foro da Comarca de Blumenau, Santa Catarina, Brasil. Na hipótese de qualquer cláusula destes Termos conflitar com o Código de Defesa do Consumidor (Lei 8.078/90) ou com a LGPD (Lei 13.709/2018), essas leis prevalecerão em favor do consumidor ou titular.",
+        },
+        {
+          type: "h3",
+          text: "Usuários fora do Brasil",
+        },
+        {
+          type: "p",
+          text: "Quaisquer disputas decorrentes destes Termos ou do uso do Serviço que não sejam resolvidas por negociação serão definitivamente resolvidas por arbitragem, administrada pela Câmara de Comércio Internacional (ICC) sob seu Regulamento de Arbitragem. A sede da arbitragem será Paris, França. O idioma do processo será o inglês. A lei aplicável será a legislação brasileira. Cada parte arcará com seus próprios custos, salvo decisão em contrário do árbitro.",
+        },
+        {
+          type: "p",
+          text: "Nada nesta cláusula limita os direitos obrigatórios de proteção ao consumidor disponíveis a você pela legislação do seu país de residência.",
         },
       ],
     },
     {
       id: "alteracoes",
-      title: "13. Alterações nestes Termos",
+      title: "14. Alterações nestes Termos",
       blocks: [
         {
           type: "p",
@@ -497,8 +595,8 @@ const pt: LegalContent = {
         {
           type: "ul",
           items: [
-            'Atualizaremos a data de "Última atualização" no topo desta página.',
-            "Publicaremos um aviso destacado dentro do aplicativo RetroDash.",
+            "Atualizaremos a data de \"Última atualização\" no topo desta página.",
+            "Publicaremos um aviso dentro do aplicativo RetroDash.",
             "Quando exigido por lei, notificaremos por e-mail com pelo menos 30 dias de antecedência.",
           ],
         },
@@ -510,7 +608,7 @@ const pt: LegalContent = {
     },
     {
       id: "contato",
-      title: "14. Fale Conosco",
+      title: "15. Fale Conosco",
       blocks: [
         {
           type: "p",
@@ -520,7 +618,7 @@ const pt: LegalContent = {
           type: "ul",
           items: [
             `E-mail: ${CONTACT_EMAIL}`,
-            "Nosso objetivo é responder a todas as consultas jurídicas em até 30 dias.",
+            "Nosso objetivo é responder a todas as consultas jurídicas em até 15 dias úteis.",
           ],
         },
       ],

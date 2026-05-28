@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Avatar } from "@/components/ui/Avatar";
 import {
   updateCard,
@@ -193,13 +194,23 @@ export function CardItem({
                 onClick={handleImprove}
                 disabled={improving}
                 className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
-                title={t("improveWithAI")}
               >
                 {improving ? <MiniSpinner /> : <SparkleIcon />}
                 {improving ? t("improving") : t("improveWithAI")}
               </button>
             )}
           </div>
+          {editText.trim() && (
+            <p className="text-[10px] text-text-muted text-right leading-tight mt-1">
+              {t("improveWithAIHint")}{" "}
+              <Link
+                href="/privacy#ai-text-improvement"
+                className="hover:underline transition-colors"
+              >
+                {t("improveWithAIHintLink")}
+              </Link>
+            </p>
+          )}
         </div>
       ) : isActionItem ? (
         <div className="pr-14">

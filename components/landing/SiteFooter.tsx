@@ -21,6 +21,12 @@ export function SiteFooter() {
           >
             {t("terms")}
           </Link>
+          <Link
+            href="/cookies"
+            className="text-text-muted hover:text-text-secondary text-xs transition-colors"
+          >
+            {t("cookies")}
+          </Link>
           <p className="text-text-muted text-xs italic">{t("tagline")}</p>
         </div>
       </div>
