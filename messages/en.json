@@ -171,7 +171,12 @@
     "notFound": "Room not found.",
     "backToDashboard": "Back to dashboard",
     "host": "Host",
-    "fromCard": "From:"
+    "fromCard": "From:",
+    "scoreboard": "Scoreboard",
+    "scoreboardCards": "Cards",
+    "scoreboardActions": "Actions",
+    "scoreboardPoints": "Points",
+    "scoreboardEmpty": "No contributions yet."
   },
   "navbar": {
     "signOut": "Sign out",

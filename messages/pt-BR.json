@@ -171,7 +171,12 @@
     "notFound": "Sala não encontrada.",
     "backToDashboard": "Voltar ao dashboard",
     "host": "Anfitrião",
-    "fromCard": "De:"
+    "fromCard": "De:",
+    "scoreboard": "Placar",
+    "scoreboardCards": "Cards",
+    "scoreboardActions": "Ações",
+    "scoreboardPoints": "Pontos",
+    "scoreboardEmpty": "Nenhuma contribuição ainda."
   },
   "navbar": {
     "signOut": "Sair",
