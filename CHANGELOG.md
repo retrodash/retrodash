@@ -1,3 +1,9 @@
+## [1.2.2](https://github.com/retrodash/retrodash/compare/v1.2.1...v1.2.2) (2026-05-28)
+
+### Bug Fixes
+
+* **room-flow:** improve create room, summary redirect and dashboard flow ([#22](https://github.com/retrodash/retrodash/issues/22)) ([f941100](https://github.com/retrodash/retrodash/commit/f9411007e62bfebb272bbd8356868144aebc0c27))
+
 ## [1.2.1](https://github.com/retrodash/retrodash/compare/v1.2.0...v1.2.1) (2026-05-27)
 
 ### Bug Fixes
