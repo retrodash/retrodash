@@ -1,3 +1,9 @@
+## [1.4.1](https://github.com/retrodash/retrodash/compare/v1.4.0...v1.4.1) (2026-05-28)
+
+### Bug Fixes
+
+* **room:** enforce anonymous room privacy and fix participant card deletion ([#25](https://github.com/retrodash/retrodash/issues/25)) ([1bfd9ef](https://github.com/retrodash/retrodash/commit/1bfd9efd296a1bde5663260d178d57ea1c0da581))
+
 ## [1.4.0](https://github.com/retrodash/retrodash/compare/v1.3.0...v1.4.0) (2026-05-28)
 
 ### Features
