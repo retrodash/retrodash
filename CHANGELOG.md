@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/retrodash/retrodash/compare/v1.4.1...v1.5.0) (2026-05-28)
+
+### Features
+
+* **landing:** expand landing page with new sections and dedicated marketing pages ([#26](https://github.com/retrodash/retrodash/issues/26)) ([e0f67da](https://github.com/retrodash/retrodash/commit/e0f67da8446488c635083aed8fc2c6a5c15d296b))
+
 ## [1.4.1](https://github.com/retrodash/retrodash/compare/v1.4.0...v1.4.1) (2026-05-28)
 
 ### Bug Fixes
