@@ -26,7 +26,7 @@ export function FinalCTASection({ ctaHref, ctaLabel, loading }: CTAProps) {
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] mb-6">
               {t("title")}{" "}
               <span
-                className="bg-clip-text text-transparent"
+                className="block bg-clip-text text-transparent"
                 style={{ backgroundImage: "var(--gradient-brand)" }}
               >
                 {t("titleGradient")}
