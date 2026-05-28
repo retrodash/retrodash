@@ -282,6 +282,27 @@ export function CheckBoxIcon() {
   );
 }
 
+export function TrophyIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M8 21h8M12 17v4" />
+      <path d="M7 4H4a2 2 0 000 4c0 2.5 2 4.5 4 5" />
+      <path d="M17 4h3a2 2 0 010 4c0 2.5-2 4.5-4 5" />
+      <path d="M7 4h10v8a5 5 0 01-10 0V4z" />
+    </svg>
+  );
+}
+
 export function LoopIcon({ size = 15 }: { size?: number }) {
   return (
     <svg
