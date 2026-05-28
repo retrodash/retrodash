@@ -77,14 +77,11 @@ export function Modal({ onClose, title, children, size = "sm" }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative bg-bg-card border border-border rounded-lg w-full ${sizeMap[size]} shadow-2xl flex flex-col max-h-[85vh]`}
+        className={`relative pb-2 pt-1 bg-bg-card border border-border rounded-lg w-full ${sizeMap[size]} shadow-2xl flex flex-col max-h-[85vh]`}
       >
         {/* Header — stays pinned */}
         <div className="flex items-center justify-between px-6 pt-6 pb-5 shrink-0">
-          <h2
-            id={titleId}
-            className="text-text-primary font-semibold text-lg"
-          >
+          <h2 id={titleId} className="text-text-primary font-semibold text-lg">
             {title}
           </h2>
           <button
@@ -97,7 +94,7 @@ export function Modal({ onClose, title, children, size = "sm" }: ModalProps) {
         </div>
 
         {/* Scrollable body */}
-        <div className="overflow-y-auto flex-1 px-6 pb-6">
+        <div className="overflow-y-auto flex-1 px-6 pb-6 scrollbar-thin">
           {children}
         </div>
       </div>
