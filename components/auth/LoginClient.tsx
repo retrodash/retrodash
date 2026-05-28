@@ -111,10 +111,14 @@ export function LoginClient({ redirect }: { redirect?: string }) {
             {t("byContinuing")}{" "}
             <Link href="/terms" className="text-accent-cyan hover:underline transition-colors">
               {t("termsOfService")}
-            </Link>{" "}
-            {t("and")}{" "}
+            </Link>
+            ,{" "}
             <Link href="/privacy" className="text-accent-cyan hover:underline transition-colors">
               {t("privacyPolicy")}
+            </Link>{" "}
+            {t("and")}{" "}
+            <Link href="/cookies" className="text-accent-cyan hover:underline transition-colors">
+              {t("cookiesPolicy")}
             </Link>
             .
           </p>

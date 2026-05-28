@@ -48,7 +48,8 @@
     "footer": {
       "tagline": "Reflita Juntos. Melhore Sempre.",
       "privacy": "Política de Privacidade",
-      "terms": "Termos de Serviço"
+      "terms": "Termos de Serviço",
+      "cookies": "Política de Cookies"
     }
   },
   "login": {
@@ -65,7 +66,8 @@
     "byContinuing": "Ao continuar, você concorda com os nossos",
     "termsOfService": "Termos de Serviço",
     "and": "e",
-    "privacyPolicy": "Política de Privacidade"
+    "privacyPolicy": "Política de Privacidade",
+    "cookiesPolicy": "Política de Cookies"
   },
   "dashboard": {
     "myRooms": "Minhas Salas",
@@ -262,6 +264,8 @@
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
     "improving": "Melhorando…",
+    "improveWithAIHint": "Envia o texto deste card ao Google Gemini.",
+    "improveWithAIHintLink": "Saiba mais.",
     "fromCard": "De:"
   },
   "feedback": {

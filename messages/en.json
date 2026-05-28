@@ -48,7 +48,8 @@
     "footer": {
       "tagline": "Reflect Together. Improve Always.",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
     }
   },
   "login": {
@@ -65,7 +66,8 @@
     "byContinuing": "By continuing, you agree to our",
     "termsOfService": "Terms of Service",
     "and": "and",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "cookiesPolicy": "Cookie Policy"
   },
   "dashboard": {
     "myRooms": "My Rooms",
@@ -262,6 +264,8 @@
     "vote": "Vote",
     "improveWithAI": "Improve with AI",
     "improving": "Improving…",
+    "improveWithAIHint": "Sends this card's text to Google Gemini.",
+    "improveWithAIHintLink": "Learn more.",
     "fromCard": "From:"
   },
   "feedback": {
