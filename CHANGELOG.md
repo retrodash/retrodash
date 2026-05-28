@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/retrodash/retrodash/compare/v1.2.2...v1.3.0) (2026-05-28)
+
+### Features
+
+* **legal:** rewrite privacy/terms and add cookie policy with LGPD/GDPR compliance ([#23](https://github.com/retrodash/retrodash/issues/23)) ([5b5c9c1](https://github.com/retrodash/retrodash/commit/5b5c9c1ecec9abb890c25ebc49cedd93ab526879))
+
 ## [1.2.2](https://github.com/retrodash/retrodash/compare/v1.2.1...v1.2.2) (2026-05-28)
 
 ### Bug Fixes
