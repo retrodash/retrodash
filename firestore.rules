@@ -123,8 +123,7 @@ service cloud.firestore {
 
       allow delete: if isFacilitator(roomId) ||
         (isParticipant(roomId) &&
-         resource.data.authorId == request.auth.uid &&
-         !resource.data.published);
+         resource.data.authorId == request.auth.uid);
     }
 
     // ── Participants ───────────────────────────────────────────────

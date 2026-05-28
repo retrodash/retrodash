@@ -299,10 +299,17 @@ function ActionItemRow({ card, isAnonymous, allCards }: { card: Card; isAnonymou
         )}
         {!isAnonymous && (
           <div className="flex items-center gap-1.5 mt-1.5">
-            <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
-            <span className="text-text-muted text-xs">{card.authorName}</span>
+            {card.authorName ? (
+              <>
+                <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
+                <span className="text-text-muted text-xs">{card.authorName}</span>
+              </>
+            ) : (
+              <AnonymousChip label={t("anonymous")} />
+            )}
           </div>
         )}
+
       </div>
       {card.votes > 0 && (
         <span className="shrink-0 flex items-center gap-1 text-xs text-text-muted">
@@ -347,6 +354,7 @@ function ColumnSummary({
 }
 
 function SummaryCard({ card, isAnonymous }: { card: Card; isAnonymous: boolean }) {
+  const t = useTranslations("summary");
   return (
     <div className="bg-bg-card border border-border rounded-md px-4 py-3">
       <p className="text-text-primary text-sm leading-relaxed whitespace-pre-wrap wrap-break-word">
@@ -354,10 +362,14 @@ function SummaryCard({ card, isAnonymous }: { card: Card; isAnonymous: boolean }
       </p>
       <div className="flex items-center justify-between mt-2">
         {!isAnonymous ? (
-          <div className="flex items-center gap-1.5">
-            <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
-            <span className="text-text-muted text-xs">{card.authorName}</span>
-          </div>
+          card.authorName ? (
+            <div className="flex items-center gap-1.5">
+              <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
+              <span className="text-text-muted text-xs">{card.authorName}</span>
+            </div>
+          ) : (
+            <AnonymousChip label={t("anonymous")} />
+          )
         ) : (
           <span />
         )}
@@ -402,6 +414,28 @@ function BoardIcon() {
       <rect x="1.5" y="2.5" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.3" />
       <line x1="1.5" y1="7" x2="15.5" y2="7" stroke="currentColor" strokeWidth="1.3" />
       <line x1="7" y1="7" x2="7" y2="14.5" stroke="currentColor" strokeWidth="1.3" />
+    </svg>
+  );
+}
+
+function AnonymousChip({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-1.5 min-w-0">
+      <div className="size-6 rounded-full bg-bg-elevated border border-border flex items-center justify-center shrink-0">
+        <MaskIcon />
+      </div>
+      <span className="text-text-muted text-xs truncate max-w-28">{label}</span>
+    </div>
+  );
+}
+
+function MaskIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <line x1="9" y1="9" x2="9.01" y2="9" strokeWidth="2.5" />
+      <line x1="15" y1="9" x2="15.01" y2="9" strokeWidth="2.5" />
     </svg>
   );
 }

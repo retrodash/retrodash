@@ -107,7 +107,7 @@ export async function createRoom({
   isAnonymous: boolean;
   columnTitles: string[];
   actionItemsTitle: string;
-  initialActionItems?: { text: string; actionStatus: "pending" | "keep"; linkedCardText?: string }[];
+  initialActionItems?: { text: string; actionStatus: "pending" | "keep"; linkedCardText?: string; authorName: string; authorPhotoURL: string | null }[];
 }): Promise<string> {
   const batch = writeBatch(db);
   const roomRef = doc(collection(db, "rooms"));
@@ -143,14 +143,14 @@ export async function createRoom({
     role: "facilitator",
   });
 
-  initialActionItems.forEach(({ text, actionStatus, linkedCardText }) => {
+  initialActionItems.forEach(({ text, actionStatus, linkedCardText, authorName, authorPhotoURL }) => {
     const cardRef = doc(collection(db, "rooms", roomRef.id, "cards"));
     batch.set(cardRef, {
       columnId: actionItemsRef.id,
       text,
       authorId: ownerId,
-      authorName: ownerName,
-      authorPhotoURL: ownerPhotoURL,
+      authorName: isAnonymous ? "" : authorName,
+      authorPhotoURL: isAnonymous ? null : authorPhotoURL,
       votes: 0,
       votedBy: [],
       published: false,

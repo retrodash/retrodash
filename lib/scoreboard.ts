@@ -10,7 +10,7 @@ export function calculateRetroScoreboard(
   actionItemsColumnId: string | undefined,
   participants: Participant[],
 ): ScoreboardEntry[] {
-  const published = cards.filter((c) => c.published !== false);
+  const published = cards.filter((c) => c.published !== false && c.authorName !== "");
 
   const entries = participants.map((p) => {
     const mine = published.filter((c) => c.authorId === p.id);

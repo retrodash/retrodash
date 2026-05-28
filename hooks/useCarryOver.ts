@@ -8,6 +8,8 @@ export interface CarryOverItem {
   text: string;
   actionStatus: "pending" | "keep";
   linkedCardText?: string;
+  authorName: string;
+  authorPhotoURL: string | null;
 }
 
 export interface CarryOverState {
@@ -90,6 +92,8 @@ export function useCarryOver(endedRooms: Room[]): CarryOverState {
           ? "keep"
           : "pending",
       ...(item.linkedCardText && { linkedCardText: item.linkedCardText }),
+      authorName: item.authorName,
+      authorPhotoURL: item.authorPhotoURL ?? null,
     }));
 
   return {

@@ -48,8 +48,8 @@ export function BoardColumn({
       columnId: column.id,
       text,
       authorId: userId,
-      authorName: userName,
-      authorPhotoURL: userPhotoURL,
+      authorName: isAnonymous ? "" : userName,
+      authorPhotoURL: isAnonymous ? null : userPhotoURL,
       isActionItem: column.isActionItems,
     });
     setNewText("");
@@ -63,8 +63,8 @@ export function BoardColumn({
       columnId: actionItemsColumnId,
       text,
       authorId: userId,
-      authorName: userName,
-      authorPhotoURL: userPhotoURL,
+      authorName: isAnonymous ? "" : userName,
+      authorPhotoURL: isAnonymous ? null : userPhotoURL,
       isActionItem: true,
       linkedCardId,
       linkedCardText,
@@ -121,6 +121,7 @@ export function BoardColumn({
             card={card}
             roomId={roomId}
             userId={userId}
+            currentUserName={userName}
             currentUserPhotoURL={userPhotoURL}
             isAnonymous={isAnonymous}
             isFacilitator={isFacilitator}
