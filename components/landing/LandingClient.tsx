@@ -5,7 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { LandingNav } from "./LandingNav";
 import { HeroSection } from "./HeroSection";
 import { FeaturesSection } from "./FeaturesSection";
+import { WhySection } from "./WhySection";
 import { HowItWorksSection } from "./HowItWorksSection";
+import { UseCasesSection } from "./UseCasesSection";
 import { FinalCTASection } from "./FinalCTASection";
 import { SiteFooter } from "./SiteFooter";
 
@@ -21,7 +23,9 @@ export function LandingClient() {
       <main className="flex-1">
         <HeroSection ctaHref={ctaHref} ctaLabel={ctaLabel} loading={loading} />
         <FeaturesSection />
+        <WhySection />
         <HowItWorksSection />
+        <UseCasesSection />
         <FinalCTASection ctaHref={ctaHref} ctaLabel={ctaLabel} loading={loading} />
       </main>
       <SiteFooter />

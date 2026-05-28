@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/Reveal";
-import { LockIcon, BoltIcon, EyeOffIcon, CheckBoxIcon } from "@/components/ui/Icons";
+import { LockIcon, BoltIcon, EyeOffIcon, CheckBoxIcon, ArrowRightIcon } from "@/components/ui/Icons";
+import { Link } from "@/i18n/navigation";
 
 export function FeaturesSection() {
   const t = useTranslations("landing.features");
@@ -40,6 +41,18 @@ export function FeaturesSection() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={320}>
+          <div className="mt-10 flex justify-start">
+            <Link
+              href="/features"
+              className="inline-flex items-center gap-2 text-sm text-accent-cyan hover:text-accent-cyan/80 font-medium transition-colors"
+            >
+              {t("viewAll")}
+              <ArrowRightIcon />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
