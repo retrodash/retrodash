@@ -60,6 +60,7 @@ export function DashboardClient() {
                 <RoomCard
                   key={room.id}
                   room={room}
+                  href={room.status === "ended" ? `/room/${room.id}/summary` : undefined}
                   onDelete={room.status === "ended" ? () => setRoomToDelete(room) : undefined}
                 />
               ))}
