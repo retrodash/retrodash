@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/ui/Reveal";
+import { ArrowRightIcon } from "@/components/ui/Icons";
+import { Link } from "@/i18n/navigation";
 
 export function HowItWorksSection() {
   const t = useTranslations("landing.steps");
@@ -41,6 +43,18 @@ export function HowItWorksSection() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={300}>
+          <div className="mt-10 flex justify-start">
+            <Link
+              href="/how-it-works"
+              className="inline-flex items-center gap-2 text-sm text-accent-cyan hover:text-accent-cyan/80 font-medium transition-colors"
+            >
+              {t("viewGuide")}
+              <ArrowRightIcon />
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
