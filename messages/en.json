@@ -176,7 +176,8 @@
     "scoreboardCards": "Cards",
     "scoreboardActions": "Actions",
     "scoreboardPoints": "Points",
-    "scoreboardEmpty": "No contributions yet."
+    "scoreboardEmpty": "No contributions yet.",
+    "anonymous": "Anonymous"
   },
   "navbar": {
     "signOut": "Sign out",
@@ -271,7 +272,8 @@
     "improving": "Improving…",
     "improveWithAIHint": "Sends this card's text to Google Gemini.",
     "improveWithAIHintLink": "Learn more.",
-    "fromCard": "From:"
+    "fromCard": "From:",
+    "anonymous": "Anonymous"
   },
   "feedback": {
     "title": "Feedback & Suggestions",

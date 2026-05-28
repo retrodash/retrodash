@@ -19,6 +19,7 @@ interface CardProps {
   card: Card;
   roomId: string;
   userId: string;
+  currentUserName?: string;
   currentUserPhotoURL?: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
@@ -32,6 +33,7 @@ export function CardItem({
   card,
   roomId,
   userId,
+  currentUserName,
   currentUserPhotoURL,
   isAnonymous,
   isFacilitator,
@@ -314,10 +316,14 @@ export function CardItem({
       {!isEditing && (
         <div className="flex items-center justify-between mt-3">
           {!isAnonymous && (
-            <AuthorChip
-              name={isOwnCard ? t("you") : card.authorName}
-              photoURL={isOwnCard ? currentUserPhotoURL : card.authorPhotoURL}
-            />
+            card.authorName ? (
+              <AuthorChip
+                name={isOwnCard && card.authorName === currentUserName ? t("you") : card.authorName}
+                photoURL={isOwnCard && card.authorName === currentUserName ? currentUserPhotoURL : card.authorPhotoURL}
+              />
+            ) : (
+              <AnonymousChip label={t("anonymous")} />
+            )
           )}
 
           {isDraft && isOwnCard ? (
@@ -411,6 +417,28 @@ function AuthorChip({
       <Avatar photoURL={photoURL} name={name} size={24} />
       <span className="text-text-muted text-xs truncate max-w-28">{name}</span>
     </div>
+  );
+}
+
+function AnonymousChip({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-1.5 min-w-0">
+      <div className="size-6 rounded-full bg-bg-card border border-border flex items-center justify-center shrink-0">
+        <MaskIcon />
+      </div>
+      <span className="text-text-muted text-xs truncate max-w-28">{label}</span>
+    </div>
+  );
+}
+
+function MaskIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <line x1="9" y1="9" x2="9.01" y2="9" strokeWidth="2.5" />
+      <line x1="15" y1="9" x2="15.01" y2="9" strokeWidth="2.5" />
+    </svg>
   );
 }
 
