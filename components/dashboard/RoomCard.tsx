@@ -45,7 +45,7 @@ export function RoomCard({ room, href, onDelete }: RoomCardProps) {
           )}
         </div>
 
-        <h3 className="text-text-primary font-semibold text-lg leading-snug mb-2 group-hover:text-accent-cyan transition-colors">
+        <h3 className="text-text-primary font-semibold text-lg leading-snug mb-2 group-hover:text-accent-violet dark:group-hover:text-accent-cyan transition-colors">
           {room.name}
         </h3>
 
