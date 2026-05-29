@@ -9,7 +9,7 @@ import { signOut } from "@/lib/auth";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { RetroDashLogo } from "@/components/ui/RetroDashLogo";
+import { RetroDashLogo, RetroDashIcon } from "@/components/ui/RetroDashLogo";
 import { MenuIcon, MessageIcon } from "@/components/ui/Icons";
 
 interface NavbarProps {
@@ -83,7 +83,12 @@ export function Navbar({
     setMenuOpen(false);
   };
 
-  const logo = <RetroDashLogo width={110} className="w-20.5 sm:w-27.5" />;
+  const logo = (
+    <>
+      <span className="min-[450px]:hidden shrink-0"><RetroDashIcon size={28} /></span>
+      <span className="hidden min-[450px]:block shrink-0"><RetroDashLogo className="w-20.5 lg:w-27.5" /></span>
+    </>
+  );
 
   const avatarButton = user && (
     <button
@@ -121,13 +126,13 @@ export function Navbar({
           )}
           {(children || leftActions) && (
             <>
-              <span aria-hidden className="text-border hidden sm:block shrink-0">
+              <span aria-hidden className="text-border hidden lg:block shrink-0">
                 |
               </span>
               <div className="flex items-center gap-2.5 min-w-0">
                 {children && (
                   <div
-                    className={`flex items-center gap-2.5 min-w-0 ${showHamburger ? "hidden sm:flex" : "flex"}`}
+                    className={`flex items-center gap-2.5 min-w-0 ${showHamburger ? "hidden lg:flex" : "flex"}`}
                   >
                     {children}
                   </div>
@@ -142,21 +147,21 @@ export function Navbar({
           {actions}
 
           <div
-            className={`flex items-center gap-3 ${showHamburger ? "hidden sm:flex" : "flex"}`}
+            className={`flex items-center gap-3 ${showHamburger ? "hidden lg:flex" : "flex"}`}
           >
             <ThemeToggle variant="dropdown" />
             <LanguageSwitcher />
-            <span aria-hidden className="text-border hidden sm:block">
+            <span aria-hidden className="text-border hidden lg:block">
               |
             </span>
             <Link
               href="/feedback"
               title={t("feedback")}
-              className="hidden sm:flex w-8 h-8 items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors"
+              className="hidden lg:flex w-8 h-8 items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors"
             >
               <MessageIcon size={16} />
             </Link>
-            <span aria-hidden className="text-border hidden sm:block">
+            <span aria-hidden className="text-border hidden lg:block">
               |
             </span>
           </div>
@@ -164,7 +169,7 @@ export function Navbar({
           {avatarButton}
 
           {showHamburger && (
-            <div ref={menuRef} className="relative sm:hidden">
+            <div ref={menuRef} className="relative lg:hidden">
               <button
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label="Menu"
