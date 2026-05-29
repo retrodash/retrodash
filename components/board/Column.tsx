@@ -116,7 +116,7 @@ export function BoardColumn({
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
+      <div className="flex-1 overflow-y-auto scrollbar-thin p-3 space-y-2 min-h-0">
         {[...cards]
           .filter((c) => c.published !== false || c.authorId !== userId)
           .sort((a, b) => {
@@ -163,7 +163,7 @@ export function BoardColumn({
               {t("myDrafts")}
             </span>
           </div>
-          <div className="overflow-y-auto max-h-[30vh] px-3 pb-3 space-y-2">
+          <div className="overflow-y-auto scrollbar-thin max-h-[30vh] px-3 pb-3 space-y-2">
             {[...cards]
               .filter((c) => c.published === false && c.authorId === userId)
               .sort((a, b) => (a.createdAt?.seconds ?? 0) - (b.createdAt?.seconds ?? 0))
