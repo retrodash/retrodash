@@ -1,3 +1,9 @@
+## [1.5.2](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.1...v1.5.2) (2026-05-29)
+
+### Bug Fixes
+
+* **a11y:** improve color contrast for muted text and hover states ([#28](https://github.com/Igor-Ponticelli/retrodash/issues/28)) ([b997df2](https://github.com/Igor-Ponticelli/retrodash/commit/b997df2d8befbc868a8600373e152850e9dca711))
+
 ## [1.5.1](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.0...v1.5.1) (2026-05-29)
 
 ### Bug Fixes
