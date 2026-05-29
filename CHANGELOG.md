@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.0...v1.5.1) (2026-05-29)
+
+### Bug Fixes
+
+* **retro:** resolve card edit permissions, carry-over visibility, and publish gate ([#27](https://github.com/Igor-Ponticelli/retrodash/issues/27)) ([49578ec](https://github.com/Igor-Ponticelli/retrodash/commit/49578ec35746824bb8445361b5d5ff997285236c))
+
 ## [1.5.0](https://github.com/retrodash/retrodash/compare/v1.4.1...v1.5.0) (2026-05-28)
 
 ### Features
