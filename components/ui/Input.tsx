@@ -14,7 +14,7 @@ const inputSizeClasses: Record<InputSize, string> = {
 };
 
 const inputBase =
-  "w-full bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-cyan transition-colors";
+  "w-full bg-bg-elevated border border-border rounded-md text-text-primary placeholder:text-text-muted text-sm outline-hidden focus:border-accent-primary transition-colors";
 
 export function Input({ size = "md", className = "", ...props }: InputProps) {
   return (
@@ -28,7 +28,7 @@ export function Input({ size = "md", className = "", ...props }: InputProps) {
 // ── Textarea ───────────────────────────────────────────────────
 
 const textareaBase =
-  "w-full bg-bg-elevated border border-border rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-hidden focus:border-accent-cyan transition-colors";
+  "w-full bg-bg-elevated border border-border rounded-md p-2.5 text-sm text-text-primary placeholder:text-text-muted resize-none outline-hidden focus:border-accent-primary transition-colors";
 
 export function Textarea({
   className = "",

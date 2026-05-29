@@ -12,9 +12,9 @@ const variantClasses: Record<Variant, string> = {
   primary:
     "bg-cta text-bg-base hover:opacity-90 disabled:opacity-50",
   cyan:
-    "bg-accent-cyan text-bg-base hover:opacity-90 disabled:opacity-50",
+    "bg-accent-primary text-bg-base hover:opacity-90 disabled:opacity-50",
   ghost:
-    "border border-border text-text-secondary hover:border-accent-cyan hover:text-text-primary disabled:opacity-50",
+    "border border-border text-text-secondary hover:border-accent-primary hover:text-text-primary disabled:opacity-50",
   destructive:
     "bg-red-500/20 text-red-400 hover:bg-red-500/30 disabled:opacity-60",
   "ghost-text":

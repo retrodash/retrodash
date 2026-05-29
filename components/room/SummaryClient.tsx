@@ -195,7 +195,7 @@ function SummaryContent({ roomId }: { roomId: string }) {
                     {p.displayName}
                   </span>
                   {p.role === "facilitator" && (
-                    <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan">
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-primary">
                       {t("host")}
                     </span>
                   )}
@@ -284,7 +284,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-      <span className={accent ? "text-accent-cyan" : "text-text-muted"}>
+      <span className={accent ? "text-accent-primary" : "text-text-muted"}>
         {icon}
       </span>
       <h2 className="text-text-primary font-semibold text-lg">{title}</h2>
@@ -323,7 +323,7 @@ function ActionItemRow({
       <span
         className={`mt-0.5 shrink-0 ${
           status === "done"
-            ? "text-accent-cyan"
+            ? "text-accent-primary"
             : status === "keep"
               ? "text-accent-violet"
               : "text-text-muted"

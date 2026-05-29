@@ -66,7 +66,7 @@ export function CardItem({
   const voteClass = !canVote
     ? "text-text-muted cursor-default opacity-50"
     : hasVoted
-      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 cursor-pointer"
+      ? "bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 cursor-pointer"
       : "text-text-muted hover:text-text-primary hover:bg-bg-card cursor-pointer";
 
   const handlePublish = async () => {
@@ -140,7 +140,7 @@ export function CardItem({
         isDraft
           ? "border-dashed border-border/60 opacity-80"
           : isActionItem && actionStatus === "done"
-            ? "border-accent-cyan/20"
+            ? "border-accent-primary/20"
             : isActionItem && actionStatus === "keep"
               ? "border-accent-violet/20"
               : "border-transparent hover:border-border"
@@ -184,7 +184,7 @@ export function CardItem({
                 handleSaveEdit();
             }}
             rows={3}
-            className="bg-bg-card border-accent-cyan"
+            className="bg-bg-card border-accent-primary"
           />
           <div className="flex items-center gap-2">
             <Button
@@ -257,7 +257,7 @@ export function CardItem({
                   className="flex items-center gap-1.5 text-xs text-text-muted"
                 >
                   <span
-                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-cyan" : ""}`}
+                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-primary" : ""}`}
                   >
                     <MiniCheckIcon done={item.actionStatus === "done"} />
                   </span>
@@ -286,13 +286,13 @@ export function CardItem({
                       }
                     }}
                     placeholder={t("actionItemPlaceholder")}
-                    className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-cyan"
+                    className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary"
                   />
                   <div className="flex gap-1.5">
                     <button
                       onClick={handleAddLinkedItem}
                       disabled={addingLinkedItem || !linkedItemText.trim()}
-                      className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
+                      className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {t("add")}
                     </button>
@@ -310,7 +310,7 @@ export function CardItem({
               ) : (
                 <button
                   onClick={() => setIsAddingLinkedItem(true)}
-                  className="flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-cyan transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-primary transition-colors cursor-pointer"
                 >
                   <SmallPlusIcon />
                   {t("addActionItem")}
@@ -342,7 +342,7 @@ export function CardItem({
               <button
                 onClick={handlePublish}
                 disabled={publishing || !isRetroLive}
-                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {publishing ? t("publishing") : t("publish")}
               </button>
@@ -399,7 +399,7 @@ function ActionStatusSegment({
           className={`px-2 h-5 rounded-sm text-[10px] font-medium transition-colors cursor-pointer ${
             status === opt.value
               ? opt.value === "done"
-                ? "bg-accent-cyan/20 text-accent-cyan"
+                ? "bg-accent-primary/20 text-accent-primary"
                 : opt.value === "keep"
                   ? "bg-accent-violet/20 text-accent-violet"
                   : "bg-bg-elevated text-text-primary"

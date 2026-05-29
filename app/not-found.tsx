@@ -8,7 +8,7 @@ export default function NotFound() {
       <body className="min-h-full flex flex-col font-sans antialiased">
         <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-6 relative overflow-hidden">
           <div aria-hidden className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-60 left-1/2 -translate-x-1/2 size-160 rounded-full bg-accent-cyan/4 blur-3xl" />
+            <div className="absolute -top-60 left-1/2 -translate-x-1/2 size-160 rounded-full bg-accent-primary/4 blur-3xl" />
             <div className="absolute -bottom-60 left-1/2 -translate-x-1/2 size-160 rounded-full bg-accent-violet/5 blur-3xl" />
           </div>
 
@@ -43,7 +43,7 @@ export default function NotFound() {
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md border border-border text-text-secondary text-sm font-semibold hover:border-accent-cyan hover:text-text-primary transition-colors"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-md border border-border text-text-secondary text-sm font-semibold hover:border-accent-primary hover:text-text-primary transition-colors"
               >
                 Back to Home
               </Link>

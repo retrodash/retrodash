@@ -15,7 +15,7 @@ export function Toggle({ checked, onChange, label }: ToggleProps) {
       aria-label={label}
       onClick={() => onChange(!checked)}
       className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200 cursor-pointer ${
-        checked ? "bg-accent-cyan" : "bg-bg-elevated border border-border"
+        checked ? "bg-accent-primary" : "bg-bg-elevated border border-border"
       }`}
     >
       <span

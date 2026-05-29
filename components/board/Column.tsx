@@ -105,7 +105,7 @@ export function BoardColumn({
   };
 
   const headerAccent = column.isActionItems
-    ? "var(--color-accent-cyan)"
+    ? "var(--color-accent-primary)"
     : "var(--color-text-muted)";
 
   return (

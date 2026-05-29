@@ -49,7 +49,7 @@ export function ScoreboardSection({
   return (
     <section>
       <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-        <span className="text-accent-cyan">
+        <span className="text-accent-primary">
           <TrophyIcon />
         </span>
         <h2 className="text-text-primary font-semibold text-lg">{t("scoreboard")}</h2>
@@ -73,7 +73,7 @@ export function ScoreboardSection({
             <span className="text-[11px] font-semibold uppercase tracking-widest text-text-muted text-right w-16">
               {t("scoreboardActions")}
             </span>
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-accent-cyan text-right w-14">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-accent-primary text-right w-14">
               {t("scoreboardPoints")}
             </span>
           </div>
@@ -106,7 +106,7 @@ export function ScoreboardSection({
 
                   <span className="text-sm text-text-muted text-right w-14">{entry.cardsCount}</span>
                   <span className="text-sm text-text-muted text-right w-16">{entry.actionItemsCount}</span>
-                  <span className="text-sm font-semibold text-accent-cyan text-right w-14">
+                  <span className="text-sm font-semibold text-accent-primary text-right w-14">
                     {entry.totalPoints % 1 === 0 ? entry.totalPoints : entry.totalPoints.toFixed(1)}
                   </span>
                 </div>

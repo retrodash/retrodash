@@ -44,7 +44,7 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
             <select
               value={selectedRoomId ?? ""}
               onChange={(e) => setSelectedRoomId(e.target.value || null)}
-              className="w-full h-11 px-3 rounded-md bg-bg-elevated border border-border text-sm text-text-primary outline-none focus:border-accent-cyan transition-colors cursor-pointer"
+              className="w-full h-11 px-3 rounded-md bg-bg-elevated border border-border text-sm text-text-primary outline-none focus:border-accent-primary transition-colors cursor-pointer"
             >
               <option value="" disabled>{t("pickRoom")}</option>
               {endedRooms.map((room) => (
@@ -67,7 +67,7 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
                   <button
                     type="button"
                     onClick={toggleAll}
-                    className="text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
+                    className="text-accent-primary text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
                   >
                     {allChecked ? t("deselectAll") : t("selectAll")}
                   </button>
@@ -93,7 +93,7 @@ export function CarryOverSection({ carryOver, endedRooms, roomsLoading }: CarryO
                         <span
                           className={`mt-0.5 shrink-0 size-4 rounded-sm border flex items-center justify-center transition-colors ${
                             checked
-                              ? "bg-accent-cyan border-accent-cyan"
+                              ? "bg-accent-primary border-accent-primary"
                               : "border-border bg-bg-elevated"
                           }`}
                           aria-hidden

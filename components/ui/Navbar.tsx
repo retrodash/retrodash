@@ -106,7 +106,7 @@ export function Navbar({
           <Link
             href="/feedback"
             title={t("feedback")}
-            className="text-text-muted hover:text-text-primary transition-colors hidden sm:block"
+            className="hidden sm:flex w-8 h-8 items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors"
           >
             <MessageIcon size={16} />
           </Link>
@@ -145,7 +145,7 @@ export function Navbar({
               aria-expanded={menuOpen}
               className={`w-8 h-8 flex items-center justify-center rounded-md border transition-colors cursor-pointer ${
                 menuOpen
-                  ? "border-border bg-bg-card text-accent-cyan"
+                  ? "border-border bg-bg-card text-accent-primary"
                   : "border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary"
               }`}
             >
@@ -165,7 +165,7 @@ export function Navbar({
                     onClick={() => switchLocale("en")}
                     className={`flex-1 h-7 rounded text-xs font-medium transition-colors cursor-pointer ${
                       locale === "en"
-                        ? "bg-accent-cyan/15 text-accent-cyan"
+                        ? "bg-accent-primary/15 text-accent-primary"
                         : "text-text-secondary hover:text-text-primary hover:bg-bg-elevated"
                     }`}
                   >
@@ -175,7 +175,7 @@ export function Navbar({
                     onClick={() => switchLocale("pt-BR")}
                     className={`flex-1 h-7 rounded text-xs font-medium transition-colors cursor-pointer ${
                       locale === "pt-BR"
-                        ? "bg-accent-cyan/15 text-accent-cyan"
+                        ? "bg-accent-primary/15 text-accent-primary"
                         : "text-text-secondary hover:text-text-primary hover:bg-bg-elevated"
                     }`}
                   >
