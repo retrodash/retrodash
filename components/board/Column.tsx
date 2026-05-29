@@ -125,33 +125,34 @@ export function BoardColumn({
             return aTime - bTime;
           })
           .map((card) => (
-            <CardItem
-              key={card.id}
-              card={card}
-              roomId={roomId}
-              userId={userId}
-              currentUserName={userName}
-              currentUserPhotoURL={userPhotoURL}
-              isAnonymous={isAnonymous}
-              isFacilitator={isFacilitator}
-              isRetroLive={isRetroLive}
-              isActionItem={column.isActionItems}
-              linkedActionItems={
-                !column.isActionItems && actionItemsColumnId
-                  ? allVisibleCards.filter((c) => c.linkedCardId === card.id)
-                  : undefined
-              }
-              onAddLinkedActionItem={
-                !column.isActionItems && actionItemsColumnId
-                  ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
-                  : undefined
-              }
-              linkedCard={
-                column.isActionItems && card.linkedCardId
-                  ? allVisibleCards.find((c) => c.id === card.linkedCardId)
-                  : undefined
-              }
-            />
+            <div key={card.id} className="animate-[card-in_0.22s_ease-out]">
+              <CardItem
+                card={card}
+                roomId={roomId}
+                userId={userId}
+                currentUserName={userName}
+                currentUserPhotoURL={userPhotoURL}
+                isAnonymous={isAnonymous}
+                isFacilitator={isFacilitator}
+                isRetroLive={isRetroLive}
+                isActionItem={column.isActionItems}
+                linkedActionItems={
+                  !column.isActionItems && actionItemsColumnId
+                    ? allVisibleCards.filter((c) => c.linkedCardId === card.id)
+                    : undefined
+                }
+                onAddLinkedActionItem={
+                  !column.isActionItems && actionItemsColumnId
+                    ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
+                    : undefined
+                }
+                linkedCard={
+                  column.isActionItems && card.linkedCardId
+                    ? allVisibleCards.find((c) => c.id === card.linkedCardId)
+                    : undefined
+                }
+              />
+            </div>
           ))}
       </div>
 
@@ -168,25 +169,26 @@ export function BoardColumn({
               .filter((c) => c.published === false && c.authorId === userId)
               .sort((a, b) => (a.createdAt?.seconds ?? 0) - (b.createdAt?.seconds ?? 0))
               .map((card) => (
-                <CardItem
-                  key={card.id}
-                  card={card}
-                  roomId={roomId}
-                  userId={userId}
-                  currentUserName={userName}
-                  currentUserPhotoURL={userPhotoURL}
-                  isAnonymous={isAnonymous}
-                  isFacilitator={isFacilitator}
-                  isRetroLive={isRetroLive}
-                  isActionItem={column.isActionItems}
-                  linkedActionItems={undefined}
-                  onAddLinkedActionItem={
-                    !column.isActionItems && actionItemsColumnId
-                      ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
-                      : undefined
-                  }
-                  linkedCard={undefined}
-                />
+                <div key={card.id} className="animate-[card-in_0.22s_ease-out]">
+                  <CardItem
+                    card={card}
+                    roomId={roomId}
+                    userId={userId}
+                    currentUserName={userName}
+                    currentUserPhotoURL={userPhotoURL}
+                    isAnonymous={isAnonymous}
+                    isFacilitator={isFacilitator}
+                    isRetroLive={isRetroLive}
+                    isActionItem={column.isActionItems}
+                    linkedActionItems={undefined}
+                    onAddLinkedActionItem={
+                      !column.isActionItems && actionItemsColumnId
+                        ? (text) => handleAddLinkedActionItem(card.id, card.text, text)
+                        : undefined
+                    }
+                    linkedCard={undefined}
+                  />
+                </div>
               ))}
           </div>
         </div>
@@ -194,7 +196,7 @@ export function BoardColumn({
 
       <div className="p-3 border-t border-border shrink-0">
         {isAdding ? (
-          <div className="space-y-2">
+          <div className="space-y-2 animate-[slide-in_0.18s_ease-out]">
             <Textarea
               ref={textareaRef}
               autoFocus
