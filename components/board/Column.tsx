@@ -36,9 +36,19 @@ export function BoardColumn({
   allVisibleCards = [],
 }: ColumnProps) {
   const [isAdding, setIsAdding] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [newText, setNewText] = useState("");
   const [adding, setAdding] = useState(false);
   const [improving, setImproving] = useState(false);
+
+  const startClose = () => setIsClosing(true);
+  const handleCloseAnimationEnd = () => {
+    if (isClosing) {
+      setIsClosing(false);
+      setIsAdding(false);
+      setNewText("");
+    }
+  };
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const t = useTranslations("board");
 
@@ -56,7 +66,7 @@ export function BoardColumn({
     });
     setNewText("");
     setAdding(false);
-    setIsAdding(false);
+    startClose();
   };
 
   const handleAddLinkedActionItem = async (linkedCardId: string, linkedCardText: string, text: string) => {
@@ -91,7 +101,7 @@ export function BoardColumn({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleAddCard(); }
-    if (e.key === "Escape") { setIsAdding(false); setNewText(""); }
+    if (e.key === "Escape") { startClose(); }
   };
 
   const headerAccent = column.isActionItems
@@ -204,8 +214,11 @@ export function BoardColumn({
         </button>
       </div>
 
-      {isAdding && (
-        <div className="absolute inset-x-0 bottom-0 z-10 bg-bg-surface border-t border-border rounded-b-lg p-3 space-y-2 animate-[slide-in_0.18s_ease-out]">
+      {(isAdding || isClosing) && (
+        <div
+          className={`absolute inset-x-0 bottom-0 z-10 bg-bg-surface border-t border-border rounded-b-lg p-3 space-y-2 ${isClosing ? "animate-[slide-out_0.15s_ease-in_forwards]" : "animate-[slide-in_0.18s_ease-out]"}`}
+          onAnimationEnd={handleCloseAnimationEnd}
+        >
           <Textarea
             ref={textareaRef}
             autoFocus
@@ -222,7 +235,7 @@ export function BoardColumn({
             <Button
               size="xs"
               variant="ghost-text"
-              onClick={() => { setIsAdding(false); setNewText(""); }}
+              onClick={startClose}
             >
               {t("cancel")}
             </Button>

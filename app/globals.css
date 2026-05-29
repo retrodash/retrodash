@@ -92,6 +92,11 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes slide-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(6px); }
+}
+
 @keyframes card-in {
   from { opacity: 0; transform: translateY(10px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
