@@ -257,7 +257,7 @@ export function CardItem({
                   className="flex items-center gap-1.5 text-xs text-text-muted"
                 >
                   <span
-                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-primary" : ""}`}
+                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-green-700 dark:text-green-400" : item.actionStatus === "pending" ? "text-orange-600 dark:text-orange-400" : ""}`}
                   >
                     <MiniCheckIcon done={item.actionStatus === "done"} />
                   </span>
@@ -399,10 +399,10 @@ function ActionStatusSegment({
           className={`px-2 h-5 rounded-sm text-[10px] font-medium transition-colors cursor-pointer ${
             status === opt.value
               ? opt.value === "done"
-                ? "bg-accent-primary/20 text-accent-primary"
+                ? "bg-green-600/15 text-green-700 dark:bg-green-500/20 dark:text-green-400"
                 : opt.value === "keep"
                   ? "bg-accent-violet/20 text-accent-violet"
-                  : "bg-bg-elevated text-text-primary"
+                  : "bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
               : "text-text-muted hover:text-text-primary"
           }`}
         >

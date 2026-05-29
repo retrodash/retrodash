@@ -323,10 +323,10 @@ function ActionItemRow({
       <span
         className={`mt-0.5 shrink-0 ${
           status === "done"
-            ? "text-accent-primary"
+            ? "text-green-700 dark:text-green-400"
             : status === "keep"
               ? "text-accent-violet"
-              : "text-text-muted"
+              : "text-orange-600 dark:text-orange-400"
         }`}
       >
         {status === "done" ? (
