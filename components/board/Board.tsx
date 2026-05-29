@@ -46,7 +46,7 @@ export function Board({
   const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, isRetroLive, actionItemsColumnId, allVisibleCards: visibleCards };
 
   return (
-    <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
+    <div className="flex h-full overflow-x-auto scrollbar-thin p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
       {regularCols.map((col) => (
         <div key={col.id} className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
           <BoardColumn

@@ -85,6 +85,8 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 /* ── Keyframes ─────────────────────────────────────────────── */
@@ -149,24 +151,25 @@ body {
 
 /* ── Scrollbar ─────────────────────────────────────────────── */
 
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 999px;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }

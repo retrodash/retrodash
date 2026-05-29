@@ -292,7 +292,7 @@ function BoardSkeleton() {
   return (
     <div className="h-screen bg-bg-base flex flex-col">
       <div className="h-16 bg-bg-surface border-b border-border" />
-      <div className="flex flex-1 gap-3 p-3 overflow-x-auto snap-x snap-mandatory lg:snap-none lg:gap-4 lg:p-4">
+      <div className="flex flex-1 gap-3 p-3 overflow-x-auto scrollbar-thin snap-x snap-mandatory lg:snap-none lg:gap-4 lg:p-4">
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
         <div className="hidden lg:block w-px shrink-0 bg-border" />
