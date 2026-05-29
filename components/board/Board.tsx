@@ -11,6 +11,7 @@ interface BoardProps {
   isAnonymous: boolean;
   isFacilitator: boolean;
   isRetroLive?: boolean;
+  filterAuthorId?: string | null;
 }
 
 export function Board({
@@ -23,6 +24,7 @@ export function Board({
   isAnonymous,
   isFacilitator,
   isRetroLive = true,
+  filterAuthorId,
 }: BoardProps) {
   const regularCols = columns
     .filter((col) => !col.isActionItems)
@@ -30,10 +32,15 @@ export function Board({
 
   const actionCol = columns.find((col) => col.isActionItems);
 
-  // Show published cards to everyone; show own unpublished (draft) cards only to their author
   const visibleCards = cards.filter(
     (c) => c.published !== false || c.authorId === userId,
   );
+
+  const filteredCards = filterAuthorId
+    ? visibleCards.filter(
+        (c) => c.authorId === filterAuthorId || (c.published === false && c.authorId === userId),
+      )
+    : visibleCards;
 
   const actionItemsColumnId = actionCol?.id;
   const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, isRetroLive, actionItemsColumnId, allVisibleCards: visibleCards };
@@ -44,7 +51,7 @@ export function Board({
         <div key={col.id} className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
           <BoardColumn
             column={col}
-            cards={visibleCards.filter((c) => c.columnId === col.id)}
+            cards={filteredCards.filter((c) => c.columnId === col.id)}
             {...colProps}
           />
         </div>
@@ -56,7 +63,7 @@ export function Board({
           <div className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
             <BoardColumn
               column={actionCol}
-              cards={visibleCards.filter((c) => c.columnId === actionCol.id)}
+              cards={filteredCards.filter((c) => c.columnId === actionCol.id)}
               {...colProps}
             />
           </div>
