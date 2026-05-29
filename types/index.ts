@@ -33,6 +33,7 @@ export interface Card {
   published?: boolean;
   linkedCardId?: string;
   linkedCardText?: string;
+  carriedItem?: boolean;
   createdAt: Timestamp;
 }
 
