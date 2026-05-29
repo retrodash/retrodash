@@ -27,7 +27,7 @@ export function RoomCard({ room, href, onDelete }: RoomCardProps) {
 
   return (
     <Link href={href ?? `/room/${room.id}`} className="group block relative">
-      <div className="bg-bg-card border border-border rounded-lg p-6 h-full hover:border-accent-cyan/40 transition-colors">
+      <div className="bg-bg-card border border-border rounded-lg p-6 h-full hover:border-accent-violet/40 dark:hover:border-accent-cyan/40 transition-colors">
         <div className="mb-4 flex items-center justify-between gap-2">
           <StatusBadge status={room.status} />
           {onDelete && (
