@@ -291,6 +291,10 @@ export async function deleteRoom(roomId: string): Promise<void> {
   await batch.commit();
 }
 
+export function allFeedbackQuery() {
+  return query(collection(db, "feedback"), orderBy("createdAt", "desc"));
+}
+
 export async function addFeedback({
   userId,
   userName,
