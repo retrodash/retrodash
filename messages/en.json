@@ -331,7 +331,8 @@
   },
   "navbar": {
     "signOut": "Sign out",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "myAccount": "My account"
   },
   "language": {
     "label": "Language",

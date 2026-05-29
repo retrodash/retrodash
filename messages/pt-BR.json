@@ -331,7 +331,8 @@
   },
   "navbar": {
     "signOut": "Sair",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "myAccount": "Minha conta"
   },
   "language": {
     "label": "Idioma",
