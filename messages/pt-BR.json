@@ -282,6 +282,7 @@
   "room": {
     "startRetro": "Iniciar Retro",
     "endRetro": "Encerrar Retro",
+    "endRetroShort": "Encerrar",
     "ending": "Encerrando…",
     "viewSummary": "Ver Resumo",
     "notFound": "Sala não encontrada.",

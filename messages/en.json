@@ -282,6 +282,7 @@
   "room": {
     "startRetro": "Start Retro",
     "endRetro": "End Retro",
+    "endRetroShort": "End",
     "ending": "Ending…",
     "viewSummary": "View Summary",
     "notFound": "Room not found.",

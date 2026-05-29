@@ -29,7 +29,8 @@ export function EndRetroButton({ loading, onClick }: EndRetroButtonProps) {
         onClick={() => setOpen(true)}
         className="border border-red-500/30 bg-transparent hover:bg-red-500/10"
       >
-        {t("endRetro")}
+        <span className="min-[390px]:hidden">{t("endRetroShort")}</span>
+        <span className="hidden min-[390px]:inline">{t("endRetro")}</span>
       </Button>
 
       {open && (
