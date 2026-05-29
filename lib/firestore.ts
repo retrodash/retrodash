@@ -238,7 +238,10 @@ export async function addCard(
 }
 
 export async function publishCard(roomId: string, cardId: string): Promise<void> {
-  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), { published: true });
+  await updateDoc(doc(db, "rooms", roomId, "cards", cardId), {
+    published: true,
+    publishedAt: serverTimestamp(),
+  });
 }
 
 export async function setActionStatus(
