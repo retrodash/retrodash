@@ -23,6 +23,7 @@ interface CardProps {
   currentUserPhotoURL?: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
+  isRetroLive?: boolean;
   isActionItem?: boolean;
   linkedActionItems?: Card[];
   onAddLinkedActionItem?: (text: string) => Promise<void>;
@@ -37,6 +38,7 @@ export function CardItem({
   currentUserPhotoURL,
   isAnonymous,
   isFacilitator,
+  isRetroLive = true,
   isActionItem = false,
   linkedActionItems,
   onAddLinkedActionItem,
@@ -69,8 +71,11 @@ export function CardItem({
 
   const handlePublish = async () => {
     setPublishing(true);
-    await publishCard(roomId, card.id);
-    setPublishing(false);
+    try {
+      await publishCard(roomId, card.id);
+    } finally {
+      setPublishing(false);
+    }
   };
 
   const handleSaveEdit = async () => {
@@ -80,9 +85,12 @@ export function CardItem({
       return;
     }
     setSaving(true);
-    await updateCard(roomId, card.id, trimmed);
-    setSaving(false);
-    setIsEditing(false);
+    try {
+      await updateCard(roomId, card.id, trimmed);
+      setIsEditing(false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -333,8 +341,8 @@ export function CardItem({
               </span>
               <button
                 onClick={handlePublish}
-                disabled={publishing}
-                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
+                disabled={publishing || !isRetroLive}
+                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {publishing ? t("publishing") : t("publish")}
               </button>
