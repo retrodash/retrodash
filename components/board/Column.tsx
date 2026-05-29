@@ -99,7 +99,7 @@ export function BoardColumn({
     : "var(--color-text-muted)";
 
   return (
-    <div className="w-full h-full flex flex-col bg-bg-surface rounded-lg border border-border">
+    <div className="relative w-full h-full flex flex-col bg-bg-surface rounded-lg border border-border">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <div className="flex items-center gap-2">
           {column.isActionItems && (
@@ -195,52 +195,52 @@ export function BoardColumn({
       )}
 
       <div className="p-3 border-t border-border shrink-0">
-        {isAdding ? (
-          <div className="space-y-2 animate-[slide-in_0.18s_ease-out]">
-            <Textarea
-              ref={textareaRef}
-              autoFocus
-              value={newText}
-              onChange={(e) => setNewText(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder={column.isActionItems ? t("actionItemPlaceholder") : t("cardPlaceholder")}
-              rows={3}
-            />
-            <div className="flex items-center gap-2">
-              <Button size="xs" onClick={handleAddCard} disabled={adding || !newText.trim()}>
-                {t("add")}
-              </Button>
-              <Button
-                size="xs"
-                variant="ghost-text"
-                onClick={() => { setIsAdding(false); setNewText(""); }}
-              >
-                {t("cancel")}
-              </Button>
-              {newText.trim() && (
-                <button
-                  type="button"
-                  onClick={handleImprove}
-                  disabled={improving}
-                  className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
-                  title={t("improveWithAI")}
-                >
-                  {improving ? <MiniSpinner /> : <SparkleIcon />}
-                  {improving ? t("improving") : t("improveWithAI")}
-                </button>
-              )}
-            </div>
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsAdding(true)}
-            className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated text-sm transition-colors cursor-pointer"
-          >
-            <SmallPlusIcon />
-            {column.isActionItems ? t("addActionItem") : t("addCard")}
-          </button>
-        )}
+        <button
+          onClick={() => setIsAdding(true)}
+          className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-text-muted hover:text-text-primary hover:bg-bg-elevated text-sm transition-colors cursor-pointer"
+        >
+          <SmallPlusIcon />
+          {column.isActionItems ? t("addActionItem") : t("addCard")}
+        </button>
       </div>
+
+      {isAdding && (
+        <div className="absolute inset-x-0 bottom-0 z-10 bg-bg-surface border-t border-border rounded-b-lg p-3 space-y-2 animate-[slide-in_0.18s_ease-out]">
+          <Textarea
+            ref={textareaRef}
+            autoFocus
+            value={newText}
+            onChange={(e) => setNewText(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={column.isActionItems ? t("actionItemPlaceholder") : t("cardPlaceholder")}
+            rows={3}
+          />
+          <div className="flex items-center gap-2">
+            <Button size="xs" onClick={handleAddCard} disabled={adding || !newText.trim()}>
+              {t("add")}
+            </Button>
+            <Button
+              size="xs"
+              variant="ghost-text"
+              onClick={() => { setIsAdding(false); setNewText(""); }}
+            >
+              {t("cancel")}
+            </Button>
+            {newText.trim() && (
+              <button
+                type="button"
+                onClick={handleImprove}
+                disabled={improving}
+                className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
+                title={t("improveWithAI")}
+              >
+                {improving ? <MiniSpinner /> : <SparkleIcon />}
+                {improving ? t("improving") : t("improveWithAI")}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
