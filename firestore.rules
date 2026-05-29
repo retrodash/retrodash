@@ -76,15 +76,17 @@ service cloud.firestore {
         request.resource.data.authorId == request.auth.uid &&
         request.resource.data.votes == 0 &&
         request.resource.data.votedBy == [] &&
-        request.resource.data.published == false &&
+        (
+          request.resource.data.published == false ||
+          (isFacilitatorAfter(roomId) && request.resource.data.published == true)
+        ) &&
         request.resource.data.text is string &&
         request.resource.data.text.size() > 0 &&
         request.resource.data.text.size() <= 2000;
 
       allow update: if isParticipant(roomId) && (
-        // Author edits own unpublished card text
+        // Author edits own card text (published or draft)
         (resource.data.authorId == request.auth.uid &&
-         !resource.data.published &&
          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text']) &&
          request.resource.data.text is string &&
          request.resource.data.text.size() > 0 &&
