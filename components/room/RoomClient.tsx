@@ -196,6 +196,7 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           userPhotoURL={userPhotoURL}
           isAnonymous={room.isAnonymous}
           isFacilitator={isFacilitator}
+          isRetroLive={room.status === "active"}
         />
       </div>
 

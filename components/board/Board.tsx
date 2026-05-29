@@ -10,6 +10,7 @@ interface BoardProps {
   userPhotoURL: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
+  isRetroLive?: boolean;
 }
 
 export function Board({
@@ -21,6 +22,7 @@ export function Board({
   userPhotoURL,
   isAnonymous,
   isFacilitator,
+  isRetroLive = true,
 }: BoardProps) {
   const regularCols = columns
     .filter((col) => !col.isActionItems)
@@ -34,7 +36,7 @@ export function Board({
   );
 
   const actionItemsColumnId = actionCol?.id;
-  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, actionItemsColumnId, allVisibleCards: visibleCards };
+  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, isRetroLive, actionItemsColumnId, allVisibleCards: visibleCards };
 
   return (
     <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">

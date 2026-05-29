@@ -12,7 +12,10 @@ import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
 import { useParticipants } from "@/hooks/useParticipants";
 import { getParticipant, joinRoom } from "@/lib/firestore";
-import { calculateRetroScoreboard, saveRetroScoreboard } from "@/lib/scoreboard";
+import {
+  calculateRetroScoreboard,
+  saveRetroScoreboard,
+} from "@/lib/scoreboard";
 import { ScoreboardSection } from "@/components/room/ScoreboardSection";
 import { Navbar } from "@/components/ui/Navbar";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -55,7 +58,12 @@ export function SummaryClient({ roomId }: { roomId: string }) {
       }
 
       if (room.isPublic) {
-        await joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null);
+        await joinRoom(
+          roomId,
+          user.uid,
+          user.displayName ?? "Member",
+          user.photoURL ?? null,
+        );
         setGate("ready");
         return;
       }
@@ -80,20 +88,27 @@ function SummaryContent({ roomId }: { roomId: string }) {
   const actionItemsCol = columns.find((c) => c.isActionItems);
   const regularCols = columns.filter((c) => !c.isActionItems);
   const publishedCards = cards.filter((c) => c.published !== false);
-  const scoreboard = calculateRetroScoreboard(publishedCards, actionItemsCol?.id, participants);
+  const scoreboard = calculateRetroScoreboard(
+    publishedCards,
+    actionItemsCol?.id,
+    participants,
+  );
 
   useEffect(() => {
     if (!room || participants.length === 0) return;
     saveRetroScoreboard(roomId, scoreboard);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId]);
 
   if (loading) return <SummarySkeleton />;
   if (!room) return null;
 
   const actionCards = sortByVotes(
-    actionItemsCol ? publishedCards.filter((c) => c.columnId === actionItemsCol.id) : [],
+    actionItemsCol
+      ? publishedCards.filter((c) => c.columnId === actionItemsCol.id)
+      : [],
   );
+  const newActionCards = actionCards.filter((c) => !c.carriedItem);
 
   const dateLocale = locale === "pt-BR" ? "pt-BR" : "en-US";
   const endedDate = room.createdAt
@@ -107,7 +122,9 @@ function SummaryContent({ roomId }: { roomId: string }) {
   return (
     <div className="min-h-screen bg-bg-base flex flex-col">
       <Navbar logoHref="/dashboard">
-        <span className="text-text-primary font-semibold text-sm truncate">{room.name}</span>
+        <span className="text-text-primary font-semibold text-sm truncate">
+          {room.name}
+        </span>
         <span className="inline-flex text-[11px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm shrink-0 text-text-muted bg-bg-elevated">
           {t("ended")}
         </span>
@@ -123,7 +140,9 @@ function SummaryContent({ roomId }: { roomId: string }) {
               <ArrowLeftIcon size={12} />
               {t("myRooms")}
             </Link>
-            <h1 className="text-3xl font-bold text-text-primary tracking-tight">{room.name}</h1>
+            <h1 className="text-3xl font-bold text-text-primary tracking-tight">
+              {room.name}
+            </h1>
             {room.description && (
               <p className="text-text-primary text-base italic mt-2">
                 &ldquo;{room.description}&rdquo;
@@ -155,7 +174,10 @@ function SummaryContent({ roomId }: { roomId: string }) {
             />
             <div className="mt-4 flex flex-wrap gap-3">
               {participants.map((p) => (
-                <div key={p.id} className="flex items-center gap-2 bg-bg-card border border-border rounded-full pl-1 pr-3 py-1">
+                <div
+                  key={p.id}
+                  className="flex items-center gap-2 bg-bg-card border border-border rounded-full pl-1 pr-3 py-1"
+                >
                   {p.photoURL ? (
                     <Image
                       src={p.photoURL}
@@ -169,7 +191,9 @@ function SummaryContent({ roomId }: { roomId: string }) {
                       {(p.displayName ?? "?")[0].toUpperCase()}
                     </div>
                   )}
-                  <span className="text-sm text-text-primary">{p.displayName}</span>
+                  <span className="text-sm text-text-primary">
+                    {p.displayName}
+                  </span>
                   {p.role === "facilitator" && (
                     <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan">
                       {t("host")}
@@ -181,22 +205,32 @@ function SummaryContent({ roomId }: { roomId: string }) {
           </section>
         )}
 
-        <ScoreboardSection entries={scoreboard} isAnonymous={room.isAnonymous} />
+        <ScoreboardSection
+          entries={scoreboard}
+          isAnonymous={room.isAnonymous}
+        />
 
         <section>
           <SectionHeader
             icon={<CheckCircleIcon />}
             title={t("actionItems")}
-            count={actionCards.length}
+            count={newActionCards.length}
             accent
           />
 
           {actionCards.length === 0 ? (
-            <p className="text-text-muted text-sm mt-4 pl-1">{t("noActionItems")}</p>
+            <p className="text-text-muted text-sm mt-4 pl-1">
+              {t("noActionItems")}
+            </p>
           ) : (
             <div className="mt-4 bg-bg-card border border-border rounded-lg divide-y divide-border overflow-hidden">
               {actionCards.map((card) => (
-                <ActionItemRow key={card.id} card={card} isAnonymous={room.isAnonymous} allCards={publishedCards} />
+                <ActionItemRow
+                  key={card.id}
+                  card={card}
+                  isAnonymous={room.isAnonymous}
+                  allCards={publishedCards}
+                />
               ))}
             </div>
           )}
@@ -207,7 +241,11 @@ function SummaryContent({ roomId }: { roomId: string }) {
             <SectionHeader
               icon={<BoardIcon />}
               title={t("retroRecap")}
-              count={publishedCards.filter((c) => !actionCards.includes(c)).length}
+              count={
+                publishedCards.filter(
+                  (c) => !actionCards.includes(c) && !c.carriedItem,
+                ).length
+              }
             />
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -215,7 +253,9 @@ function SummaryContent({ roomId }: { roomId: string }) {
                 <ColumnSummary
                   key={col.id}
                   column={col}
-                  cards={sortByVotes(publishedCards.filter((c) => c.columnId === col.id))}
+                  cards={sortByVotes(
+                    publishedCards.filter((c) => c.columnId === col.id),
+                  )}
                   isAnonymous={room.isAnonymous}
                 />
               ))}
@@ -244,7 +284,9 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-      <span className={accent ? "text-accent-cyan" : "text-text-muted"}>{icon}</span>
+      <span className={accent ? "text-accent-cyan" : "text-text-muted"}>
+        {icon}
+      </span>
       <h2 className="text-text-primary font-semibold text-lg">{title}</h2>
       <span className="text-xs text-text-muted bg-bg-elevated px-2 py-0.5 rounded-full ml-0.5">
         {count}
@@ -253,17 +295,31 @@ function SectionHeader({
   );
 }
 
-function ActionItemRow({ card, isAnonymous, allCards }: { card: Card; isAnonymous: boolean; allCards: Card[] }) {
+function ActionItemRow({
+  card,
+  isAnonymous,
+  allCards,
+}: {
+  card: Card;
+  isAnonymous: boolean;
+  allCards: Card[];
+}) {
   const t = useTranslations("summary");
   const status: "pending" | "done" | "keep" =
     card.actionStatus ?? (card.done ? "done" : "pending");
 
   const sourceCardText = card.linkedCardId
-    ? (allCards.find((c) => c.id === card.linkedCardId)?.text ?? card.linkedCardText)
+    ? (allCards.find((c) => c.id === card.linkedCardId)?.text ??
+      card.linkedCardText)
     : card.linkedCardText;
 
   return (
-    <div className="flex items-start gap-3 px-5 py-4">
+    <div className="relative flex items-start gap-3 px-5 py-4">
+      {card.carriedItem && (
+        <span className="absolute top-4 right-4 px-1.5 py-px text-[9px] font-semibold uppercase tracking-wider text-text-muted bg-bg-elevated border border-border/60 rounded">
+          {t("carriedOver")}
+        </span>
+      )}
       <span
         className={`mt-0.5 shrink-0 ${
           status === "done"
@@ -273,7 +329,13 @@ function ActionItemRow({ card, isAnonymous, allCards }: { card: Card; isAnonymou
               : "text-text-muted"
         }`}
       >
-        {status === "done" ? <CheckIcon /> : status === "keep" ? <LoopIcon /> : <CircleIcon />}
+        {status === "done" ? (
+          <CheckIcon />
+        ) : status === "keep" ? (
+          <LoopIcon />
+        ) : (
+          <CircleIcon />
+        )}
       </span>
       <div className="flex-1 min-w-0">
         {sourceCardText && (
@@ -301,15 +363,20 @@ function ActionItemRow({ card, isAnonymous, allCards }: { card: Card; isAnonymou
           <div className="flex items-center gap-1.5 mt-1.5">
             {card.authorName ? (
               <>
-                <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
-                <span className="text-text-muted text-xs">{card.authorName}</span>
+                <Avatar
+                  photoURL={card.authorPhotoURL}
+                  name={card.authorName}
+                  size={24}
+                />
+                <span className="text-text-muted text-xs">
+                  {card.authorName}
+                </span>
               </>
             ) : (
               <AnonymousChip label={t("anonymous")} />
             )}
           </div>
         )}
-
       </div>
       {card.votes > 0 && (
         <span className="shrink-0 flex items-center gap-1 text-xs text-text-muted">
@@ -334,7 +401,9 @@ function ColumnSummary({
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-text-primary font-semibold text-sm">{column.title}</h3>
+        <h3 className="text-text-primary font-semibold text-sm">
+          {column.title}
+        </h3>
         <span className="text-xs text-text-muted bg-bg-elevated px-2 py-0.5 rounded-full">
           {cards.length}
         </span>
@@ -353,7 +422,13 @@ function ColumnSummary({
   );
 }
 
-function SummaryCard({ card, isAnonymous }: { card: Card; isAnonymous: boolean }) {
+function SummaryCard({
+  card,
+  isAnonymous,
+}: {
+  card: Card;
+  isAnonymous: boolean;
+}) {
   const t = useTranslations("summary");
   return (
     <div className="bg-bg-card border border-border rounded-md px-4 py-3">
@@ -364,7 +439,11 @@ function SummaryCard({ card, isAnonymous }: { card: Card; isAnonymous: boolean }
         {!isAnonymous ? (
           card.authorName ? (
             <div className="flex items-center gap-1.5">
-              <Avatar photoURL={card.authorPhotoURL} name={card.authorName} size={24} />
+              <Avatar
+                photoURL={card.authorPhotoURL}
+                name={card.authorName}
+                size={24}
+              />
               <span className="text-text-muted text-xs">{card.authorName}</span>
             </div>
           ) : (
@@ -411,9 +490,31 @@ function SummarySkeleton() {
 function BoardIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden>
-      <rect x="1.5" y="2.5" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.3" />
-      <line x1="1.5" y1="7" x2="15.5" y2="7" stroke="currentColor" strokeWidth="1.3" />
-      <line x1="7" y1="7" x2="7" y2="14.5" stroke="currentColor" strokeWidth="1.3" />
+      <rect
+        x="1.5"
+        y="2.5"
+        width="14"
+        height="12"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="1.5"
+        y1="7"
+        x2="15.5"
+        y2="7"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
+      <line
+        x1="7"
+        y1="7"
+        x2="7"
+        y2="14.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
     </svg>
   );
 }
@@ -431,7 +532,17 @@ function AnonymousChip({ label }: { label: string }) {
 
 function MaskIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
       <path d="M8 14s1.5 2 4 2 4-2 4-2" />
       <line x1="9" y1="9" x2="9.01" y2="9" strokeWidth="2.5" />

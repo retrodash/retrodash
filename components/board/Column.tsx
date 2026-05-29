@@ -17,6 +17,7 @@ interface ColumnProps {
   userPhotoURL: string | null;
   isAnonymous: boolean;
   isFacilitator: boolean;
+  isRetroLive?: boolean;
   actionItemsColumnId?: string;
   allVisibleCards?: Card[];
 }
@@ -30,6 +31,7 @@ export function BoardColumn({
   userPhotoURL,
   isAnonymous,
   isFacilitator,
+  isRetroLive = true,
   actionItemsColumnId,
   allVisibleCards = [],
 }: ColumnProps) {
@@ -125,6 +127,7 @@ export function BoardColumn({
             currentUserPhotoURL={userPhotoURL}
             isAnonymous={isAnonymous}
             isFacilitator={isFacilitator}
+            isRetroLive={isRetroLive}
             isActionItem={column.isActionItems}
             linkedActionItems={
               !column.isActionItems && actionItemsColumnId
