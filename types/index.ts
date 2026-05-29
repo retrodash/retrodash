@@ -35,6 +35,7 @@ export interface Card {
   linkedCardText?: string;
   carriedItem?: boolean;
   createdAt: Timestamp;
+  publishedAt?: Timestamp;
 }
 
 export interface Participant {
