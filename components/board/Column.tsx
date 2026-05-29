@@ -117,7 +117,17 @@ export function BoardColumn({
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
-        {cards.map((card) => (
+        {[...cards]
+          .sort((a, b) => {
+            const aIsDraft = a.published === false && a.authorId === userId;
+            const bIsDraft = b.published === false && b.authorId === userId;
+            if (aIsDraft && !bIsDraft) return -1;
+            if (!aIsDraft && bIsDraft) return 1;
+            const aTime = (a.publishedAt ?? a.createdAt)?.seconds ?? 0;
+            const bTime = (b.publishedAt ?? b.createdAt)?.seconds ?? 0;
+            return aTime - bTime;
+          })
+          .map((card) => (
           <CardItem
             key={card.id}
             card={card}
