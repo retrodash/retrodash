@@ -36,7 +36,9 @@ interface RoomClientProps {
 export function RoomClient({ roomId }: RoomClientProps) {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [gate, setGate] = useState<"checking" | "ready" | "needs-password">("checking");
+  const [gate, setGate] = useState<"checking" | "ready" | "needs-password">(
+    "checking",
+  );
   const [roomData, setRoomData] = useState<Room | null>(null);
 
   useEffect(() => {
@@ -57,7 +59,12 @@ export function RoomClient({ roomId }: RoomClientProps) {
       }
 
       if (room.isPublic) {
-        await joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null);
+        await joinRoom(
+          roomId,
+          user.uid,
+          user.displayName ?? "Member",
+          user.photoURL ?? null,
+        );
         setGate("ready");
         return;
       }
@@ -198,7 +205,9 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           </>
         }
       >
-        <h1 className="text-text-primary font-semibold text-sm truncate">{room.name}</h1>
+        <h1 className="text-text-primary font-semibold text-sm truncate">
+          {room.name}
+        </h1>
         <StatusBadge status={room.status} />
       </Navbar>
 
@@ -247,10 +256,16 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
                       : "border-border text-text-secondary hover:text-text-primary hover:border-text-muted"
                   }`}
                 >
-                  <Avatar photoURL={p.photoURL} name={p.displayName} size={24} />
+                  <Avatar
+                    photoURL={p.photoURL}
+                    name={p.displayName}
+                    size={24}
+                  />
                   <span className="max-w-40 truncate">{p.displayName}</span>
                   {p.id === userId && (
-                    <span className="text-[11px] text-text-muted">({t("you")})</span>
+                    <span className="text-[11px] text-text-muted">
+                      ({t("you")})
+                    </span>
                   )}
                 </button>
               );
@@ -258,7 +273,10 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           </div>
           {filterAuthorId !== null && (
             <button
-              onClick={() => { setFilterAuthorId(null); setFilterOpen(false); }}
+              onClick={() => {
+                setFilterAuthorId(null);
+                setFilterOpen(false);
+              }}
               className="mt-4 w-full text-sm text-text-muted hover:text-text-primary transition-colors cursor-pointer"
             >
               {t("clearFilter")}
@@ -281,9 +299,27 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
 
 function FilterIcon({ active }: { active: boolean }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-      {active && <circle cx="19" cy="19" r="5" fill="var(--color-accent-primary)" stroke="none" />}
+      {active && (
+        <circle
+          cx="19"
+          cy="19"
+          r="5"
+          fill="var(--color-accent-primary)"
+          stroke="none"
+        />
+      )}
     </svg>
   );
 }
@@ -295,7 +331,6 @@ function BoardSkeleton() {
       <div className="flex flex-1 gap-3 p-3 overflow-x-auto scrollbar-thin snap-x snap-mandatory lg:snap-none lg:gap-4 lg:p-4">
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
-        <div className="hidden lg:block w-px shrink-0 bg-border" />
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
       </div>
     </div>
