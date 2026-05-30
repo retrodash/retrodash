@@ -2,8 +2,10 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Card, Participant, ScoreboardEntry } from "@/types";
 
+export const PARTICIPATION_POINTS = 1;
 export const CARD_POINTS = 1;
 export const ACTION_ITEM_POINTS = 0.5;
+export const VOTE_POINTS = 0.25;
 
 export function calculateRetroScoreboard(
   cards: Card[],
@@ -16,13 +18,15 @@ export function calculateRetroScoreboard(
     const mine = published.filter((c) => c.authorId === p.id);
     const cardsCount = mine.filter((c) => c.columnId !== actionItemsColumnId).length;
     const actionItemsCount = mine.filter((c) => c.columnId === actionItemsColumnId).length;
-    const totalPoints = cardsCount * CARD_POINTS + actionItemsCount * ACTION_ITEM_POINTS;
+    const votesReceived = mine.reduce((sum, c) => sum + (c.votedBy?.length ?? 0), 0);
+    const totalPoints = PARTICIPATION_POINTS + cardsCount * CARD_POINTS + actionItemsCount * ACTION_ITEM_POINTS + votesReceived * VOTE_POINTS;
     return {
       userId: p.id,
       userName: p.displayName,
       userPhotoURL: p.photoURL,
       cardsCount,
       actionItemsCount,
+      votesReceived,
       totalPoints,
       position: 0,
     };
