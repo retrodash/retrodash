@@ -268,7 +268,7 @@ function SummaryContent({ roomId }: { roomId: string }) {
 }
 
 function sortByVotes(cards: Card[]): Card[] {
-  return [...cards].sort((a, b) => b.votes - a.votes);
+  return [...cards].sort((a, b) => b.votedBy.length - a.votedBy.length);
 }
 
 function SectionHeader({
@@ -378,10 +378,10 @@ function ActionItemRow({
           </div>
         )}
       </div>
-      {card.votes > 0 && (
+      {card.votedBy.length > 0 && (
         <span className="shrink-0 flex items-center gap-1 text-xs text-text-muted">
           <ThumbUpIcon />
-          {card.votes}
+          {card.votedBy.length}
         </span>
       )}
     </div>
@@ -452,10 +452,10 @@ function SummaryCard({
         ) : (
           <span />
         )}
-        {card.votes > 0 && (
+        {card.votedBy.length > 0 && (
           <span className="flex items-center gap-1 text-xs text-text-muted">
             <ThumbUpIcon />
-            {card.votes}
+            {card.votedBy.length}
           </span>
         )}
       </div>

@@ -368,7 +368,7 @@ export function CardItem({
                 className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors ${voteClass}`}
               >
                 <ThumbUpIcon filled={hasVoted} />
-                {card.votes > 0 && <span>{card.votes}</span>}
+                {card.votedBy.length > 0 && <span>{card.votedBy.length}</span>}
               </button>
             </div>
           ) : (
