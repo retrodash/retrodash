@@ -424,6 +424,7 @@
     "removeVote": "Remover voto",
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
+    "undoImprove": "Desfazer",
     "improving": "Melhorando…",
     "improveWithAIHint": "Envia o texto deste card ao Google Gemini.",
     "improveWithAIHintLink": "Saiba mais.",

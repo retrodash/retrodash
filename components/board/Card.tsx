@@ -54,6 +54,7 @@ export function CardItem({
   const [linkedItemText, setLinkedItemText] = useState("");
   const [addingLinkedItem, setAddingLinkedItem] = useState(false);
   const [linkedCardOpen, setLinkedCardOpen] = useState(false);
+  const [previousEditText, setPreviousEditText] = useState<string | null>(null);
   const t = useTranslations("board");
 
   const MAX_CHARS = 320;
@@ -101,6 +102,7 @@ export function CardItem({
 
   const handleCancelEdit = () => {
     setEditText(card.text);
+    setPreviousEditText(null);
     setIsEditing(false);
   };
 
@@ -134,10 +136,19 @@ export function CardItem({
         }),
       });
       const data = await res.json();
-      if (data.improved) setEditText(data.improved);
+      if (data.improved) {
+        setPreviousEditText(editText);
+        setEditText(data.improved);
+      }
     } finally {
       setImproving(false);
     }
+  };
+
+  const handleUndoImprove = () => {
+    if (previousEditText === null) return;
+    setEditText(previousEditText);
+    setPreviousEditText(null);
   };
 
   return (
@@ -208,6 +219,17 @@ export function CardItem({
               <span className={`text-[10px] tabular-nums ${editOverLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
                 {editText.length}/{MAX_CHARS}
               </span>
+              {previousEditText !== null && (
+                <button
+                  type="button"
+                  onClick={handleUndoImprove}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors cursor-pointer"
+                  title={t("undoImprove")}
+                >
+                  <UndoIcon />
+                  {t("undoImprove")}
+                </button>
+              )}
               {editText.trim() && (
                 <button
                   type="button"
@@ -515,6 +537,15 @@ function SparkleIcon() {
       aria-hidden
     >
       <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" />
+    </svg>
+  );
+}
+
+function UndoIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 7v6h6" />
+      <path d="M3 13C5 7 11 3 18 5a9 9 0 0 1 3 14" />
     </svg>
   );
 }

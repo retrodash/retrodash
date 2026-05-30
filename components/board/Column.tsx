@@ -40,6 +40,7 @@ export function BoardColumn({
   const [newText, setNewText] = useState("");
   const [adding, setAdding] = useState(false);
   const [improving, setImproving] = useState(false);
+  const [previousText, setPreviousText] = useState<string | null>(null);
 
   const startClose = () => setIsClosing(true);
   const handleCloseAnimationEnd = () => {
@@ -47,6 +48,7 @@ export function BoardColumn({
       setIsClosing(false);
       setIsAdding(false);
       setNewText("");
+      setPreviousText(null);
     }
   };
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -96,10 +98,19 @@ export function BoardColumn({
         body: JSON.stringify({ text: newText, type: column.isActionItems ? "action" : "card" }),
       });
       const data = await res.json();
-      if (data.improved) setNewText(data.improved);
+      if (data.improved) {
+        setPreviousText(newText);
+        setNewText(data.improved);
+      }
     } finally {
       setImproving(false);
     }
+  };
+
+  const handleUndoImprove = () => {
+    if (previousText === null) return;
+    setNewText(previousText);
+    setPreviousText(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -242,6 +253,17 @@ export function BoardColumn({
               <span className={`text-[10px] tabular-nums ${overLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
                 {newText.length}/{MAX_CHARS}
               </span>
+              {previousText !== null && (
+                <button
+                  type="button"
+                  onClick={handleUndoImprove}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors cursor-pointer"
+                  title={t("undoImprove")}
+                >
+                  <UndoIcon />
+                  {t("undoImprove")}
+                </button>
+              )}
               {newText.trim() && (
                 <button
                   type="button"
@@ -259,6 +281,15 @@ export function BoardColumn({
         </div>
       )}
     </div>
+  );
+}
+
+function UndoIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 7v6h6" />
+      <path d="M3 13C5 7 11 3 18 5a9 9 0 0 1 3 14" />
+    </svg>
   );
 }
 
