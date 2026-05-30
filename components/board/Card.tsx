@@ -56,6 +56,10 @@ export function CardItem({
   const [linkedCardOpen, setLinkedCardOpen] = useState(false);
   const t = useTranslations("board");
 
+  const MAX_CHARS = 320;
+  const editOverLimit = editText.length > MAX_CHARS;
+  const linkedOverLimit = linkedItemText.length > MAX_CHARS;
+
   const isOwnCard = card.authorId === userId;
   const isDraft = card.published === false;
   const hasVoted = card.votedBy.includes(userId);
@@ -193,24 +197,29 @@ export function CardItem({
               size="xs"
               variant="cyan"
               onClick={handleSaveEdit}
-              disabled={saving || !editText.trim()}
+              disabled={saving || !editText.trim() || editOverLimit}
             >
               {t("save")}
             </Button>
             <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
               {t("cancel")}
             </Button>
-            {editText.trim() && (
-              <button
-                type="button"
-                onClick={handleImprove}
-                disabled={improving}
-                className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
-              >
-                {improving ? <MiniSpinner /> : <SparkleIcon />}
-                {improving ? t("improving") : t("improveWithAI")}
-              </button>
-            )}
+            <div className="ml-auto flex items-center gap-2">
+              <span className={`text-[10px] tabular-nums ${editOverLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
+                {editText.length}/{MAX_CHARS}
+              </span>
+              {editText.trim() && (
+                <button
+                  type="button"
+                  onClick={handleImprove}
+                  disabled={improving}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  {improving ? <MiniSpinner /> : <SparkleIcon />}
+                  {improving ? t("improving") : t("improveWithAI")}
+                </button>
+              )}
+            </div>
           </div>
           {editText.trim() && (
             <p className="text-[10px] text-text-muted text-right leading-tight mt-1">
@@ -300,10 +309,10 @@ export function CardItem({
                     placeholder={t("actionItemPlaceholder")}
                     className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary"
                   />
-                  <div className="flex gap-1.5">
+                  <div className="flex items-center gap-1.5">
                     <button
                       onClick={handleAddLinkedItem}
-                      disabled={addingLinkedItem || !linkedItemText.trim()}
+                      disabled={addingLinkedItem || !linkedItemText.trim() || linkedOverLimit}
                       className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {t("add")}
@@ -317,6 +326,9 @@ export function CardItem({
                     >
                       {t("cancel")}
                     </button>
+                    <span className={`ml-auto text-[10px] tabular-nums ${linkedOverLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
+                      {linkedItemText.length}/{MAX_CHARS}
+                    </span>
                   </div>
                 </div>
               ) : (
@@ -353,7 +365,7 @@ export function CardItem({
               </span>
               <button
                 onClick={handlePublish}
-                disabled={publishing || !isRetroLive}
+                disabled={publishing || !isRetroLive || card.text.length > MAX_CHARS}
                 className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {publishing ? t("publishing") : t("publish")}

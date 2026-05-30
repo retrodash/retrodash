@@ -52,9 +52,12 @@ export function BoardColumn({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const t = useTranslations("board");
 
+  const MAX_CHARS = 320;
+  const overLimit = newText.length > MAX_CHARS;
+
   const handleAddCard = async () => {
     const text = newText.trim();
-    if (!text) return;
+    if (!text || overLimit) return;
     setAdding(true);
     await addCard(roomId, {
       columnId: column.id,
@@ -100,7 +103,7 @@ export function BoardColumn({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleAddCard(); }
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (!overLimit) handleAddCard(); }
     if (e.key === "Escape") { startClose(); }
   };
 
@@ -229,28 +232,29 @@ export function BoardColumn({
             rows={3}
           />
           <div className="flex items-center gap-2">
-            <Button size="xs" onClick={handleAddCard} disabled={adding || !newText.trim()}>
+            <Button size="xs" onClick={handleAddCard} disabled={adding || !newText.trim() || overLimit}>
               {t("add")}
             </Button>
-            <Button
-              size="xs"
-              variant="ghost-text"
-              onClick={startClose}
-            >
+            <Button size="xs" variant="ghost-text" onClick={startClose}>
               {t("cancel")}
             </Button>
-            {newText.trim() && (
-              <button
-                type="button"
-                onClick={handleImprove}
-                disabled={improving}
-                className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
-                title={t("improveWithAI")}
-              >
-                {improving ? <MiniSpinner /> : <SparkleIcon />}
-                {improving ? t("improving") : t("improveWithAI")}
-              </button>
-            )}
+            <div className="ml-auto flex items-center gap-2">
+              <span className={`text-[10px] tabular-nums ${overLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
+                {newText.length}/{MAX_CHARS}
+              </span>
+              {newText.trim() && (
+                <button
+                  type="button"
+                  onClick={handleImprove}
+                  disabled={improving}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
+                  title={t("improveWithAI")}
+                >
+                  {improving ? <MiniSpinner /> : <SparkleIcon />}
+                  {improving ? t("improving") : t("improveWithAI")}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
