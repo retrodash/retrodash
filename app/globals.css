@@ -83,6 +83,8 @@ body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   line-height: 1.65;
+  letter-spacing: 0.010em !important;
+  word-spacing: 0.018em !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scrollbar-width: thin;
