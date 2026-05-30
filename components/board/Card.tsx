@@ -13,6 +13,7 @@ import {
 } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
+import { Modal } from "@/components/ui/Modal";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -52,6 +53,7 @@ export function CardItem({
   const [isAddingLinkedItem, setIsAddingLinkedItem] = useState(false);
   const [linkedItemText, setLinkedItemText] = useState("");
   const [addingLinkedItem, setAddingLinkedItem] = useState(false);
+  const [linkedCardOpen, setLinkedCardOpen] = useState(false);
   const t = useTranslations("board");
 
   const isOwnCard = card.authorId === userId;
@@ -225,12 +227,22 @@ export function CardItem({
       ) : isActionItem ? (
         <div className="pr-14">
           {(linkedCard ?? card.linkedCardText) && (
-            <div className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted">
+            <button
+              onClick={() => setLinkedCardOpen(true)}
+              className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted hover:text-text-secondary transition-colors cursor-pointer max-w-full"
+            >
               <LinkIcon />
               <span className="truncate italic">
                 {linkedCard?.text ?? card.linkedCardText}
               </span>
-            </div>
+            </button>
+          )}
+          {linkedCardOpen && (
+            <Modal title={t("linkedCard")} onClose={() => setLinkedCardOpen(false)} size="sm">
+              <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-wrap">
+                {linkedCard?.text ?? card.linkedCardText}
+              </p>
+            </Modal>
           )}
           <p
             className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word transition-colors ${
