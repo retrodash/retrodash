@@ -339,7 +339,7 @@ function ActionItemRow({
       </span>
       <div className="flex-1 min-w-0">
         {sourceCardText && (
-          <p className="text-[11px] text-text-muted italic mb-1 truncate">
+          <p className="text-[11px] text-text-muted italic mb-1">
             {t("fromCard")} {sourceCardText}
           </p>
         )}
