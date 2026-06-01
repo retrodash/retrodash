@@ -1,3 +1,9 @@
+## [1.6.0](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.2...v1.6.0) (2026-06-01)
+
+### Features
+
+* board and room UX overhaul ([#30](https://github.com/Igor-Ponticelli/retrodash/issues/30)) ([80916cd](https://github.com/Igor-Ponticelli/retrodash/commit/80916cd94c57e213ffdd93031027bc8c29c1ce7a))
+
 ## [1.5.2](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.1...v1.5.2) (2026-05-29)
 
 ### Bug Fixes
