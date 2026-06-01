@@ -85,7 +85,7 @@ export function DashboardClient() {
               {t("noJoinedRooms")}{" "}
               <button
                 onClick={() => setJoinOpen(true)}
-                className="text-accent-cyan hover:underline cursor-pointer"
+                className="text-accent-primary hover:underline cursor-pointer"
               >
                 {t("noJoinedRoomsLink")}
               </button>{" "}

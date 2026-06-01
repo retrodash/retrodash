@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
 
   const prompt =
     type === "action"
-      ? `You are a Scrum coach. Rewrite this retrospective action item to be specific, measurable, and start with a strong verb. Return only the rewritten text, no explanations, no quotes:\n\n${text}`
-      : `You are a Scrum coach. Rewrite this retrospective card to be clear, concise, and constructive. Return only the rewritten text, no explanations, no quotes:\n\n${text}`;
+      ? `You are a Scrum coach. Rewrite this retrospective action item to be specific, measurable, and start with a strong verb. Maximum 320 characters. Return only the rewritten text, no explanations, no quotes:\n\n${text}`
+      : `You are a Scrum coach. Rewrite this retrospective card to be clear, concise, and constructive. Maximum 320 characters. Return only the rewritten text, no explanations, no quotes:\n\n${text}`;
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });

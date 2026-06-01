@@ -69,7 +69,7 @@ export function ParticipantsModal({ roomId, isFacilitator, onClose }: Participan
               </span>
 
               {p.role === "facilitator" ? (
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 px-2 py-0.5 rounded-sm shrink-0">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-primary bg-accent-primary/10 px-2 py-0.5 rounded-sm shrink-0">
                   {t("host")}
                 </span>
               ) : isFacilitator ? (

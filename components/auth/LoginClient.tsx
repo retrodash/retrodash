@@ -45,7 +45,7 @@ export function LoginClient({ redirect }: { redirect?: string }) {
       {/* ── Left: brand panel ─────────────────────────────────── */}
       <div className="hidden lg:flex flex-1 flex-col justify-between px-16 py-14 relative overflow-hidden">
         <div aria-hidden className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-40 -left-40 size-140 rounded-full bg-accent-cyan/4 blur-3xl" />
+          <div className="absolute -top-40 -left-40 size-140 rounded-full bg-accent-primary/4 blur-3xl" />
           <div className="absolute -bottom-40 right-0 size-140 rounded-full bg-accent-violet/5 blur-3xl" />
         </div>
 
@@ -109,15 +109,15 @@ export function LoginClient({ redirect }: { redirect?: string }) {
 
           <p className="mt-6 text-center text-xs text-text-muted leading-relaxed">
             {t("byContinuing")}{" "}
-            <Link href="/terms" className="text-accent-cyan hover:underline transition-colors">
+            <Link href="/terms" className="text-accent-primary hover:underline transition-colors">
               {t("termsOfService")}
             </Link>
             ,{" "}
-            <Link href="/privacy" className="text-accent-cyan hover:underline transition-colors">
+            <Link href="/privacy" className="text-accent-primary hover:underline transition-colors">
               {t("privacyPolicy")}
             </Link>{" "}
             {t("and")}{" "}
-            <Link href="/cookies" className="text-accent-cyan hover:underline transition-colors">
+            <Link href="/cookies" className="text-accent-primary hover:underline transition-colors">
               {t("cookiesPolicy")}
             </Link>
             .

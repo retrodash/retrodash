@@ -114,9 +114,9 @@ export function NewRoomModal({ onClose }: NewRoomModalProps) {
   };
 
   const copiedStyle = {
-    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
-    color: "var(--color-accent-cyan)",
-    borderColor: "var(--color-accent-cyan)",
+    background: "color-mix(in srgb, var(--color-accent-primary) 12%, transparent)",
+    color: "var(--color-accent-primary)",
+    borderColor: "var(--color-accent-primary)",
   };
 
   const defaultCopyStyle = {
@@ -175,7 +175,7 @@ export function NewRoomModal({ onClose }: NewRoomModalProps) {
               {t("codeLabel")}
             </label>
             <div className="flex gap-2">
-              <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+              <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-primary text-sm tracking-widest truncate">
                 {created.roomId}
               </div>
               <button
@@ -238,7 +238,7 @@ export function NewRoomModal({ onClose }: NewRoomModalProps) {
                   onClick={() => setIsPublic(true)}
                   className={`flex-1 flex items-center justify-center cursor-pointer gap-2 py-2.5 text-sm font-medium transition-colors ${
                     isPublic
-                      ? "bg-accent-cyan/10 text-accent-cyan"
+                      ? "bg-accent-primary/10 text-accent-primary"
                       : "text-text-muted hover:text-text-secondary"
                   }`}
                 >
@@ -307,7 +307,7 @@ export function NewRoomModal({ onClose }: NewRoomModalProps) {
               <button
                 type="button"
                 onClick={addColumn}
-                className="mt-3 flex items-center gap-1.5 text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
+                className="mt-3 flex items-center gap-1.5 text-accent-primary text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <PlusIcon size={12} />
                 {t("addColumn")}

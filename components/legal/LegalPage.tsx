@@ -23,7 +23,7 @@ function Section({ section }: { section: LegalContent["sections"][number] }) {
                 {block.before}
                 <Link
                   href={block.href as Parameters<typeof Link>[0]["href"]}
-                  className="text-accent-cyan hover:underline transition-colors"
+                  className="text-accent-primary hover:underline transition-colors"
                 >
                   {block.linkText}
                 </Link>
@@ -111,7 +111,7 @@ export function LegalPage({ content }: { content: LegalContent }) {
       </header>
 
       <div className="max-w-4xl mx-auto px-6 pt-16 pb-10 border-b border-border">
-        <span className="inline-block text-xs font-semibold uppercase tracking-[2px] text-accent-cyan mb-4">
+        <span className="inline-block text-xs font-semibold uppercase tracking-[2px] text-accent-primary mb-4">
           {c.label}
         </span>
         <h1 className="text-4xl font-bold text-text-primary tracking-tight">{c.title}</h1>

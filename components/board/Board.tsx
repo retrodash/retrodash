@@ -11,6 +11,7 @@ interface BoardProps {
   isAnonymous: boolean;
   isFacilitator: boolean;
   isRetroLive?: boolean;
+  filterAuthorId?: string | null;
 }
 
 export function Board({
@@ -23,6 +24,7 @@ export function Board({
   isAnonymous,
   isFacilitator,
   isRetroLive = true,
+  filterAuthorId,
 }: BoardProps) {
   const regularCols = columns
     .filter((col) => !col.isActionItems)
@@ -30,37 +32,54 @@ export function Board({
 
   const actionCol = columns.find((col) => col.isActionItems);
 
-  // Show published cards to everyone; show own unpublished (draft) cards only to their author
   const visibleCards = cards.filter(
     (c) => c.published !== false || c.authorId === userId,
   );
 
+  const filteredCards = filterAuthorId
+    ? visibleCards.filter(
+        (c) =>
+          c.authorId === filterAuthorId ||
+          (c.published === false && c.authorId === userId),
+      )
+    : visibleCards;
+
   const actionItemsColumnId = actionCol?.id;
-  const colProps = { roomId, userId, userName, userPhotoURL, isAnonymous, isFacilitator, isRetroLive, actionItemsColumnId, allVisibleCards: visibleCards };
+  const colProps = {
+    roomId,
+    userId,
+    userName,
+    userPhotoURL,
+    isAnonymous,
+    isFacilitator,
+    isRetroLive,
+    actionItemsColumnId,
+    allVisibleCards: visibleCards,
+  };
 
   return (
-    <div className="flex h-full overflow-x-auto p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
+    <div className="flex h-full overflow-x-auto scrollbar-thin p-3 gap-3 snap-x snap-mandatory lg:snap-none lg:p-4 lg:gap-4">
       {regularCols.map((col) => (
-        <div key={col.id} className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
+        <div
+          key={col.id}
+          className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48"
+        >
           <BoardColumn
             column={col}
-            cards={visibleCards.filter((c) => c.columnId === col.id)}
+            cards={filteredCards.filter((c) => c.columnId === col.id)}
             {...colProps}
           />
         </div>
       ))}
 
       {actionCol && (
-        <>
-          <div className="hidden lg:block w-px shrink-0 bg-border" />
-          <div className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
-            <BoardColumn
-              column={actionCol}
-              cards={visibleCards.filter((c) => c.columnId === actionCol.id)}
-              {...colProps}
-            />
-          </div>
-        </>
+        <div className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48">
+          <BoardColumn
+            column={actionCol}
+            cards={filteredCards.filter((c) => c.columnId === actionCol.id)}
+            {...colProps}
+          />
+        </div>
       )}
     </div>
   );

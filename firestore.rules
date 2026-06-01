@@ -95,12 +95,12 @@ service cloud.firestore {
         // Author publishes own draft (one-way: false → true only)
         (resource.data.authorId == request.auth.uid &&
          resource.data.published == false &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['published']) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['published', 'publishedAt']) &&
          request.resource.data.published == true)
         ||
         // Facilitator publishes/unpublishes any card
         (isFacilitator(roomId) &&
-         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['published']) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['published', 'publishedAt']) &&
          request.resource.data.published is bool)
         ||
         // Any participant sets actionStatus on a published card

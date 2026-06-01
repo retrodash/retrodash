@@ -282,6 +282,7 @@
   "room": {
     "startRetro": "Iniciar Retro",
     "endRetro": "Encerrar Retro",
+    "endRetroShort": "Encerrar",
     "ending": "Encerrando…",
     "viewSummary": "Ver Resumo",
     "notFound": "Sala não encontrada.",
@@ -293,6 +294,10 @@
     "confirmEnd": "Encerrar Retro",
     "inviteTeammates": "Convidar membros",
     "viewParticipants": "Ver participantes",
+    "filterParticipants": "Filtrar por participante",
+    "filterParticipantsTitle": "Filtrar cards",
+    "clearFilter": "Limpar filtro",
+    "you": "Você",
     "participants": "Participantes",
     "unknown": "Desconhecido",
     "host": "Anfitrião",
@@ -321,13 +326,15 @@
     "scoreboard": "Placar",
     "scoreboardCards": "Cards",
     "scoreboardActions": "Ações",
+    "scoreboardLikes": "Likes",
     "scoreboardPoints": "Pontos",
     "scoreboardEmpty": "Nenhuma contribuição ainda.",
     "anonymous": "Anônimo"
   },
   "navbar": {
     "signOut": "Sair",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "myAccount": "Minha conta"
   },
   "language": {
     "label": "Idioma",
@@ -400,6 +407,8 @@
     "cardPlaceholder": "O que você está pensando?",
     "you": "Você",
     "draft": "Rascunho",
+    "myDrafts": "Meus rascunhos",
+    "linkedCard": "Card vinculado",
     "publishing": "Publicando…",
     "publish": "Publicar",
     "save": "Salvar",
@@ -415,6 +424,7 @@
     "removeVote": "Remover voto",
     "vote": "Votar",
     "improveWithAI": "Melhorar com IA",
+    "undoImprove": "Desfazer",
     "improving": "Melhorando…",
     "improveWithAIHint": "Envia o texto deste card ao Google Gemini.",
     "improveWithAIHintLink": "Saiba mais.",

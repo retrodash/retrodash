@@ -37,7 +37,7 @@ export function ShareRoomModal({ roomId, roomName, isPublic = false, onClose }: 
           {t("roomCode")}
         </label>
         <div className="flex gap-2">
-          <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+          <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-primary text-sm tracking-widest truncate">
             {roomId}
           </div>
           <button
@@ -46,9 +46,9 @@ export function ShareRoomModal({ roomId, roomName, isPublic = false, onClose }: 
             style={
               copiedCode
                 ? {
-                    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
-                    color: "var(--color-accent-cyan)",
-                    borderColor: "var(--color-accent-cyan)",
+                    background: "color-mix(in srgb, var(--color-accent-primary) 12%, transparent)",
+                    color: "var(--color-accent-primary)",
+                    borderColor: "var(--color-accent-primary)",
                   }
                 : {
                     background: "transparent",
@@ -76,11 +76,11 @@ export function ShareRoomModal({ roomId, roomName, isPublic = false, onClose }: 
             style={
               copiedUrl
                 ? {
-                    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
-                    color: "var(--color-accent-cyan)",
+                    background: "color-mix(in srgb, var(--color-accent-primary) 12%, transparent)",
+                    color: "var(--color-accent-primary)",
                   }
                 : {
-                    background: "var(--color-accent-cyan)",
+                    background: "var(--color-accent-primary)",
                     color: "var(--color-bg-base)",
                   }
             }

@@ -32,9 +32,9 @@ export function RoomCreatedScreen({
   };
 
   const copiedStyle = {
-    background: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
-    color: "var(--color-accent-cyan)",
-    borderColor: "var(--color-accent-cyan)",
+    background: "color-mix(in srgb, var(--color-accent-primary) 12%, transparent)",
+    color: "var(--color-accent-primary)",
+    borderColor: "var(--color-accent-primary)",
   };
 
   const defaultStyle = {
@@ -47,7 +47,7 @@ export function RoomCreatedScreen({
     <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center px-4 sm:px-6">
       <div className="w-full max-w-sm bg-bg-card border border-border rounded-lg p-5 sm:p-8 space-y-6">
         <div>
-          <p className="text-accent-cyan text-[11px] font-semibold uppercase tracking-widest mb-1">
+          <p className="text-accent-primary text-[11px] font-semibold uppercase tracking-widest mb-1">
             {t("createdHeader")}
           </p>
           <h1 className="text-text-primary font-bold text-xl leading-snug">{roomName}</h1>
@@ -91,7 +91,7 @@ export function RoomCreatedScreen({
             {t("codeLabel")}
           </label>
           <div className="flex gap-2">
-            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-cyan text-sm tracking-widest truncate">
+            <div className="flex-1 bg-bg-elevated border border-border rounded-md px-4 py-2.5 font-mono text-accent-primary text-sm tracking-widest truncate">
               {roomId}
             </div>
             <button

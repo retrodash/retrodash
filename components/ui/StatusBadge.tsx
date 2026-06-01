@@ -11,8 +11,8 @@ const styles: Record<Status, { color: string; bg: string; pulse?: boolean }> = {
     bg: "var(--color-bg-elevated)",
   },
   active: {
-    color: "var(--color-accent-cyan)",
-    bg: "color-mix(in srgb, var(--color-accent-cyan) 12%, transparent)",
+    color: "var(--color-accent-primary)",
+    bg: "color-mix(in srgb, var(--color-accent-primary) 12%, transparent)",
     pulse: true,
   },
   ended: {

@@ -178,7 +178,7 @@ export function NewRoomClient() {
                   onClick={() => setIsPublic(true)}
                   className={`flex-1 flex items-center justify-center cursor-pointer gap-2 py-2.5 text-sm font-medium transition-colors ${
                     isPublic
-                      ? "bg-accent-cyan/10 text-accent-cyan"
+                      ? "bg-accent-primary/10 text-accent-primary"
                       : "text-text-muted hover:text-text-secondary"
                   }`}
                 >
@@ -257,7 +257,7 @@ export function NewRoomClient() {
               <button
                 type="button"
                 onClick={addColumn}
-                className="mt-3 flex items-center gap-1.5 text-accent-cyan text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
+                className="mt-3 flex items-center gap-1.5 text-accent-primary text-sm font-medium hover:opacity-80 transition-opacity cursor-pointer"
               >
                 <PlusIcon size={12} />
                 {t("addColumn")}

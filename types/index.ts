@@ -26,7 +26,6 @@ export interface Card {
   authorId: string;
   authorName: string;
   authorPhotoURL?: string | null;
-  votes: number;
   votedBy: string[];
   done?: boolean;
   actionStatus?: "pending" | "done" | "keep";
@@ -35,6 +34,7 @@ export interface Card {
   linkedCardText?: string;
   carriedItem?: boolean;
   createdAt: Timestamp;
+  publishedAt?: Timestamp;
 }
 
 export interface Participant {
@@ -51,6 +51,7 @@ export interface ScoreboardEntry {
   userPhotoURL: string | null;
   cardsCount: number;
   actionItemsCount: number;
+  votesReceived: number;
   totalPoints: number;
   position: number;
 }

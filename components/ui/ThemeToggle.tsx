@@ -51,7 +51,7 @@ export function ThemeToggle({ variant = "inline" }: ThemeToggleProps) {
             title={t(labelKey)}
             className={`p-1.5 rounded transition-colors cursor-pointer ${
               theme === value
-                ? "text-accent-cyan"
+                ? "text-accent-primary"
                 : "text-text-muted hover:text-text-secondary"
             }`}
           >
@@ -72,7 +72,7 @@ export function ThemeToggle({ variant = "inline" }: ThemeToggleProps) {
         aria-expanded={open}
         className={`w-8 h-8 flex items-center justify-center rounded-md border transition-colors cursor-pointer ${
           open
-            ? "border-border bg-bg-card text-accent-cyan"
+            ? "border-border bg-bg-card text-accent-primary"
             : "border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary"
         }`}
       >
@@ -87,7 +87,7 @@ export function ThemeToggle({ variant = "inline" }: ThemeToggleProps) {
               onClick={() => { setTheme(value); setOpen(false); }}
               className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors cursor-pointer ${
                 theme === value
-                  ? "text-accent-cyan bg-bg-card"
+                  ? "text-accent-primary bg-bg-card"
                   : "text-text-secondary hover:text-text-primary hover:bg-bg-card"
               }`}
             >

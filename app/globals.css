@@ -8,9 +8,12 @@
   --font-sans: var(--font-jakarta), system-ui, sans-serif;
 
   /* Static brand tokens — same in every theme */
-  --color-accent-cyan:   #00E5CC;
-  --color-accent-violet: #7B61FF;
-  --color-cta:           #F5A623;
+  --color-accent-cyan:    #00E5CC;
+  --color-accent-violet:  #7B61FF;
+  --color-cta:            #F5A623;
+
+  /* Theme-aware interactive accent — resolves from per-theme CSS var */
+  --color-accent-primary: var(--t-accent-primary);
 
   /* Border radius */
   --radius:    14px;
@@ -54,6 +57,8 @@
   --t-text-primary:   #0F1117;
   --t-text-secondary: #4A4F68;
   --t-text-muted:     #8B90A7;
+  /* In light mode, violet has better contrast than cyan on light backgrounds */
+  --t-accent-primary: #7B61FF;
 }
 
 /* ── Dark theme ─────────────────────────────────────────────── */
@@ -66,6 +71,8 @@
   --t-text-primary:   #F0F2F5;
   --t-text-secondary: #8B90A7;
   --t-text-muted:     #737899;
+  /* In dark mode, cyan pops well on dark backgrounds */
+  --t-accent-primary: #00E5CC;
 }
 
 html {
@@ -76,8 +83,12 @@ body {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   line-height: 1.65;
+  letter-spacing: 0.010em !important;
+  word-spacing: 0.018em !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 /* ── Keyframes ─────────────────────────────────────────────── */
@@ -85,6 +96,41 @@ body {
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); opacity: 0.6; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes drawer-out {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes backdrop-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes float {
@@ -107,24 +153,25 @@ body {
 
 /* ── Scrollbar ─────────────────────────────────────────────── */
 
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 999px;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-muted);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }

@@ -74,7 +74,7 @@ export function FeedbackClient() {
       <div className="min-h-screen bg-bg-base flex flex-col">
         <Navbar logoHref="/dashboard" />
         <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center text-center gap-6">
-          <div className="size-16 rounded-2xl border border-border bg-bg-card flex items-center justify-center text-accent-cyan">
+          <div className="size-16 rounded-2xl border border-border bg-bg-card flex items-center justify-center text-accent-primary">
             <CheckCircleIcon size={28} />
           </div>
           <div>
@@ -87,7 +87,7 @@ export function FeedbackClient() {
           </div>
           <button
             onClick={reset}
-            className="text-accent-cyan text-sm hover:underline cursor-pointer"
+            className="text-accent-primary text-sm hover:underline cursor-pointer"
           >
             {t("sendAnother")}
           </button>

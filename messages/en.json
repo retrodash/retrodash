@@ -282,6 +282,7 @@
   "room": {
     "startRetro": "Start Retro",
     "endRetro": "End Retro",
+    "endRetroShort": "End",
     "ending": "Ending…",
     "viewSummary": "View Summary",
     "notFound": "Room not found.",
@@ -293,6 +294,10 @@
     "confirmEnd": "End Retro",
     "inviteTeammates": "Invite teammates",
     "viewParticipants": "View participants",
+    "filterParticipants": "Filter by participant",
+    "filterParticipantsTitle": "Filter cards",
+    "clearFilter": "Clear filter",
+    "you": "You",
     "participants": "Participants",
     "unknown": "Unknown",
     "host": "Host",
@@ -321,13 +326,15 @@
     "scoreboard": "Scoreboard",
     "scoreboardCards": "Cards",
     "scoreboardActions": "Actions",
+    "scoreboardLikes": "Likes",
     "scoreboardPoints": "Points",
     "scoreboardEmpty": "No contributions yet.",
     "anonymous": "Anonymous"
   },
   "navbar": {
     "signOut": "Sign out",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "myAccount": "My account"
   },
   "language": {
     "label": "Language",
@@ -400,6 +407,8 @@
     "cardPlaceholder": "What's on your mind?",
     "you": "You",
     "draft": "Draft",
+    "myDrafts": "My drafts",
+    "linkedCard": "Linked card",
     "publishing": "Publishing…",
     "publish": "Publish",
     "save": "Save",
@@ -415,6 +424,7 @@
     "removeVote": "Remove vote",
     "vote": "Vote",
     "improveWithAI": "Improve with AI",
+    "undoImprove": "Undo",
     "improving": "Improving…",
     "improveWithAIHint": "Sends this card's text to Google Gemini.",
     "improveWithAIHintLink": "Learn more.",

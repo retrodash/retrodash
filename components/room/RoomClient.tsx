@@ -8,6 +8,9 @@ import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { useRoom } from "@/hooks/useRoom";
 import { useCards } from "@/hooks/useCards";
+import { useParticipants } from "@/hooks/useParticipants";
+import { Avatar } from "@/components/ui/Avatar";
+import { Modal } from "@/components/ui/Modal";
 import {
   updateRoomStatus,
   subscribeToParticipant,
@@ -33,7 +36,9 @@ interface RoomClientProps {
 export function RoomClient({ roomId }: RoomClientProps) {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [gate, setGate] = useState<"checking" | "ready" | "needs-password">("checking");
+  const [gate, setGate] = useState<"checking" | "ready" | "needs-password">(
+    "checking",
+  );
   const [roomData, setRoomData] = useState<Room | null>(null);
 
   useEffect(() => {
@@ -54,7 +59,12 @@ export function RoomClient({ roomId }: RoomClientProps) {
       }
 
       if (room.isPublic) {
-        await joinRoom(roomId, user.uid, user.displayName ?? "Member", user.photoURL ?? null);
+        await joinRoom(
+          roomId,
+          user.uid,
+          user.displayName ?? "Member",
+          user.photoURL ?? null,
+        );
         setGate("ready");
         return;
       }
@@ -102,6 +112,9 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
   const [endingRetro, setEndingRetro] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [participantsOpen, setParticipantsOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterAuthorId, setFilterAuthorId] = useState<string | null>(null);
+  const { participants } = useParticipants(roomId);
   const wasParticipantRef = useRef(false);
 
   useEffect(() => {
@@ -145,8 +158,8 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
               <button
                 onClick={() => setParticipantsOpen(true)}
                 title={t("viewParticipants")}
-                className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
                 aria-label={t("viewParticipants")}
+                className="w-8 h-8 flex items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors cursor-pointer"
               >
                 <PeopleIcon />
               </button>
@@ -154,11 +167,21 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
             <button
               onClick={() => setShareOpen(true)}
               title={t("inviteTeammates")}
-              className="text-text-muted hover:text-accent-cyan transition-colors cursor-pointer shrink-0"
               aria-label={t("inviteTeammates")}
+              className="w-8 h-8 flex items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors cursor-pointer"
             >
               <LinkIcon />
             </button>
+            {!room.isAnonymous && participants.length > 1 && (
+              <button
+                onClick={() => setFilterOpen(true)}
+                title={t("filterParticipants")}
+                aria-label={t("filterParticipants")}
+                className="relative w-8 h-8 flex items-center justify-center rounded-md border border-transparent text-text-muted hover:border-border hover:bg-bg-card hover:text-text-secondary transition-colors cursor-pointer"
+              >
+                <FilterIcon active={filterAuthorId !== null} />
+              </button>
+            )}
           </>
         }
         actions={
@@ -182,7 +205,9 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           </>
         }
       >
-        <h1 className="text-text-primary font-semibold text-sm truncate">{room.name}</h1>
+        <h1 className="text-text-primary font-semibold text-sm truncate">
+          {room.name}
+        </h1>
         <StatusBadge status={room.status} />
       </Navbar>
 
@@ -197,6 +222,7 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           isAnonymous={room.isAnonymous}
           isFacilitator={isFacilitator}
           isRetroLive={room.status === "active"}
+          filterAuthorId={filterAuthorId}
         />
       </div>
 
@@ -206,6 +232,57 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
           isFacilitator={isFacilitator}
           onClose={() => setParticipantsOpen(false)}
         />
+      )}
+
+      {filterOpen && (
+        <Modal
+          title={t("filterParticipantsTitle")}
+          onClose={() => setFilterOpen(false)}
+          size="sm"
+        >
+          <div className="flex flex-wrap gap-2">
+            {participants.map((p) => {
+              const isActive = filterAuthorId === p.id;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    setFilterAuthorId(isActive ? null : p.id);
+                    setFilterOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                    isActive
+                      ? "border-accent-primary bg-accent-primary/10 text-text-primary"
+                      : "border-border text-text-secondary hover:text-text-primary hover:border-text-muted"
+                  }`}
+                >
+                  <Avatar
+                    photoURL={p.photoURL}
+                    name={p.displayName}
+                    size={24}
+                  />
+                  <span className="max-w-40 truncate">{p.displayName}</span>
+                  {p.id === userId && (
+                    <span className="text-[11px] text-text-muted">
+                      ({t("you")})
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          {filterAuthorId !== null && (
+            <button
+              onClick={() => {
+                setFilterAuthorId(null);
+                setFilterOpen(false);
+              }}
+              className="mt-4 w-full text-sm text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+            >
+              {t("clearFilter")}
+            </button>
+          )}
+        </Modal>
       )}
 
       {shareOpen && (
@@ -220,14 +297,40 @@ function RoomBoard({ roomId, userId, userName, userPhotoURL }: RoomBoardProps) {
   );
 }
 
+function FilterIcon({ active }: { active: boolean }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+      {active && (
+        <circle
+          cx="19"
+          cy="19"
+          r="5"
+          fill="var(--color-accent-primary)"
+          stroke="none"
+        />
+      )}
+    </svg>
+  );
+}
+
 function BoardSkeleton() {
   return (
     <div className="h-screen bg-bg-base flex flex-col">
       <div className="h-16 bg-bg-surface border-b border-border" />
-      <div className="flex flex-1 gap-3 p-3 overflow-x-auto snap-x snap-mandatory lg:snap-none lg:gap-4 lg:p-4">
+      <div className="flex flex-1 gap-3 p-3 overflow-x-auto scrollbar-thin snap-x snap-mandatory lg:snap-none lg:gap-4 lg:p-4">
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
-        <div className="hidden lg:block w-px shrink-0 bg-border" />
         <Skeleton className="w-[85vw] shrink-0 snap-start lg:flex-1 lg:w-auto lg:min-w-48 bg-bg-surface border border-border" />
       </div>
     </div>

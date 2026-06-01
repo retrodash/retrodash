@@ -13,6 +13,7 @@ import {
 } from "@/lib/firestore";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
+import { Modal } from "@/components/ui/Modal";
 import type { Card } from "@/types";
 
 interface CardProps {
@@ -52,7 +53,13 @@ export function CardItem({
   const [isAddingLinkedItem, setIsAddingLinkedItem] = useState(false);
   const [linkedItemText, setLinkedItemText] = useState("");
   const [addingLinkedItem, setAddingLinkedItem] = useState(false);
+  const [linkedCardOpen, setLinkedCardOpen] = useState(false);
+  const [previousEditText, setPreviousEditText] = useState<string | null>(null);
   const t = useTranslations("board");
+
+  const MAX_CHARS = 320;
+  const editOverLimit = editText.length > MAX_CHARS;
+  const linkedOverLimit = linkedItemText.length > MAX_CHARS;
 
   const isOwnCard = card.authorId === userId;
   const isDraft = card.published === false;
@@ -66,7 +73,7 @@ export function CardItem({
   const voteClass = !canVote
     ? "text-text-muted cursor-default opacity-50"
     : hasVoted
-      ? "bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 cursor-pointer"
+      ? "bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 cursor-pointer"
       : "text-text-muted hover:text-text-primary hover:bg-bg-card cursor-pointer";
 
   const handlePublish = async () => {
@@ -95,6 +102,7 @@ export function CardItem({
 
   const handleCancelEdit = () => {
     setEditText(card.text);
+    setPreviousEditText(null);
     setIsEditing(false);
   };
 
@@ -128,10 +136,19 @@ export function CardItem({
         }),
       });
       const data = await res.json();
-      if (data.improved) setEditText(data.improved);
+      if (data.improved) {
+        setPreviousEditText(editText);
+        setEditText(data.improved);
+      }
     } finally {
       setImproving(false);
     }
+  };
+
+  const handleUndoImprove = () => {
+    if (previousEditText === null) return;
+    setEditText(previousEditText);
+    setPreviousEditText(null);
   };
 
   return (
@@ -140,7 +157,7 @@ export function CardItem({
         isDraft
           ? "border-dashed border-border/60 opacity-80"
           : isActionItem && actionStatus === "done"
-            ? "border-accent-cyan/20"
+            ? "border-accent-primary/20"
             : isActionItem && actionStatus === "keep"
               ? "border-accent-violet/20"
               : "border-transparent hover:border-border"
@@ -184,31 +201,47 @@ export function CardItem({
                 handleSaveEdit();
             }}
             rows={3}
-            className="bg-bg-card border-accent-cyan"
+            className="bg-bg-card border-accent-primary"
           />
           <div className="flex items-center gap-2">
             <Button
               size="xs"
               variant="cyan"
               onClick={handleSaveEdit}
-              disabled={saving || !editText.trim()}
+              disabled={saving || !editText.trim() || editOverLimit}
             >
               {t("save")}
             </Button>
             <Button size="xs" variant="ghost-text" onClick={handleCancelEdit}>
               {t("cancel")}
             </Button>
-            {editText.trim() && (
-              <button
-                type="button"
-                onClick={handleImprove}
-                disabled={improving}
-                className="ml-auto inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
-              >
-                {improving ? <MiniSpinner /> : <SparkleIcon />}
-                {improving ? t("improving") : t("improveWithAI")}
-              </button>
-            )}
+            <div className="ml-auto flex items-center gap-2">
+              <span className={`text-[10px] tabular-nums ${editOverLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
+                {editText.length}/{MAX_CHARS}
+              </span>
+              {previousEditText !== null && (
+                <button
+                  type="button"
+                  onClick={handleUndoImprove}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-text-primary hover:bg-bg-card transition-colors cursor-pointer"
+                  title={t("undoImprove")}
+                >
+                  <UndoIcon />
+                  {t("undoImprove")}
+                </button>
+              )}
+              {editText.trim() && (
+                <button
+                  type="button"
+                  onClick={handleImprove}
+                  disabled={improving}
+                  className="inline-flex items-center gap-1 px-2 h-6 rounded text-[11px] font-medium text-text-muted hover:text-accent-violet hover:bg-bg-card transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  {improving ? <MiniSpinner /> : <SparkleIcon />}
+                  {improving ? t("improving") : t("improveWithAI")}
+                </button>
+              )}
+            </div>
           </div>
           {editText.trim() && (
             <p className="text-[10px] text-text-muted text-right leading-tight mt-1">
@@ -225,12 +258,22 @@ export function CardItem({
       ) : isActionItem ? (
         <div className="pr-14">
           {(linkedCard ?? card.linkedCardText) && (
-            <div className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted">
+            <button
+              onClick={() => setLinkedCardOpen(true)}
+              className="mb-1.5 flex items-center gap-1 text-[10px] text-text-muted hover:text-text-secondary transition-colors cursor-pointer max-w-full"
+            >
               <LinkIcon />
               <span className="truncate italic">
                 {linkedCard?.text ?? card.linkedCardText}
               </span>
-            </div>
+            </button>
+          )}
+          {linkedCardOpen && (
+            <Modal title={t("linkedCard")} onClose={() => setLinkedCardOpen(false)} size="sm">
+              <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-wrap">
+                {linkedCard?.text ?? card.linkedCardText}
+              </p>
+            </Modal>
           )}
           <p
             className={`text-sm leading-relaxed whitespace-pre-wrap wrap-break-word transition-colors ${
@@ -257,7 +300,7 @@ export function CardItem({
                   className="flex items-center gap-1.5 text-xs text-text-muted"
                 >
                   <span
-                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-accent-cyan" : ""}`}
+                    className={`mt-px shrink-0 ${item.actionStatus === "done" ? "text-green-700 dark:text-green-400" : item.actionStatus === "pending" ? "text-orange-600 dark:text-orange-400" : ""}`}
                   >
                     <MiniCheckIcon done={item.actionStatus === "done"} />
                   </span>
@@ -286,13 +329,13 @@ export function CardItem({
                       }
                     }}
                     placeholder={t("actionItemPlaceholder")}
-                    className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-cyan"
+                    className="w-full text-xs bg-bg-card border border-border rounded px-2 py-1 text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent-primary"
                   />
-                  <div className="flex gap-1.5">
+                  <div className="flex items-center gap-1.5">
                     <button
                       onClick={handleAddLinkedItem}
-                      disabled={addingLinkedItem || !linkedItemText.trim()}
-                      className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50"
+                      disabled={addingLinkedItem || !linkedItemText.trim() || linkedOverLimit}
+                      className="px-2 h-5 rounded text-[10px] font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50"
                     >
                       {t("add")}
                     </button>
@@ -305,12 +348,15 @@ export function CardItem({
                     >
                       {t("cancel")}
                     </button>
+                    <span className={`ml-auto text-[10px] tabular-nums ${linkedOverLimit ? "text-red-500 font-medium" : "text-text-muted"}`}>
+                      {linkedItemText.length}/{MAX_CHARS}
+                    </span>
                   </div>
                 </div>
               ) : (
                 <button
                   onClick={() => setIsAddingLinkedItem(true)}
-                  className="flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-cyan transition-colors cursor-pointer"
+                  className="flex items-center gap-1 text-[11px] text-text-muted hover:text-accent-primary transition-colors cursor-pointer"
                 >
                   <SmallPlusIcon />
                   {t("addActionItem")}
@@ -341,8 +387,8 @@ export function CardItem({
               </span>
               <button
                 onClick={handlePublish}
-                disabled={publishing || !isRetroLive}
-                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-cyan/15 text-accent-cyan hover:bg-accent-cyan/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={publishing || !isRetroLive || card.text.length > MAX_CHARS}
+                className="inline-flex items-center gap-1 px-2 h-6 rounded text-xs font-semibold bg-accent-primary/15 text-accent-primary hover:bg-accent-primary/25 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {publishing ? t("publishing") : t("publish")}
               </button>
@@ -356,7 +402,7 @@ export function CardItem({
                 className={`inline-flex items-center gap-1.5 px-2 h-6 rounded text-xs font-medium transition-colors ${voteClass}`}
               >
                 <ThumbUpIcon filled={hasVoted} />
-                {card.votes > 0 && <span>{card.votes}</span>}
+                {card.votedBy.length > 0 && <span>{card.votedBy.length}</span>}
               </button>
             </div>
           ) : (
@@ -399,10 +445,10 @@ function ActionStatusSegment({
           className={`px-2 h-5 rounded-sm text-[10px] font-medium transition-colors cursor-pointer ${
             status === opt.value
               ? opt.value === "done"
-                ? "bg-accent-cyan/20 text-accent-cyan"
+                ? "bg-green-600/15 text-green-700 dark:bg-green-500/20 dark:text-green-400"
                 : opt.value === "keep"
                   ? "bg-accent-violet/20 text-accent-violet"
-                  : "bg-bg-elevated text-text-primary"
+                  : "bg-orange-500/15 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400"
               : "text-text-muted hover:text-text-primary"
           }`}
         >
@@ -491,6 +537,15 @@ function SparkleIcon() {
       aria-hidden
     >
       <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" />
+    </svg>
+  );
+}
+
+function UndoIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 7v6h6" />
+      <path d="M3 13C5 7 11 3 18 5a9 9 0 0 1 3 14" />
     </svg>
   );
 }

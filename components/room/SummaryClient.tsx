@@ -195,7 +195,7 @@ function SummaryContent({ roomId }: { roomId: string }) {
                     {p.displayName}
                   </span>
                   {p.role === "facilitator" && (
-                    <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-cyan">
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-accent-primary">
                       {t("host")}
                     </span>
                   )}
@@ -268,7 +268,7 @@ function SummaryContent({ roomId }: { roomId: string }) {
 }
 
 function sortByVotes(cards: Card[]): Card[] {
-  return [...cards].sort((a, b) => b.votes - a.votes);
+  return [...cards].sort((a, b) => b.votedBy.length - a.votedBy.length);
 }
 
 function SectionHeader({
@@ -284,7 +284,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-      <span className={accent ? "text-accent-cyan" : "text-text-muted"}>
+      <span className={accent ? "text-accent-primary" : "text-text-muted"}>
         {icon}
       </span>
       <h2 className="text-text-primary font-semibold text-lg">{title}</h2>
@@ -323,10 +323,10 @@ function ActionItemRow({
       <span
         className={`mt-0.5 shrink-0 ${
           status === "done"
-            ? "text-accent-cyan"
+            ? "text-green-700 dark:text-green-400"
             : status === "keep"
               ? "text-accent-violet"
-              : "text-text-muted"
+              : "text-orange-600 dark:text-orange-400"
         }`}
       >
         {status === "done" ? (
@@ -339,7 +339,7 @@ function ActionItemRow({
       </span>
       <div className="flex-1 min-w-0">
         {sourceCardText && (
-          <p className="text-[11px] text-text-muted italic mb-1 truncate">
+          <p className="text-[11px] text-text-muted italic mb-1">
             {t("fromCard")} {sourceCardText}
           </p>
         )}
@@ -378,10 +378,10 @@ function ActionItemRow({
           </div>
         )}
       </div>
-      {card.votes > 0 && (
+      {card.votedBy.length > 0 && (
         <span className="shrink-0 flex items-center gap-1 text-xs text-text-muted">
           <ThumbUpIcon />
-          {card.votes}
+          {card.votedBy.length}
         </span>
       )}
     </div>
@@ -452,10 +452,10 @@ function SummaryCard({
         ) : (
           <span />
         )}
-        {card.votes > 0 && (
+        {card.votedBy.length > 0 && (
           <span className="flex items-center gap-1 text-xs text-text-muted">
             <ThumbUpIcon />
-            {card.votes}
+            {card.votedBy.length}
           </span>
         )}
       </div>
