@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/Igor-Ponticelli/retrodash/compare/v1.6.0...v1.6.1) (2026-06-01)
+
+### Bug Fixes
+
+* **voting:** restore votes increment to satisfy Firestore security rule ([#31](https://github.com/Igor-Ponticelli/retrodash/issues/31)) ([4ed0c0c](https://github.com/Igor-Ponticelli/retrodash/commit/4ed0c0cf01b1962bf1d8cc1f8f686375cfe5a119))
+
 ## [1.6.0](https://github.com/Igor-Ponticelli/retrodash/compare/v1.5.2...v1.6.0) (2026-06-01)
 
 ### Features
