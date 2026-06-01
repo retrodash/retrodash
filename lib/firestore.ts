@@ -16,6 +16,7 @@ import {
   serverTimestamp,
   arrayUnion,
   arrayRemove,
+  increment,
 } from "firebase/firestore";
 import type { Card, FeedbackType } from "@/types";
 import { db } from "@/lib/firebase";
@@ -270,6 +271,7 @@ export async function toggleVote(
   hasVoted: boolean
 ): Promise<void> {
   await updateDoc(doc(db, "rooms", roomId, "cards", cardId), {
+    votes: increment(hasVoted ? -1 : 1),
     votedBy: hasVoted ? arrayRemove(userId) : arrayUnion(userId),
   });
 }
